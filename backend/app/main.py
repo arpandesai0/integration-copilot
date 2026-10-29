@@ -17,6 +17,10 @@ from app.database import (
 from app.services.core import seed_catalog
 from app.api import router
 from app.chat_store import get_chat_store
+from app.metadata_store import (
+    flush_metadata_snapshot,
+    get_metadata_store,
+)
 
 
 @asynccontextmanager
@@ -25,6 +29,8 @@ async def lifespan(app):
     if chat_store:
         chat_store.initialize()
     Base.metadata.create_all(engine)
+    metadata_store = get_metadata_store()
+    metadata_restored = bool(metadata_store and metadata_store.restore(engine, Base.metadata))
     with SessionLocal() as db:
         seed_catalog(db)
         for message in db.scalars(select(Message).where(Message.status == "streaming")):
@@ -47,7 +53,12 @@ async def lifespan(app):
             w = db.get(Workspace, run.workspace_id)
             w.status = "research_failed"
         db.commit()
-    yield
+    if metadata_store and not metadata_restored:
+        flush_metadata_snapshot()
+    try:
+        yield
+    finally:
+        flush_metadata_snapshot()
 
 
 app = FastAPI(title="Integration Copilot API", version="0.1.0", lifespan=lifespan)
@@ -84,6 +95,7 @@ def health():
         "status": "ok",
         "ai_configured": bool(settings.google_cloud_project),
         "chat_store": "mongodb" if settings.mongodb_uri else "relational_fallback",
+        "metadata_store": "mongodb" if settings.mongodb_uri else "sqlite",
     }
 
 

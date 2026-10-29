@@ -6,7 +6,7 @@ Build requirements: [docs/agents/AGENT.md](docs/agents/AGENT.md). Execution chec
 
 ## Local setup
 
-Requirements: Node.js 20.9+ (a current supported LTS is recommended), npm, Python 3.11+, [uv](https://docs.astral.sh/uv/), and MongoDB Atlas (or local MongoDB) for durable chat storage. Google Cloud access is required for live research and assistant answers; local guide metadata uses SQLite by default.
+Requirements: Node.js 20.9+ (a current supported LTS is recommended), npm, Python 3.11+, [uv](https://docs.astral.sh/uv/), and MongoDB Atlas (or local MongoDB) for durable application storage. Google Cloud access is required for live research and assistant answers. SQLite is retained as a process-local query cache and is restored from MongoDB at startup.
 
 ```sh
 make setup
@@ -59,8 +59,8 @@ Open http://localhost:3000. Backend API documentation is at http://localhost:800
 ```mermaid
 flowchart LR
     UI[Next.js workspace] --> API[FastAPI API]
-    API --> Metadata[(SQLite metadata)]
-    API --> Mongo[(MongoDB chat storage)]
+    API --> Cache[(SQLite query cache)]
+    API --> Mongo[(MongoDB durable chats + metadata)]
     API --> Agent[One agent service]
     Agent --> Research[Grounded provider research]
     Agent --> Synthesis[Validated guide synthesis]
@@ -85,9 +85,9 @@ Research resolves provider identity, gathers actual source metadata, synthesizes
 
 Implemented: provider discovery, three-panel workspace, persisted guides and automatic reading progress, independent main and step conversations, a single reusable sub-chat per step, research/chat SSE, source disclosures, freshness checks, copyable links/code/steps and technical response formatting, verified passage links, unified user/agent chat for seeded and researched guides, public read-only sharing, sidebar-only chat deletion, responsive discussion drawers, and persisted light/dark themes.
 
-The current full check passes 115 backend tests plus frontend lint, TypeScript, and the production build. Backend tests cover ownership, privacy, evidence validation, scoped conversation histories, mocked research success, interruptions, freshness, retry/reconnection, and grounding-link sanitization. Browser checks against development and production servers cover actual workspace interactions and real cloud error handling. Live Vertex research and both main/step chat answers are now verified using the selected project. Linear generated a persisted five-step guide with 16 source records. An earlier inherited project produced billing errors; local configuration now takes precedence and the backend has been restarted.
+The current full check passes 118 backend tests plus frontend lint, TypeScript, and the production build. Backend tests cover ownership, privacy, evidence validation, scoped conversation histories, mocked research success, interruptions, freshness, retry/reconnection, and grounding-link sanitization. A live Atlas snapshot-and-restore check reproduced 975 rows across all 11 metadata tables in a fresh database. Browser checks against development and production servers cover actual workspace interactions and real cloud error handling. Live Vertex research and both main/step chat answers are verified using the selected project. Linear generated a persisted five-step guide with 16 source records.
 
-The optional “Save finding to step” action has a confirmed-note API and rendering support, but its UI action is deferred. MongoDB Atlas deployment, container builds, deployment, and actual provider OAuth flows have not been verified. A checked implementation task is not evidence of a successful deployment.
+The optional “Save finding to step” action has a confirmed-note API and rendering support, but its UI action is deferred. Actual provider OAuth registration and approval flows have not been completed. A checked implementation task is not evidence of a successful provider approval.
 
 Run project checks with:
 
@@ -105,13 +105,13 @@ backend and frontend as separate Cloud Run services. Run it with:
 ```sh
 PROJECT_ID=your-project-id \
 GCLOUD_ACCOUNT=your-account@example.com \
-ALLOW_EPHEMERAL_SQLITE=1 \
 cloud/deploy-gcp.sh
 ```
 
-`ALLOW_EPHEMERAL_SQLITE=1` acknowledges the current demo-only SQLite metadata
-store. MongoDB chat data remains persistent in Atlas, but the application must
-migrate metadata to durable storage before a production deployment.
+MongoDB stores chat documents directly and durable snapshots of all relational
+metadata. The backend restores its SQLite query cache from the current atomic
+MongoDB snapshot on startup. The deployment is intentionally capped at one
+backend instance because this cache-and-snapshot design is single-writer.
 
 The script is safe to rerun: named service accounts, secrets, repositories, and
 Cloud Run services are reused. It also reuses the current MongoDB secret version.
@@ -122,8 +122,8 @@ versions, not duplicate services.
 For evaluator stability, the script keeps one backend instance warm and verifies
 MongoDB initialization, the provider API, and the frontend after deployment.
 This incurs Cloud Run minimum-instance usage. Override it with
-`BACKEND_MIN_INSTANCES=0` only when cold starts and ephemeral SQLite resets are
-acceptable.
+`BACKEND_MIN_INSTANCES=0` when cold starts are acceptable; MongoDB restoration
+keeps data durable across revisions and instance replacement.
 
 ## Deployment
 
@@ -133,9 +133,17 @@ Use the Atlas SRV URI through `MONGODB_URI`; never commit the real password. The
 
 `GUIDE_FRESHNESS_DAYS` defaults to 30; older or undated evidence is flagged for refresh. CORS allows the exact frontend origins and the `X-Device-ID` header; the deployment script configures both Cloud Run-generated frontend URL aliases without using a wildcard. A device ID identifies one browser profile; clearing site storage intentionally starts a new private workspace identity.
 
-Run the backend with `uvicorn app.main:app --host 0.0.0.0 --port 8000` from `backend/`. Run `npm run build` followed by `npm start` from `frontend/`. Provide Google Cloud identity, model configuration, and the MongoDB URI to the backend only. Mount persistent storage for the remaining SQLite guide metadata until it is migrated to MongoDB.
+Run the backend with `uvicorn app.main:app --host 0.0.0.0 --port 8000` from `backend/`. Run `npm run build` followed by `npm start` from `frontend/`. Provide Google Cloud identity, model configuration, and the MongoDB URI to the backend only.
 
-No deployed URL or remote repository has been created in this session.
+Deployed frontend: https://integration-copilot-web-ueqme4aywq-uc.a.run.app
+
+Deployed API: https://integration-copilot-api-ueqme4aywq-uc.a.run.app
+
+Source repository: https://github.com/arpandesai0/integration-copilot
+
+Redeploying the same Cloud Run service in the same project and region keeps
+these service URLs stable. Cloud Run creates a new internal revision name for
+each deployment.
 
 ## Scope and future work
 

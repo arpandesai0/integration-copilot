@@ -13,6 +13,11 @@ from app.agents import workflows
 
 @pytest.fixture
 def client(monkeypatch):
+    from app import chat_store, metadata_store
+
+    monkeypatch.setattr(chat_store.settings, "mongodb_uri", "")
+    chat_store.get_chat_store.cache_clear()
+    monkeypatch.setattr(metadata_store, "_store", None)
     engine = create_engine(
         "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
     )
@@ -38,4 +43,5 @@ def client(monkeypatch):
     with TestClient(main.app) as c:
         yield c
     main.app.dependency_overrides.clear()
+    chat_store.get_chat_store.cache_clear()
     engine.dispose()

@@ -10,7 +10,7 @@ from sqlalchemy import (
     Integer,
     event,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 from app.config import settings
 
 
@@ -167,7 +167,15 @@ if settings.database_url.startswith("sqlite"):
         connection.execute("PRAGMA foreign_keys=ON")
 
 
-SessionLocal = sessionmaker(engine, expire_on_commit=False)
+class PersistedSession(Session):
+    def commit(self):
+        super().commit()
+        from app.metadata_store import schedule_metadata_snapshot
+
+        schedule_metadata_snapshot(engine, Base.metadata)
+
+
+SessionLocal = sessionmaker(engine, class_=PersistedSession, expire_on_commit=False)
 
 
 def get_db():

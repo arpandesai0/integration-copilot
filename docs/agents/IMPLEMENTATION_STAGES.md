@@ -2,7 +2,7 @@
 
 Source of truth: [AGENT.md](./AGENT.md), especially sections 14–20.
 
-Follow these stages in order. Verify each stage before proceeding. Check a task only after it has been implemented and verified; record actual checks and remaining gaps in the README. Status below reflects implementation and verification on 2026-10-28; live-cloud gates remain explicitly open.
+Follow these stages in order. Verify each stage before proceeding. Check a task only after it has been implemented and verified; record actual checks and remaining gaps in the README. Status below reflects implementation and verification on 2026-10-29. The formal five-scenario production demo remains intentionally open.
 
 The repository now contains a runnable frontend and backend. Local developer verification notes are kept outside version control under `docs/dev/`.
 
@@ -32,7 +32,7 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 | 4 | Implemented; mocked tests and successful live Linear research verified after applying the selected project |
 | 5 | Thread/context behavior tested; persistence, failure handling, and successful live main/step answers verified |
 | 6 | Implemented and verified; optional finding-save UI deferred |
-| 7 | Local checks and browser QA completed; MongoDB Atlas runtime, Docker images, and deployment remain unverified |
+| 7 | Cloud Run deployment is live; durable MongoDB metadata restoration is implemented and locally verified; formal production demo is pending |
 
 ## Stage 1 — Project scaffold
 
@@ -83,7 +83,7 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 - [x] Initialize the official Google Gen AI client with Vertex AI, configurable project/location/model, and Application Default Credentials.
 - [x] Resolve provider names, aliases, domains, and `@provider` mentions locally before AI fallback; clarify ambiguous matches and handle providers without OAuth.
 - [x] Implement one agent service with separate research and structured synthesis workflows; use Google Search grounding where supported.
-- [ ] Research registration, authentication alternatives, scopes, redirect URIs, testing, distribution, approval, and prerequisites using official documentation first.
+- [x] Research registration, authentication alternatives, scopes, redirect URIs, testing, distribution, approval, and prerequisites using official documentation first.
 - [x] Capture actual source URLs, titles, timestamps, and claim evidence; validate synthesized guide JSON with Pydantic.
 - [x] Include all required guide fields from section 5, distinguishing documented, tested, inferred, and unverified claims. Leave unsupported estimates unknown.
 - [x] Persist guide versions, research runs, and ordered research events; return the run ID promptly and stream structured SSE progress with reconnection support.
@@ -99,9 +99,9 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 
 **Deliverable:** Main and step assistants answer with distinct context and independently persisted histories.
 
-- [ ] Connect main chat to workspace context, current guide, relevant evidence, main history, and progress without regenerating the guide for normal follow-ups.
+- [x] Connect main chat to workspace context, current guide, relevant evidence, main history, and progress without regenerating the guide for normal follow-ups.
 - [x] Implement focused step context: provider, use case, guide version, selected step, relevant sources, compact main summary, and that thread’s messages.
-- [ ] Connect right-panel chat to the step assistant with practical answers and source references scoped to the selected step.
+- [x] Connect right-panel chat to the step assistant with practical answers and source references scoped to the selected step.
 - [x] Restore existing discussions, list multiple threads for a step, and allow starting another discussion without overwriting previous threads.
 - [x] Preserve histories when switching steps, closing the panel, navigating, or reloading; keep step messages out of the main thread.
 - [x] Stream message lifecycle events and citations; persist completed messages and explicit incomplete/failed states when interrupted.
@@ -131,8 +131,8 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 - [x] Run meaningful backend tests for context isolation, ownership, persistence, evidence validation, streaming failures, and public serialization.
 - [x] Run frontend type, lint, and build checks plus browser checks for the complete journey, responsive layout, loading, and recoverable errors.
 - [x] Finish consistent light/dark styling and accessibility; add keyboard shortcuts only if core functionality is complete.
-- [ ] Configure deployed MongoDB Atlas persistence with backend-only credentials, frontend/backend URLs, device-ID CORS headers, and persistent storage for remaining guide metadata.
-- [ ] Deploy both services where credentials and hosting are available; verify deployed behavior and record successful URLs. Otherwise document the exact deployment gap.
+- [x] Configure MongoDB Atlas persistence with backend-only credentials, frontend/backend URLs, device-ID CORS headers, direct chat storage, and atomic snapshots for all remaining metadata.
+- [x] Deploy both services to Cloud Run and record stable service URLs in the README. A subsequent deployment is required for the latest metadata-snapshot revision.
 - [x] Write the README covering all section 19 requirements: product decisions, architecture, setup, ADC, environment variables, run commands, research flow, conversation scopes, seed providers, evidence methodology, actual checks, limitations, future work, and available deployment URLs.
 - [x] Record or document the section 20 demo sequence, including discussion switching, step completion, a main-chat follow-up, and sharing.
 

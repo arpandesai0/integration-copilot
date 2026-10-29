@@ -26,10 +26,6 @@ command -v gcloud >/dev/null 2>&1 || die "gcloud CLI is not installed"
 command -v curl >/dev/null 2>&1 || die "curl is not installed"
 [[ -n "${project_id}" ]] || die "set PROJECT_ID to the target Google Cloud project"
 
-if [[ "${ALLOW_EPHEMERAL_SQLITE:-0}" != "1" ]]; then
-  die "the app still uses local SQLite metadata. Set ALLOW_EPHEMERAL_SQLITE=1 for a demo deployment; do not use it for persistent production data"
-fi
-
 if [[ -n "${requested_account}" ]]; then
   if ! gcloud auth list --filter="account=${requested_account}" --format='value(account)' | grep -Fxq "${requested_account}"; then
     die "${requested_account} is not authenticated; run: gcloud auth login ${requested_account}"
@@ -178,11 +174,11 @@ wait_for_url() {
   die "${label} did not pass its post-deploy check at ${url}"
 }
 
-wait_for_url "backend health" "${backend_url}/health" '"chat_store":"mongodb"'
+wait_for_url "backend health" "${backend_url}/health" '"metadata_store":"mongodb"'
 wait_for_url "backend API" "${backend_url}/api/v1/providers" '"slug"'
 wait_for_url "frontend" "${frontend_url}"
 wait_for_url "frontend regional alias" "${frontend_regional_url}"
 
 printf '\nDeployment complete.\nFrontend: %s\nFrontend alias: %s\nBackend:  %s\n' "${frontend_url}" "${frontend_regional_url}" "${backend_url}"
-printf 'The backend keeps %s minimum instance(s) warm for evaluator stability. SQLite metadata is still demo-only and not durable across revision replacement.\n' "${backend_min_instances}"
+printf 'The backend keeps %s minimum instance(s) warm and restores durable application metadata from MongoDB.\n' "${backend_min_instances}"
 
