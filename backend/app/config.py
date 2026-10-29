@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     gemini_synthesis_model: ClassVar[str] = "gemini-3.5-flash-lite"
     gemini_research_model: ClassVar[str] = "gemini-3.5-flash-lite"
     google_cloud_project: str = ""
-    google_cloud_location: str = "us-central1"
+    google_cloud_location: str = "global"
     research_timeout_seconds: float = 240
     research_search_timeout_seconds: float = 150
     research_synthesis_timeout_seconds: float = 75

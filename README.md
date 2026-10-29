@@ -18,7 +18,7 @@ Configure `backend/.env`:
 
 ```dotenv
 GOOGLE_CLOUD_PROJECT=your-project-id
-GOOGLE_CLOUD_LOCATION=us-central1
+GOOGLE_CLOUD_LOCATION=global
 DATABASE_URL=sqlite:///./integration_copilot.db
 MONGODB_URI=mongodb+srv://USERNAME:PASSWORD@YOUR_CLUSTER.mongodb.net/?retryWrites=true&w=majority
 MONGODB_DATABASE=integration_copilot

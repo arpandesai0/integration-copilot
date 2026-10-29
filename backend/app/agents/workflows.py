@@ -259,6 +259,12 @@ async def research(run_id):
     except BaseException as exc:
         if isinstance(exc, (KeyboardInterrupt, SystemExit)):
             raise
+        logging.getLogger(__name__).warning(
+            "Research failed during %s: type=%s code=%s",
+            phase,
+            type(exc).__name__,
+            getattr(exc, "code", None),
+        )
         if isinstance(exc, ValidationError):
             # Record structure, never model content, credentials, or request data.
             logging.getLogger(__name__).warning(
