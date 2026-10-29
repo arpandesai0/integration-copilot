@@ -132,7 +132,7 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 - [x] Run frontend type, lint, and build checks plus browser checks for the complete journey, responsive layout, loading, and recoverable errors.
 - [x] Finish consistent light/dark styling and accessibility; add keyboard shortcuts only if core functionality is complete.
 - [x] Configure MongoDB Atlas persistence with backend-only credentials, frontend/backend URLs, device-ID CORS headers, direct chat storage, and atomic snapshots for all remaining metadata.
-- [x] Deploy both services to Cloud Run and record stable service URLs in the README. A subsequent deployment is required for the latest metadata-snapshot revision.
+- [x] Deploy both services to Cloud Run, including the MongoDB metadata-snapshot revision, and record stable service URLs in the README.
 - [x] Write the README covering all section 19 requirements: product decisions, architecture, setup, ADC, environment variables, run commands, research flow, conversation scopes, seed providers, evidence methodology, actual checks, limitations, future work, and available deployment URLs.
 - [x] Record or document the section 20 demo sequence, including discussion switching, step completion, a main-chat follow-up, and sharing.
 
