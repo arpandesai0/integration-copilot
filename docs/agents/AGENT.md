@@ -99,7 +99,7 @@ Use the current supported versions of the libraries.
 - Pydantic v2
 - SQLAlchemy or SQLModel
 - SQLite for local development
-- PostgreSQL-compatible persistence for deployment
+- MongoDB with PyMongo for deployed chat persistence
 - Alembic if migrations are needed
 - httpx for controlled retrieval of public documentation
 - Server-Sent Events for research progress and chat streaming
@@ -1669,7 +1669,7 @@ Implement practical MVP safeguards.
 - Add appropriate fetch timeouts and request limits.
 - Do not expose internal research logs containing sensitive data.
 
-Use PostgreSQL for deployed persistence rather than relying on an ephemeral SQLite file.
+Use MongoDB for deployed chat persistence, partitioned by a server-side hash of the browser's persistent device UUID. Never store the raw device ID or MongoDB credentials in public data.
 
 If anonymous-session security or multi-user isolation is intentionally incomplete, disclose the limitation clearly and restrict the public demo accordingly.
 

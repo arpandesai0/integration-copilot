@@ -6,7 +6,7 @@ Build requirements: [docs/agents/AGENT.md](docs/agents/AGENT.md). Execution chec
 
 ## Local setup
 
-Requirements: Node.js 20.9+ (a current supported LTS is recommended), npm, Python 3.11+, and [uv](https://docs.astral.sh/uv/). Google Cloud access is required for live research and assistant answers; local workspace features use SQLite by default.
+Requirements: Node.js 20.9+ (a current supported LTS is recommended), npm, Python 3.11+, [uv](https://docs.astral.sh/uv/), and MongoDB Atlas (or local MongoDB) for durable chat storage. Google Cloud access is required for live research and assistant answers; local guide metadata uses SQLite by default.
 
 ```sh
 make setup
@@ -21,6 +21,8 @@ GOOGLE_CLOUD_PROJECT=your-project-id
 GOOGLE_CLOUD_LOCATION=us-central1
 GEMINI_MODEL=your-supported-gemini-model
 DATABASE_URL=sqlite:///./integration_copilot.db
+MONGODB_URI=mongodb+srv://USERNAME:PASSWORD@YOUR_CLUSTER.mongodb.net/?retryWrites=true&w=majority
+MONGODB_DATABASE=integration_copilot
 FRONTEND_URL=http://localhost:3000
 ```
 
@@ -51,14 +53,15 @@ make backend
 make frontend
 ```
 
-Open http://localhost:3000. Backend API documentation is at http://localhost:8000/docs. Use the same hostname consistently for frontend and backend so anonymous-session cookies work correctly.
+Open http://localhost:3000. Backend API documentation is at http://localhost:8000/docs. The browser creates a persistent UUID in local storage and sends it as `X-Device-ID`; only its SHA-256 hash is used to partition private workspaces and MongoDB chat documents.
 
 ## Architecture and product decisions
 
 ```mermaid
 flowchart LR
     UI[Next.js workspace] --> API[FastAPI API]
-    API --> DB[(SQLite locally / PostgreSQL deployed)]
+    API --> Metadata[(SQLite metadata)]
+    API --> Mongo[(MongoDB chat storage)]
     API --> Agent[One agent service]
     Agent --> Research[Grounded provider research]
     Agent --> Synthesis[Validated guide synthesis]
@@ -85,7 +88,7 @@ Implemented: provider discovery, three-panel workspace, persisted guides and aut
 
 The current full check passes 115 backend tests plus frontend lint, TypeScript, and the production build. Backend tests cover ownership, privacy, evidence validation, scoped conversation histories, mocked research success, interruptions, freshness, retry/reconnection, and grounding-link sanitization. Browser checks against development and production servers cover actual workspace interactions and real cloud error handling. Live Vertex research and both main/step chat answers are now verified using the selected project. Linear generated a persisted five-step guide with 16 source records. An earlier inherited project produced billing errors; local configuration now takes precedence and the backend has been restarted.
 
-The optional “Save finding to step” action has a confirmed-note API and rendering support, but its UI action is deferred. PostgreSQL runtime, container builds, deployment, and actual provider OAuth flows have not been verified. A checked implementation task is not evidence of a successful deployment.
+The optional “Save finding to step” action has a confirmed-note API and rendering support, but its UI action is deferred. MongoDB Atlas deployment, container builds, deployment, and actual provider OAuth flows have not been verified. A checked implementation task is not evidence of a successful deployment.
 
 Run project checks with:
 
@@ -95,13 +98,13 @@ make check
 
 ## Deployment
 
-Deploy the frontend as a Node.js Next.js application and the backend as a Python ASGI service. Set the frontend's `NEXT_PUBLIC_API_URL` at build time, configure the backend's `FRONTEND_URL` to its exact browser origin, and use HTTPS in deployment. Set secure cookies for HTTPS; keep both services on the same site when relying on browser session cookies.
+Deploy the frontend as a Node.js Next.js application and the backend as a Python ASGI service. Set the frontend's `NEXT_PUBLIC_API_URL` at build time, configure the backend's `FRONTEND_URL` to its exact browser origin, and use HTTPS in deployment. Allow the deployment host in MongoDB Atlas Network Access and store `MONGODB_URI` only in the backend secret manager.
 
-Use a persistent PostgreSQL database, for example `DATABASE_URL=postgresql+psycopg://USER:PASSWORD@HOST:5432/DATABASE`. The optional `docker compose up -d postgres` command starts a local PostgreSQL service; its default password is only for local development. Set `POSTGRES_PASSWORD` when using a different local password.
+Use the Atlas SRV URI through `MONGODB_URI`; never commit the real password. The optional `docker compose up -d mongo` command starts local MongoDB, which can be selected with `MONGODB_URI=mongodb://localhost:27017`. Chat records are indexed by the hashed device ID, thread, and creation time.
 
-Set `COOKIE_SECURE=true` behind HTTPS. `GUIDE_FRESHNESS_DAYS` defaults to 30; older or undated evidence is flagged for refresh. Anonymous-session cookies use SameSite=Lax, so cross-site frontend/backend hosting requires a same-site proxy/domain arrangement. Schemas are created on startup; existing databases need explicit migration planning when the schema changes.
+`GUIDE_FRESHNESS_DAYS` defaults to 30; older or undated evidence is flagged for refresh. CORS must allow the exact frontend origin and the `X-Device-ID` header. A device ID identifies one browser profile; clearing site storage intentionally starts a new private workspace identity.
 
-Run the backend with `uvicorn app.main:app --host 0.0.0.0 --port 8000` from `backend/`. Run `npm run build` followed by `npm start` from `frontend/`. Provide Google Cloud identity and model configuration to the backend only. Do not deploy a SQLite file on an ephemeral filesystem.
+Run the backend with `uvicorn app.main:app --host 0.0.0.0 --port 8000` from `backend/`. Run `npm run build` followed by `npm start` from `frontend/`. Provide Google Cloud identity, model configuration, and the MongoDB URI to the backend only. Mount persistent storage for the remaining SQLite guide metadata until it is migrated to MongoDB.
 
 No deployed URL or remote repository has been created in this session.
 

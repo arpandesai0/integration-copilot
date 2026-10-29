@@ -16,10 +16,14 @@ from app.database import (
 )
 from app.services.core import seed_catalog
 from app.api import router
+from app.chat_store import get_chat_store
 
 
 @asynccontextmanager
 async def lifespan(app):
+    chat_store = get_chat_store()
+    if chat_store:
+        chat_store.initialize()
     Base.metadata.create_all(engine)
     with SessionLocal() as db:
         seed_catalog(db)
@@ -52,7 +56,7 @@ app.add_middleware(
     allow_origins=[settings.frontend_url],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
-    allow_headers=["Content-Type", "Last-Event-ID"],
+    allow_headers=["Content-Type", "Last-Event-ID", "X-Device-ID"],
 )
 
 
@@ -79,6 +83,7 @@ def health():
     return {
         "status": "ok",
         "ai_configured": bool(settings.google_cloud_project and settings.gemini_model),
+        "chat_store": "mongodb" if settings.mongodb_uri else "relational_fallback",
     }
 
 

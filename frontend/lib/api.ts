@@ -1,6 +1,26 @@
 import type { StreamEvent } from "./types";
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+const DEVICE_ID_KEY = "integration-copilot-device-id";
+
+function deviceId(): string | undefined {
+  if (typeof window === "undefined") return undefined;
+  let id = window.localStorage.getItem(DEVICE_ID_KEY);
+  if (!id) {
+    id = window.crypto.randomUUID();
+    window.localStorage.setItem(DEVICE_ID_KEY, id);
+  }
+  return id;
+}
+
+function requestHeaders(headers?: HeadersInit): Headers {
+  const result = new Headers(headers);
+  result.set("Content-Type", "application/json");
+  const id = deviceId();
+  if (id) result.set("X-Device-ID", id);
+  return result;
+}
 export async function api<T>(
   path: string,
   options: RequestInit = {},
@@ -8,7 +28,7 @@ export async function api<T>(
   const response = await fetch(`${API_URL}/api/v1${path}`, {
     ...options,
     credentials: "include",
-    headers: { "Content-Type": "application/json", ...options.headers },
+    headers: requestHeaders(options.headers),
   });
   if (!response.ok) {
     let message = `Request failed (${response.status})`;
@@ -32,7 +52,7 @@ export async function stream(
   const r = await fetch(`${API_URL}/api/v1${path}`, {
     ...options,
     credentials: "include",
-    headers: { "Content-Type": "application/json", ...options.headers },
+    headers: requestHeaders(options.headers),
     signal,
   });
   if (!r.ok) {

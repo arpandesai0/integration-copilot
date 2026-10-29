@@ -2,6 +2,7 @@ import asyncio
 import hashlib
 import json
 import secrets
+import re
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.responses import StreamingResponse
@@ -18,6 +19,7 @@ from app.services.core import *
 from app.agents.workflows import research, answer_stream, clarify_intent, clarification_reply_stream
 from app.agents.client import safe_error
 from app.config import settings
+from app.chat_store import get_chat_store
 
 router = APIRouter(prefix="/api/v1")
 _tasks = set()
@@ -25,8 +27,18 @@ _research_tasks = {}
 _clarifying = set()
 
 
+DEVICE_ID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$", re.I)
+
+
 def owner(request: Request, response: Response):
-    # Unguessable opaque bearer session; only its hash is persisted.
+    # The browser persists this UUID. Only its hash is used in either datastore.
+    device_id = request.headers.get("x-device-id", "").strip()
+    if device_id:
+        if not DEVICE_ID.fullmatch(device_id):
+            raise HTTPException(400, "X-Device-ID must be a valid UUID")
+        return hashlib.sha256(device_id.lower().encode()).hexdigest()
+
+    # Temporary compatibility for older clients. New clients always send X-Device-ID.
     token = request.cookies.get("copilot_session")
     if not token or len(token) != 64:
         token = secrets.token_hex(32)
@@ -39,6 +51,14 @@ def owner(request: Request, response: Response):
             max_age=60 * 60 * 24 * 30,
         )
     return hashlib.sha256(token.encode()).hexdigest()
+
+
+def persist_chat(db, message, identity):
+    store = get_chat_store()
+    if not store:
+        return
+    thread = db.get(ConversationThread, message.thread_id)
+    store.save(message, device_id=identity, workspace_id=thread.workspace_id)
 
 
 def sse(name, data, id=None):
@@ -128,6 +148,9 @@ def delete_workspace(
     db.execute(delete(ResearchRun).where(ResearchRun.workspace_id == w.id))
     db.delete(w)
     db.commit()
+    store = get_chat_store()
+    if store:
+        store.delete_workspace(workspace_id=workspace_id, device_id=identity)
     return {"deleted": True, "id": workspace_id}
 
 
@@ -251,7 +274,7 @@ def new_thread(
 @router.get("/threads/{thread_id}/messages")
 def messages(thread_id: str, identity=Depends(owner), db: Session = Depends(get_db)):
     owned_thread(db, thread_id, identity)
-    return [
+    relational = [
         message_dict(m)
         for m in db.scalars(
             select(Message)
@@ -259,6 +282,15 @@ def messages(thread_id: str, identity=Depends(owner), db: Session = Depends(get_
             .order_by(Message.created_at)
         )
     ]
+    store = get_chat_store()
+    if not store:
+        return relational
+    # Backfill pre-migration messages once, then serve MongoDB as the chat source.
+    for item in db.scalars(
+        select(Message).where(Message.thread_id == thread_id).order_by(Message.created_at)
+    ):
+        persist_chat(db, item, identity)
+    return store.list(thread_id=thread_id, device_id=identity)
 
 
 @router.post("/threads/{thread_id}/messages")
@@ -286,12 +318,14 @@ async def send_message(
     user = Message(thread_id=thread.id, role="user", content=body.content)
     db.add(user)
     db.commit()
+    persist_chat(db, user, identity)
     context = context_package(db, thread)
     assistant = Message(
         thread_id=thread.id, role="assistant", content="", status="streaming"
     )
     db.add(assistant)
     db.commit()
+    persist_chat(db, assistant, identity)
     assistant_id = assistant.id
     mode = thread.type
 
@@ -325,6 +359,7 @@ async def send_message(
                 m.status = "completed"
                 m.citations = citations
                 session.commit()
+                persist_chat(session, m, identity)
                 result = message_dict(m)
             complete = True
             yield sse("message_completed", result)
@@ -337,6 +372,7 @@ async def send_message(
                 m.content = text or error
                 m.status = "failed"
                 session.commit()
+                persist_chat(session, m, identity)
             yield sse("message_error", {"id": assistant_id, "message": error})
         finally:
             if not complete:
@@ -346,6 +382,7 @@ async def send_message(
                         m.content = text
                         m.status = "incomplete"
                         session.commit()
+                        persist_chat(session, m, identity)
 
     return StreamingResponse(
         stream(),
@@ -411,10 +448,12 @@ async def clarify_request(
     user = Message(thread_id=thread.id, role="user", content=body.content)
     db.add(user)
     db.commit()
+    persist_chat(db, user, identity)
     context = context_package(db, thread)
     assistant = Message(thread_id=thread.id, role="assistant", content="", status="streaming")
     db.add(assistant)
     db.commit()
+    persist_chat(db, assistant, identity)
     assistant_id, thread_id, workspace_id = assistant.id, thread.id, w.id
     _clarifying.add(workspace_id)
 
@@ -434,6 +473,7 @@ async def clarify_request(
                 message = session.get(Message, assistant_id)
                 message.content, message.status = text, "completed"
                 session.commit()
+                persist_chat(session, message, identity)
                 result = message_dict(message)
             complete = True
             yield sse("message_completed", result)
@@ -458,6 +498,7 @@ async def clarify_request(
                 message.content = text or error
                 message.status = "failed"
                 session.commit()
+                persist_chat(session, message, identity)
             yield sse("message_error", {"id": assistant_id, "message": error})
         finally:
             _clarifying.discard(workspace_id)
@@ -467,6 +508,7 @@ async def clarify_request(
                     if message and message.status == "streaming":
                         message.content, message.status = text, "incomplete"
                         session.commit()
+                        persist_chat(session, message, identity)
 
     return StreamingResponse(
         stream(), media_type="text/event-stream",

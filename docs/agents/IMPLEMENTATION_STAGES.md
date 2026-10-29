@@ -32,7 +32,7 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 | 4 | Implemented; mocked tests and successful live Linear research verified after applying the selected project |
 | 5 | Thread/context behavior tested; persistence, failure handling, and successful live main/step answers verified |
 | 6 | Implemented and verified; optional finding-save UI deferred |
-| 7 | Local checks and browser QA completed; PostgreSQL runtime, Docker images, and deployment remain unverified |
+| 7 | Local checks and browser QA completed; MongoDB Atlas runtime, Docker images, and deployment remain unverified |
 
 ## Stage 1 — Project scaffold
 
@@ -66,9 +66,9 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 **Deliverable:** Workspace and discussion state survives navigation and reloads.
 
 - [x] Implement the section 8 entities: Provider, Workspace, GuideVersion, GuideStep, Source, ClaimEvidence, ConversationThread, Message, ResearchRun, ResearchEvent, and StepNote.
-- [x] Use validated enums, nullable unknown estimates, relational constraints, and PostgreSQL-compatible persistence; add migrations as needed.
+- [x] Use validated enums, nullable unknown estimates, relational constraints for guide metadata, and MongoDB persistence for chats.
 - [x] Preserve stable step keys across guide versions and retain discussions attached to historical or removed steps.
-- [x] Add an anonymous ownership/session mechanism and enforce access checks for private workspace, thread, message, and mutation endpoints.
+- [x] Add a persistent browser device UUID, hash it on the server, and enforce the resulting ownership key for private workspace, thread, message, and mutation endpoints.
 - [x] Seed the provider catalog with names, domains, aliases, and icons for GitHub, Slack, and Google Drive.
 - [x] Implement provider lookup and workspace creation/list/loading, guide retrieval, thread creation/listing, and message persistence under `/api/v1`.
 - [x] Require a valid step, workspace, guide version, and parent main thread for step discussions.
@@ -131,7 +131,7 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 - [x] Run meaningful backend tests for context isolation, ownership, persistence, evidence validation, streaming failures, and public serialization.
 - [x] Run frontend type, lint, and build checks plus browser checks for the complete journey, responsive layout, loading, and recoverable errors.
 - [x] Finish consistent light/dark styling and accessibility; add keyboard shortcuts only if core functionality is complete.
-- [ ] Configure deployed persistence with PostgreSQL, backend-only credentials, frontend/backend URLs, and appropriate CORS.
+- [ ] Configure deployed MongoDB Atlas persistence with backend-only credentials, frontend/backend URLs, device-ID CORS headers, and persistent storage for remaining guide metadata.
 - [ ] Deploy both services where credentials and hosting are available; verify deployed behavior and record successful URLs. Otherwise document the exact deployment gap.
 - [x] Write the README covering all section 19 requirements: product decisions, architecture, setup, ADC, environment variables, run commands, research flow, conversation scopes, seed providers, evidence methodology, actual checks, limitations, future work, and available deployment URLs.
 - [x] Record or document the section 20 demo sequence, including discussion switching, step completion, a main-chat follow-up, and sharing.

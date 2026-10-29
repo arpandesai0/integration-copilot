@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     clarification_reply_timeout_seconds: float = 90
     gemini_research_thinking_level: str = "low"
     database_url: str = "sqlite:///./integration_copilot.db"
+    mongodb_uri: str = ""
+    mongodb_database: str = "integration_copilot"
     frontend_url: str = "http://localhost:3000"
     cookie_secure: bool = False
     guide_freshness_days: int = 30
