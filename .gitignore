@@ -1,0 +1,29 @@
+# Dependencies and generated output
+node_modules/
+.next/
+out/
+dist/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.tsbuildinfo
+
+# Local settings, credentials, and databases
+.env
+.env.*
+!.env.example
+!.env.local.example
+*.db
+*.db-shm
+*.db-wal
+*.sqlite*
+.DS_Store
+*.log
+playwright-report/
+test-results/
+
+# Local developer documentation must not be committed or pushed.
+/docs/dev/
+

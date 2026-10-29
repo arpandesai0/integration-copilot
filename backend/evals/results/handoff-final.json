@@ -1,0 +1,1188 @@
+{
+  "label": "handoff-final",
+  "models": {
+    "research": "gemini-3.5-flash-lite",
+    "synthesis": "gemini-3.5-flash-lite",
+    "chat": "gemini-3.8-flash"
+  },
+  "cases": [
+    {
+      "id": "research_google_login",
+      "mode": "research",
+      "question": "Let users sign in to my web app using their Google account",
+      "expectation": "google_supported",
+      "status": "fail",
+      "seconds": 12.369,
+      "first_token_seconds": null,
+      "checks": {
+        "finished": true,
+        "not_tested": true,
+        "source_backed_steps": true,
+        "no_approval_estimate": false,
+        "usable_supported_guide": true
+      },
+      "output": {
+        "status": "ready",
+        "guide": {
+          "provider_name": "Google",
+          "provider_website": "https://accounts.google.com/",
+          "oauth_support_status": "supported",
+          "authentication_method": "oauth2",
+          "summary": "Implement Google Sign-In for your web application using OAuth 2.0 and OpenID Connect to let users authenticate securely with their Google accounts.",
+          "clarification_questions": [],
+          "recommended_auth_path": "OAuth 2.0 Authorization Code Flow via Google Identity Services",
+          "difficulty": "Easy",
+          "estimated_setup_minutes": 15,
+          "estimated_approval_days": 0,
+          "setup_confidence": "High",
+          "approval_confidence": "High",
+          "assumptions": [
+            "You have an active Google account and access to the Google Cloud Console."
+          ],
+          "prerequisites": [
+            "A Google Cloud Console project",
+            "Configured OAuth consent screen"
+          ],
+          "approval_requirement": "None for testing; external publishing may require verification depending on scopes used.",
+          "approval_materials": [
+            "App logo",
+            "Privacy policy URL",
+            "Terms of service URL"
+          ],
+          "while_waiting": [
+            "Prepare your backend route handlers for the OAuth callback."
+          ],
+          "uncertainties": [],
+          "blockers": [],
+          "sources": [
+            {
+              "id": "source-1",
+              "title": "google.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGh8eRNyCZmGvWBkI9ZSBw_II0Z3zOk1Bxu3J3FMLTWEQbeQ_87TO5pcCNg8FlcVdNqLuMLymTCxiTeAIxjGyp6pnS4sxte-ivtYM75Iov3AYjI69jFAl_sESoMBPSbwMlmTZl95MRNecfcJcV60FpqJ957Ra0slcfUkSV9B4tC",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:03:57.736628+00:00",
+              "claims": [
+                "Register Your App in Google Cloud Console",
+                "Authorization Endpoint: https://accounts.google.com/o/oauth2/v2/auth",
+                "Token Endpoint: https://oauth2.googleapis.com/token"
+              ],
+              "excerpt": "the base URI is https://accounts.google.com/o/oauth2/v2/auth.",
+              "text_fragment_url": "https://developers.google.com/identity/openid-connect/openid-connect#:~:text=the%20base%20URI%20is%20https%3A%2F%2Faccounts.google.com%2Fo%2Foauth2%2Fv2%2Fauth.",
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "register-app": "https://developers.google.com/identity/openid-connect/openid-connect#:~:text=Google%20Cloud%20Console%20to%20obtain%20OAuth%202.0%20credentials%2C%20set%20a",
+                "code-exchange": "https://developers.google.com/identity/openid-connect/openid-connect#:~:text=Add%20your%20access%20token%20to%20the%20authorization%20header%20and%20make%20an%20HTTPS%20GET%20request"
+              }
+            }
+          ],
+          "citations": [],
+          "last_verified_at": "2026-10-29T05:03:57.736628+00:00",
+          "id": "d9fd198e-4a49-4d7e-a968-66a89215599c",
+          "version_number": 1,
+          "provider": {
+            "id": "a6c2955d-6ef8-45b0-ba98-d509a44dc1de",
+            "name": "Google",
+            "slug": "resolved-google-a6c2955d",
+            "website_url": "https://accounts.google.com/",
+            "official_domain": "accounts.google.com",
+            "aliases": [
+              "google",
+              "accounts.google.com"
+            ],
+            "oauth_support_status": "supported"
+          },
+          "steps": [
+            {
+              "id": "83aaa11f-ec61-4812-b3dd-a111938270ba",
+              "title": "Register Your App in Google Cloud Console",
+              "description": "Create an OAuth client ID within the Google Cloud Console.",
+              "why_it_matters": "Google requires an registered OAuth client ID to issue credentials and validate redirect URIs.",
+              "instructions": [
+                "Go to the Google Cloud Console (https://console.cloud.google.com/).",
+                "Navigate to Credentials -> Create Credentials -> OAuth client ID.",
+                "Select Web application as the application type and add your authorized redirect URIs."
+              ],
+              "estimated_minutes": 10,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://console.cloud.google.com/",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "register-app",
+              "position": 0,
+              "notes": []
+            },
+            {
+              "id": "2cb96dd9-cf80-4ac1-a7cb-9dec89ed26cc",
+              "title": "Implement Authorization Code Flow",
+              "description": "Redirect users to Google for authentication and exchange the returned authorization code for tokens on your backend.",
+              "why_it_matters": "This establishes a secure session by obtaining verified ID and access tokens.",
+              "instructions": [
+                "Send the user to the Google authorization endpoint with your client_id and redirect_uri.",
+                "Handle the callback to retrieve the authorization code.",
+                "Make a POST request to the Google token endpoint to exchange the code for an ID token and access token."
+              ],
+              "estimated_minutes": 15,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": null,
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 2,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "code-exchange",
+              "position": 1,
+              "notes": []
+            }
+          ],
+          "share_slug": "ab4a85e1-b7c8-434c-b432-c082e579b307",
+          "created_at": "2026-10-29 05:04:03.971766",
+          "guide_is_stale": false,
+          "freshness_days": 30,
+          "next_best_action": "Register Your App in Google Cloud Console",
+          "conversation_anchor_message_id": "a01feeed-99f2-43ec-8feb-829ffc35b045",
+          "clarification_message_id": null,
+          "clarification_needed": false
+        },
+        "events": [
+          {
+            "event": "research_started",
+            "at": "2026-10-29T05:03:53.107992",
+            "message": "Investigating provider identity and official OAuth documentation."
+          },
+          {
+            "event": "provider_resolved",
+            "at": "2026-10-29T05:03:57.738076",
+            "message": "Provider identity investigated; validating documented requirements."
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:03:57.740649",
+            "message": "google.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:03:57.741895",
+            "message": "therootcompany.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:03:57.743061",
+            "message": "google.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:03:57.744104",
+            "message": "logto.io"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:03:57.745129",
+            "message": "medium.com"
+          },
+          {
+            "event": "requirements_identified",
+            "at": "2026-10-29T05:03:57.746130",
+            "message": "Extracted authentication, permission, and configuration evidence."
+          },
+          {
+            "event": "approval_analyzed",
+            "at": "2026-10-29T05:03:57.747057",
+            "message": "Reviewing distribution and approval evidence separately from registration."
+          },
+          {
+            "event": "guide_generating",
+            "at": "2026-10-29T05:03:57.747974",
+            "message": "Validating a structured guide against the returned evidence."
+          },
+          {
+            "event": "guide_ready",
+            "at": "2026-10-29T05:04:03.977469",
+            "message": "Your evidence-backed integration guide is ready."
+          }
+        ],
+        "error": null,
+        "evidence_debug": {
+          "synthesis_json": {
+            "provider_name": "Google",
+            "provider_website": "https://accounts.google.com",
+            "oauth_support_status": "supported",
+            "authentication_method": "oauth2",
+            "summary": "Implement Google Sign-In for your web application using OAuth 2.0 and OpenID Connect to let users authenticate securely with their Google accounts.",
+            "recommended_auth_path": "OAuth 2.0 Authorization Code Flow via Google Identity Services",
+            "difficulty": "Easy",
+            "estimated_setup_minutes": 15,
+            "estimated_approval_days": 0,
+            "setup_confidence": "High",
+            "approval_confidence": "High",
+            "assumptions": [
+              "You have an active Google account and access to the Google Cloud Console."
+            ],
+            "prerequisites": [
+              "A Google Cloud Console project",
+              "Configured OAuth consent screen"
+            ],
+            "approval_requirement": "None for testing; external publishing may require verification depending on scopes used.",
+            "approval_materials": [
+              "App logo",
+              "Privacy policy URL",
+              "Terms of service URL"
+            ],
+            "while_waiting": [
+              "Prepare your backend route handlers for the OAuth callback."
+            ],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "register-app",
+                "title": "Register Your App in Google Cloud Console",
+                "description": "Create an OAuth client ID within the Google Cloud Console.",
+                "why_it_matters": "Google requires an registered OAuth client ID to issue credentials and validate redirect URIs.",
+                "instructions": [
+                  "Go to the Google Cloud Console (https://console.cloud.google.com/).",
+                  "Navigate to Credentials -> Create Credentials -> OAuth client ID.",
+                  "Select Web application as the application type and add your authorized redirect URIs."
+                ],
+                "estimated_minutes": 10,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://console.cloud.google.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "code-exchange",
+                "title": "Implement Authorization Code Flow",
+                "description": "Redirect users to Google for authentication and exchange the returned authorization code for tokens on your backend.",
+                "why_it_matters": "This establishes a secure session by obtaining verified ID and access tokens.",
+                "instructions": [
+                  "Send the user to the Google authorization endpoint with your client_id and redirect_uri.",
+                  "Handle the callback to retrieve the authorization code.",
+                  "Make a POST request to the Google token endpoint to exchange the code for an ID token and access token."
+                ],
+                "estimated_minutes": 15,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 2,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "Register Your App in Google Cloud Console",
+                  "Authorization Endpoint: https://accounts.google.com/o/oauth2/v2/auth",
+                  "Token Endpoint: https://oauth2.googleapis.com/token"
+                ],
+                "excerpt": "Go to the Google Cloud Console. Create a new project or select an existing one."
+              }
+            ],
+            "citations": [],
+            "workflow_evidence": null,
+            "oauth_evidence": {
+              "source_id": "source-1",
+              "authorization_url": "https://accounts.google.com/o/oauth2/v2/auth",
+              "token_url": "https://oauth2.googleapis.com/token"
+            }
+          },
+          "research": "To let users sign in to your web application using their Google account, you can implement Google's OpenID Connect (OIDC) and OAuth 2.0 protocol using **Google Identity Services**. \n\n### 1. Register Your App in Google Cloud Console\n1. Go to the [Google Cloud Console](https://console.cloud.google.com/).\n2. Create a new project or select an existing one.\n3. Configure the **OAuth consent screen** (set up your app name, support email, and branding).\n4. Navigate to **Credentials** -> **Create Credentials** -> **OAuth client ID**.\n5. Select **Web application** as the application type.\n6. Add your authorized JavaScript origins and **Authorized redirect URIs** (where Google will send users back with the authorization code).\n7. Retrieve your generated **Client ID** and **Client Secret**.\n\n---\n\n### 2. OIDC & OAuth 2.0 Endpoints\nIf you are implementing the authorization code flow manually or configuring an auth library (like Auth0, NextAuth, Passport.js, etc.), use Google's standard OpenID Connect endpoints:\n\n* **Discovery Document:** `https://accounts.google.com/.well-known/openid-configuration`\n* **Issuer URL:** `https://accounts.google.com`\n* **Authorization Endpoint:** `https://accounts.google.com/o/oauth2/v2/auth`\n* **Token Endpoint:** `https://oauth2.googleapis.com/token`\n* **Userinfo Endpoint:** `https://openidconnect.googleapis.com/v1/userinfo`\n* **JWKS URI (for token validation):** `https://www.googleapis.com/oauth2/v3/certs`\n\n---\n\n### 3. Implementation Flow (Server-Side Authorization Code Flow)\n\n1. **Redirect to Google:** Send the user to the Google authorization endpoint with query parameters including your `client_id`, `redirect_uri`, `response_type=code`, and `scope=openid email profile`.\n2. **Handle the Callback:** After the user signs in and grants consent, Google redirects back to your `redirect_uri` with an authorization `code`.\n3. **Exchange Code for Tokens:** Your backend server makes a POST request to the Google token endpoint (`https://oauth2.googleapis.com/token`) passing the `code`, `client_id`, `client_secret`, and `redirect_uri` to receive an **Access Token** and an **ID Token** (JWT).\n4. **Validate the ID Token & Sign In:** Verify the cryptographic signature of the ID token using Google's public keys (JWKS URI), check that the `iss` and `aud` claims match, and extract the user's profile details (email, name) to establish a session in your web app.",
+          "draft": {
+            "provider_name": "Google",
+            "provider_website": "https://accounts.google.com/",
+            "oauth_support_status": "supported",
+            "authentication_method": "oauth2",
+            "summary": "Implement Google Sign-In for your web application using OAuth 2.0 and OpenID Connect to let users authenticate securely with their Google accounts.",
+            "clarification_questions": [],
+            "recommended_auth_path": "OAuth 2.0 Authorization Code Flow via Google Identity Services",
+            "difficulty": "Easy",
+            "estimated_setup_minutes": 15,
+            "estimated_approval_days": 0,
+            "setup_confidence": "High",
+            "approval_confidence": "High",
+            "assumptions": [
+              "You have an active Google account and access to the Google Cloud Console."
+            ],
+            "prerequisites": [
+              "A Google Cloud Console project",
+              "Configured OAuth consent screen"
+            ],
+            "approval_requirement": "None for testing; external publishing may require verification depending on scopes used.",
+            "approval_materials": [
+              "App logo",
+              "Privacy policy URL",
+              "Terms of service URL"
+            ],
+            "while_waiting": [
+              "Prepare your backend route handlers for the OAuth callback."
+            ],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "register-app",
+                "title": "Register Your App in Google Cloud Console",
+                "description": "Create an OAuth client ID within the Google Cloud Console.",
+                "why_it_matters": "Google requires an registered OAuth client ID to issue credentials and validate redirect URIs.",
+                "instructions": [
+                  "Go to the Google Cloud Console (https://console.cloud.google.com/).",
+                  "Navigate to Credentials -> Create Credentials -> OAuth client ID.",
+                  "Select Web application as the application type and add your authorized redirect URIs."
+                ],
+                "estimated_minutes": 10,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://console.cloud.google.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "code-exchange",
+                "title": "Implement Authorization Code Flow",
+                "description": "Redirect users to Google for authentication and exchange the returned authorization code for tokens on your backend.",
+                "why_it_matters": "This establishes a secure session by obtaining verified ID and access tokens.",
+                "instructions": [
+                  "Send the user to the Google authorization endpoint with your client_id and redirect_uri.",
+                  "Handle the callback to retrieve the authorization code.",
+                  "Make a POST request to the Google token endpoint to exchange the code for an ID token and access token."
+                ],
+                "estimated_minutes": 15,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 2,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "Register Your App in Google Cloud Console",
+                  "Authorization Endpoint: https://accounts.google.com/o/oauth2/v2/auth",
+                  "Token Endpoint: https://oauth2.googleapis.com/token"
+                ],
+                "excerpt": "Go to the Google Cloud Console. Create a new project or select an existing one.",
+                "url": null
+              }
+            ],
+            "citations": [],
+            "workflow_evidence": null,
+            "oauth_evidence": {
+              "source_id": "source-1",
+              "authorization_url": "https://accounts.google.com/o/oauth2/v2/auth",
+              "token_url": "https://oauth2.googleapis.com/token"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "research_dialpad_saml",
+      "mode": "research",
+      "question": "Set up SAML SSO login into Dialpad for my company. Investigate its custom SAML configuration workflow using metadata from our identity provider.",
+      "expectation": "saml_supported",
+      "status": "pass",
+      "seconds": 13.277,
+      "first_token_seconds": null,
+      "checks": {
+        "finished": true,
+        "not_tested": true,
+        "source_backed_steps": true,
+        "no_approval_estimate": true,
+        "usable_saml_workflow": true
+      },
+      "output": {
+        "status": "ready",
+        "guide": {
+          "provider_name": "Dialpad",
+          "provider_website": "https://dialpad.com/",
+          "oauth_support_status": "unknown",
+          "authentication_method": "saml",
+          "summary": "Set up custom SAML Single Sign-On (SSO) into Dialpad using metadata from your identity provider.",
+          "clarification_questions": [],
+          "recommended_auth_path": "Configure custom SAML via the Dialpad Admin Portal using IdP metadata.",
+          "difficulty": "Moderate",
+          "estimated_setup_minutes": 30,
+          "estimated_approval_days": null,
+          "setup_confidence": "High",
+          "approval_confidence": "unknown",
+          "assumptions": [
+            "Company administrator access to Dialpad is available."
+          ],
+          "prerequisites": [
+            "Company Administrator privileges in Dialpad",
+            "An identity provider supporting SAML 2.0"
+          ],
+          "approval_requirement": "None",
+          "approval_materials": [],
+          "while_waiting": [],
+          "uncertainties": [],
+          "blockers": [],
+          "sources": [
+            {
+              "id": "source-1",
+              "title": "dialpad.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGM1dybXsI4k3h8nTlsopKs-RDBO-II9C2AaWEMADqUfcUPY2wHjJ3WW14LBfHkaHUYJvVP7t3TSb9OfcWcZe3bxQnveXQ3yjrtSfzbXia1ZQJoqQYD03RlLRrXh_33PEDMW-28HxhTGfrwoDtgeVTlneRGPElkQdxgkA5g0BWu9mZR2NrRnjCBFscRs8anQwq6zQIjW-qWFg==",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:04:11.037860+00:00",
+              "claims": [
+                "Log in to your Dialpad Admin Portal as a Company Administrator and navigate to Admin Settings > My Company > Authentication > SAML."
+              ],
+              "excerpt": "To restrict the use of other authentication providers, navigate to your Admin Settings at Dialpad.com",
+              "text_fragment_url": "https://help.dialpad.com/hc/en-us/articles/55093296323867-Integrating-Azure-SAML-with-Dialpad#:~:text=To%20restrict%20the%20use%20of%20other%20authentication%20providers%2C%20navigate%20to%20your%20Admin%20Settings%20at%20Dialpad.com",
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "enable-custom-saml": "https://help.dialpad.com/hc/en-us/articles/55093296323867-Integrating-Azure-SAML-with-Dialpad#:~:text=To%20restrict%20the%20use%20of%20other%20authentication%20providers%2C%20navigate%20to%20your%20Admin%20Settings%20at%20Dialpad.com"
+              }
+            },
+            {
+              "id": "source-2",
+              "title": "dialpad.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFzSbphT2JxHfFqcIv61dDBqLR7zgPY7S2FESSXFz70B1MUZOknFf2x4QM_4LHtMhT5-Au4-PI3K2zkWiiS2sYuY5ssjJsiNqIglIWhLCk3EBLO7yu1FIzSXkjKI3Y4f5wwaD5tx2KUSFEbjKmOYqw34xS3hY1ElSJakhZ7hsJ2pgZNY_BMoRTb5XTJxV82mUZnEtKV3RnXcIGzo9NhIN0i",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:04:11.037901+00:00",
+              "claims": [
+                "Create a new custom SAML application in your identity provider dashboard and provide SP details."
+              ],
+              "excerpt": null,
+              "text_fragment_url": null,
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "configure-idp": "https://help.dialpad.com/hc/en-us/articles/55093970091803-Integrating-JumpCloud-SAML-SSO-with-Dialpad#:~:text=Update%20the%20SP%20Entity%20ID%20and%20ACS%20URL%20attributes%20with%20the%20values%20obtained%20from%20the%20Dialpad%20SAML%20configuration"
+              }
+            },
+            {
+              "id": "source-3",
+              "title": "dialpad.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFos0ucM9vJ9bLEwXoa1cCCx_73SuqKlV8GLFKWOfBvoIzvbc0v3oNF6iHNlmrsoCrS4xM7zyIKkJ9tG7F0Gpy3lgaXxDI1PtsI9_cv8xzzMFSkCEMTSxXrszF60XjYiS4rAl79k0naQih-blx_QEA3yruvshtm9roDIJ6r0x_6UvknuEbVO6JN-wvX41YKgQEMRgw0DVmzHbFmKlsh",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:04:11.037910+00:00",
+              "claims": [
+                "Populate the empty fields using the metadata obtained from your IdP and click Save."
+              ],
+              "excerpt": null,
+              "text_fragment_url": null,
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "complete-saml-config": "https://help.dialpad.com/hc/en-us/articles/55092302241307-Google-Workspace-Single-Sign-On-via-SAML#:~:text=To%20restrict%20the%20use%20of%20other%20authentication%20providers%2C%20navigate%20to%20your%20Admin%20Settings%20at%20Dialpad.com",
+                "test-login": "https://help.dialpad.com/hc/en-us/articles/55092302241307-Google-Workspace-Single-Sign-On-via-SAML#:~:text=or%2C%20head%20to%20https%3A%2F%2Fdialpad.com%2Flogin%20and%20select%20Log%20in%20with%20another%20provider"
+              }
+            },
+            {
+              "id": "source-4",
+              "title": "okta.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEWHTL9kkX1YM2yysUS0OMFvczWaoo77EvOtyjt97ECNKs9wu0aNmqNeGGjZh9gw-pC9SERNgZbvSw74aStVxPfjPEpQJeg_emch79YmWz1YBmxcP6bwklSQXSjeZs6F5BMXkC1Cs8wifAqiSwO2OkDY3bailVoAR6UdyaTK0j5ebz5s4Zasn9jAw==",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:04:11.037916+00:00",
+              "claims": [
+                "Using a generic SAML application or custom toolkit configuration."
+              ],
+              "excerpt": "Still on the Dialpad SAML Configuration page, make a copy of your Login Url:",
+              "text_fragment_url": "https://saml-doc.okta.com/SAML_Docs/How-to-Configure-SAML-2.0-for-Dialpad.html#:~:text=Still%20on%20the%20Dialpad%20SAML%20Configuration%20page%2C%20make%20a%20copy%20of%20your%20Login%20Url%3A",
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "configure-idp": "https://saml-doc.okta.com/SAML_Docs/How-to-Configure-SAML-2.0-for-Dialpad.html#:~:text=IdP%20Entity%20ID%20%28Issuer%29%3ACopy%20and%20paste%20the%20following%3A"
+              }
+            }
+          ],
+          "citations": [],
+          "last_verified_at": "2026-10-29T05:04:11.037860+00:00",
+          "id": "5a43f617-3a42-4d2f-9eab-dd936970c1ac",
+          "version_number": 1,
+          "provider": {
+            "id": "7f639ef4-c21e-45af-9d96-7e9850ed981c",
+            "name": "Dialpad",
+            "slug": "resolved-dialpad-7f639ef4",
+            "website_url": "https://dialpad.com/",
+            "official_domain": "dialpad.com",
+            "aliases": [
+              "dialpad",
+              "dialpad.com"
+            ],
+            "oauth_support_status": "unknown"
+          },
+          "steps": [
+            {
+              "id": "220d92c2-3009-4347-b78f-c11d61c4faa4",
+              "title": "Enable Custom SAML in Dialpad",
+              "description": "Log in to the Dialpad Admin Portal to retrieve Service Provider metadata and select the custom provider.",
+              "why_it_matters": "Necessary to obtain the ACS URL and SP Entity ID for your identity provider configuration.",
+              "instructions": [
+                "Log in to your Dialpad Admin Portal as a Company Administrator.",
+                "Navigate to Admin Settings > My Company > Authentication > SAML.",
+                "From the Choose your provider dropdown menu, select Custom.",
+                "Note and copy the SP SSO Url (ACS) and SP Entity ID."
+              ],
+              "estimated_minutes": 5,
+              "actor": "administrator",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://dialpad.com/",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "enable-custom-saml",
+              "position": 0,
+              "notes": []
+            },
+            {
+              "id": "d8c26abd-c0da-4f37-903b-a69230cb52d3",
+              "title": "Configure Your Identity Provider (IdP)",
+              "description": "Create a custom SAML application in your IdP and configure attributes and metadata.",
+              "why_it_matters": "Establishes trust between your IdP and Dialpad.",
+              "instructions": [
+                "Create a new custom SAML application in your identity provider dashboard.",
+                "Paste the SP SSO Url (ACS) and SP Entity ID into your IdP.",
+                "Configure required Attribute Mappings for Email, FirstName, and LastName.",
+                "Export or copy the IdP Entity ID, IdP SSO URL, and X.509 Certificate."
+              ],
+              "estimated_minutes": 15,
+              "actor": "administrator",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-2",
+                "source-4"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": null,
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-2"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "configure-idp",
+              "position": 1,
+              "notes": []
+            },
+            {
+              "id": "ec163f29-0a07-4dfb-9593-68945f1e3851",
+              "title": "Complete Custom SAML Configuration in Dialpad",
+              "description": "Input IdP metadata back into Dialpad to finalize the SAML setup.",
+              "why_it_matters": "Completes the handshake configuration inside Dialpad.",
+              "instructions": [
+                "Return to the Dialpad SAML Configuration page under Admin Settings > My Company > Authentication > SAML.",
+                "Populate the IdP Entity ID (Issuer), IdP SSO URL, and Certificate fields.",
+                "Click Save."
+              ],
+              "estimated_minutes": 5,
+              "actor": "administrator",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-3"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://dialpad.com/",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-3"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "complete-saml-config",
+              "position": 2,
+              "notes": []
+            },
+            {
+              "id": "9b7da2d7-7ed3-48ae-bb98-f81478189c2e",
+              "title": "Assign Users and Test Login",
+              "description": "Assign users to the application and test the SAML login flow.",
+              "why_it_matters": "Validates that users can successfully authenticate via SSO.",
+              "instructions": [
+                "Assign appropriate users or user groups to the Dialpad application inside your identity provider dashboard.",
+                "Navigate to the Dialpad Login page.",
+                "Select Login with another provider, enter your company email domain, and click Next to authenticate."
+              ],
+              "estimated_minutes": 5,
+              "actor": "administrator",
+              "status": "not_started",
+              "blocking": false,
+              "source_ids": [
+                "source-3"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://dialpad.com/login",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-3"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "test-login",
+              "position": 3,
+              "notes": []
+            }
+          ],
+          "share_slug": "519a238c-fec8-4d63-8bd2-9d8039ed6ccf",
+          "created_at": "2026-10-29 05:04:17.247326",
+          "guide_is_stale": false,
+          "freshness_days": 30,
+          "next_best_action": "Enable Custom SAML in Dialpad",
+          "conversation_anchor_message_id": "c2ce92bc-a610-4493-b7ba-66c1b34d47e0",
+          "clarification_message_id": null,
+          "clarification_needed": false
+        },
+        "events": [
+          {
+            "event": "research_started",
+            "at": "2026-10-29T05:04:05.812563",
+            "message": "Investigating provider identity and official OAuth documentation."
+          },
+          {
+            "event": "provider_resolved",
+            "at": "2026-10-29T05:04:11.039702",
+            "message": "Provider identity investigated; validating documented requirements."
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:04:11.042510",
+            "message": "dialpad.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:04:11.044067",
+            "message": "dialpad.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:04:11.045435",
+            "message": "dialpad.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:04:11.046520",
+            "message": "okta.com"
+          },
+          {
+            "event": "requirements_identified",
+            "at": "2026-10-29T05:04:11.047499",
+            "message": "Extracted authentication, permission, and configuration evidence."
+          },
+          {
+            "event": "approval_analyzed",
+            "at": "2026-10-29T05:04:11.048424",
+            "message": "Reviewing distribution and approval evidence separately from registration."
+          },
+          {
+            "event": "guide_generating",
+            "at": "2026-10-29T05:04:11.049418",
+            "message": "Validating a structured guide against the returned evidence."
+          },
+          {
+            "event": "guide_ready",
+            "at": "2026-10-29T05:04:17.255561",
+            "message": "Your evidence-backed integration guide is ready."
+          }
+        ],
+        "error": null,
+        "evidence_debug": {
+          "synthesis_json": {
+            "provider_name": "Dialpad",
+            "provider_website": "https://dialpad.com",
+            "oauth_support_status": "unknown",
+            "authentication_method": "saml",
+            "summary": "Set up custom SAML Single Sign-On (SSO) into Dialpad using metadata from your identity provider.",
+            "recommended_auth_path": "Configure custom SAML via the Dialpad Admin Portal using IdP metadata.",
+            "difficulty": "Moderate",
+            "estimated_setup_minutes": 30,
+            "estimated_approval_days": null,
+            "setup_confidence": "High",
+            "approval_confidence": "unknown",
+            "assumptions": [
+              "Company administrator access to Dialpad is available."
+            ],
+            "prerequisites": [
+              "Company Administrator privileges in Dialpad",
+              "An identity provider supporting SAML 2.0"
+            ],
+            "approval_requirement": "None",
+            "approval_materials": [],
+            "while_waiting": [],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "enable-custom-saml",
+                "title": "Enable Custom SAML in Dialpad",
+                "description": "Log in to the Dialpad Admin Portal to retrieve Service Provider metadata and select the custom provider.",
+                "why_it_matters": "Necessary to obtain the ACS URL and SP Entity ID for your identity provider configuration.",
+                "instructions": [
+                  "Log in to your Dialpad Admin Portal as a Company Administrator.",
+                  "Navigate to Admin Settings > My Company > Authentication > SAML.",
+                  "From the Choose your provider dropdown menu, select Custom.",
+                  "Note and copy the SP SSO Url (ACS) and SP Entity ID."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "configure-idp",
+                "title": "Configure Your Identity Provider (IdP)",
+                "description": "Create a custom SAML application in your IdP and configure attributes and metadata.",
+                "why_it_matters": "Establishes trust between your IdP and Dialpad.",
+                "instructions": [
+                  "Create a new custom SAML application in your identity provider dashboard.",
+                  "Paste the SP SSO Url (ACS) and SP Entity ID into your IdP.",
+                  "Configure required Attribute Mappings for Email, FirstName, and LastName.",
+                  "Export or copy the IdP Entity ID, IdP SSO URL, and X.509 Certificate."
+                ],
+                "estimated_minutes": 15,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-2",
+                  "source-4"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-2"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "complete-saml-config",
+                "title": "Complete Custom SAML Configuration in Dialpad",
+                "description": "Input IdP metadata back into Dialpad to finalize the SAML setup.",
+                "why_it_matters": "Completes the handshake configuration inside Dialpad.",
+                "instructions": [
+                  "Return to the Dialpad SAML Configuration page under Admin Settings > My Company > Authentication > SAML.",
+                  "Populate the IdP Entity ID (Issuer), IdP SSO URL, and Certificate fields.",
+                  "Click Save."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-3"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-3"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "test-login",
+                "title": "Assign Users and Test Login",
+                "description": "Assign users to the application and test the SAML login flow.",
+                "why_it_matters": "Validates that users can successfully authenticate via SSO.",
+                "instructions": [
+                  "Assign appropriate users or user groups to the Dialpad application inside your identity provider dashboard.",
+                  "Navigate to the Dialpad Login page.",
+                  "Select Login with another provider, enter your company email domain, and click Next to authenticate."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": false,
+                "source_ids": [
+                  "source-3"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com/login",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-3"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "Log in to your Dialpad Admin Portal as a Company Administrator and navigate to Admin Settings > My Company > Authentication > SAML."
+                ],
+                "excerpt": "Log in to your Dialpad Admin Portal as a Company Administrator."
+              },
+              {
+                "id": "source-2",
+                "claims": [
+                  "Create a new custom SAML application in your identity provider dashboard and provide SP details."
+                ],
+                "excerpt": "Create a new custom SAML application in your identity provider dashboard."
+              },
+              {
+                "id": "source-3",
+                "claims": [
+                  "Populate the empty fields using the metadata obtained from your IdP and click Save."
+                ],
+                "excerpt": "Populate the empty fields using the metadata obtained from your IdP"
+              },
+              {
+                "id": "source-4",
+                "claims": [
+                  "Using a generic SAML application or custom toolkit configuration."
+                ],
+                "excerpt": "Using a generic SAML application or custom toolkit configuration"
+              }
+            ],
+            "citations": [],
+            "workflow_evidence": {
+              "source_id": "source-1",
+              "excerpt": "To set up custom SAML Single Sign-On (SSO) into Dialpad using metadata from your identity provider (IdP), follow the documented step-by-step workflow below."
+            },
+            "oauth_evidence": null
+          },
+          "research": "To set up custom SAML Single Sign-On (SSO) into Dialpad using metadata from your identity provider (IdP), follow the documented step-by-step workflow below.\n\n---\n\n### Step 1: Enable Custom SAML in Dialpad\n1. Log in to your [Dialpad Admin Portal](https://dialpad.com) as a Company Administrator.\n2. Navigate to **Admin Settings** > **My Company** > **Authentication** > **SAML**.\n3. From the **Choose your provider** dropdown menu, select **Custom**.\n4. Note and copy the Service Provider (SP) parameters provided on the screen, which you will need to input into your IdP:\n   - **SP SSO Url (ACS)** (Assertion Consumer Service URL)\n   - **SP Entity ID**\n   *(Keep this browser tab open while configuring your IdP).*\n\n---\n\n### Step 2: Configure Your Identity Provider (IdP)\nUsing a generic SAML application or custom toolkit configuration (such as Microsoft Entra ID / Azure AD SAML Toolkit, JumpCloud, or a generic SAML provider):\n1. Create a new custom SAML application in your identity provider dashboard.\n2. Provide the Service Provider details copied from Dialpad:\n   - Paste the **SP SSO Url (ACS)** into your IdP\u2019s ACS / Reply URL field.\n   - Paste the **SP Entity ID** into your IdP\u2019s Entity ID / Identifier field.\n3. Configure required **Attribute Mappings / Statements** to ensure user identity data is passed correctly to Dialpad. Typically required attributes include:\n   - `Email` (mapped to user email)\n   - `FirstName` (mapped to user given name)\n   - `LastName` (mapped to user surname)\n4. Export or copy the Identity Provider metadata parameters required by Dialpad:\n   - **IdP Entity ID (Issuer)**\n   - **IdP SSO URL** (Login URL)\n   - **X.509 Certificate** (Signing certificate)\n\n---\n\n### Step 3: Complete Custom SAML Configuration in Dialpad\n1. Return to the open **Dialpad SAML Configuration** page under **Admin Settings** > **My Company** > **Authentication** > **SAML**.\n2. Populate the empty fields using the metadata obtained from your IdP:\n   - **IdP Entity ID (Issuer)**\n   - **IdP SSO URL**\n   - **Certificate** (paste the contents of your IdP\u2019s X.509 certificate)\n3. Click **Save**.\n\n---\n\n### Step 4: Assign Users and Test Login\n1. Assign appropriate users or user groups to the Dialpad application inside your identity provider dashboard.\n2. Open a new browser window or incognito session and navigate to the [Dialpad Login page](https://dialpad.com/login).\n3. Select **Login with another provider**, enter your company email domain, and click **Next**.\n4. You will be seamlessly redirected to your IdP's authentication page. Upon successful authentication, you will be logged into Dialpad.",
+          "draft": {
+            "provider_name": "Dialpad",
+            "provider_website": "https://dialpad.com/",
+            "oauth_support_status": "unknown",
+            "authentication_method": "saml",
+            "summary": "Set up custom SAML Single Sign-On (SSO) into Dialpad using metadata from your identity provider.",
+            "clarification_questions": [],
+            "recommended_auth_path": "Configure custom SAML via the Dialpad Admin Portal using IdP metadata.",
+            "difficulty": "Moderate",
+            "estimated_setup_minutes": 30,
+            "estimated_approval_days": null,
+            "setup_confidence": "High",
+            "approval_confidence": "unknown",
+            "assumptions": [
+              "Company administrator access to Dialpad is available."
+            ],
+            "prerequisites": [
+              "Company Administrator privileges in Dialpad",
+              "An identity provider supporting SAML 2.0"
+            ],
+            "approval_requirement": "None",
+            "approval_materials": [],
+            "while_waiting": [],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "enable-custom-saml",
+                "title": "Enable Custom SAML in Dialpad",
+                "description": "Log in to the Dialpad Admin Portal to retrieve Service Provider metadata and select the custom provider.",
+                "why_it_matters": "Necessary to obtain the ACS URL and SP Entity ID for your identity provider configuration.",
+                "instructions": [
+                  "Log in to your Dialpad Admin Portal as a Company Administrator.",
+                  "Navigate to Admin Settings > My Company > Authentication > SAML.",
+                  "From the Choose your provider dropdown menu, select Custom.",
+                  "Note and copy the SP SSO Url (ACS) and SP Entity ID."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "configure-idp",
+                "title": "Configure Your Identity Provider (IdP)",
+                "description": "Create a custom SAML application in your IdP and configure attributes and metadata.",
+                "why_it_matters": "Establishes trust between your IdP and Dialpad.",
+                "instructions": [
+                  "Create a new custom SAML application in your identity provider dashboard.",
+                  "Paste the SP SSO Url (ACS) and SP Entity ID into your IdP.",
+                  "Configure required Attribute Mappings for Email, FirstName, and LastName.",
+                  "Export or copy the IdP Entity ID, IdP SSO URL, and X.509 Certificate."
+                ],
+                "estimated_minutes": 15,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-2",
+                  "source-4"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-2"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "complete-saml-config",
+                "title": "Complete Custom SAML Configuration in Dialpad",
+                "description": "Input IdP metadata back into Dialpad to finalize the SAML setup.",
+                "why_it_matters": "Completes the handshake configuration inside Dialpad.",
+                "instructions": [
+                  "Return to the Dialpad SAML Configuration page under Admin Settings > My Company > Authentication > SAML.",
+                  "Populate the IdP Entity ID (Issuer), IdP SSO URL, and Certificate fields.",
+                  "Click Save."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-3"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-3"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "test-login",
+                "title": "Assign Users and Test Login",
+                "description": "Assign users to the application and test the SAML login flow.",
+                "why_it_matters": "Validates that users can successfully authenticate via SSO.",
+                "instructions": [
+                  "Assign appropriate users or user groups to the Dialpad application inside your identity provider dashboard.",
+                  "Navigate to the Dialpad Login page.",
+                  "Select Login with another provider, enter your company email domain, and click Next to authenticate."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": false,
+                "source_ids": [
+                  "source-3"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com/login",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-3"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "Log in to your Dialpad Admin Portal as a Company Administrator and navigate to Admin Settings > My Company > Authentication > SAML."
+                ],
+                "excerpt": "Log in to your Dialpad Admin Portal as a Company Administrator.",
+                "url": null
+              },
+              {
+                "id": "source-2",
+                "claims": [
+                  "Create a new custom SAML application in your identity provider dashboard and provide SP details."
+                ],
+                "excerpt": "Create a new custom SAML application in your identity provider dashboard.",
+                "url": null
+              },
+              {
+                "id": "source-3",
+                "claims": [
+                  "Populate the empty fields using the metadata obtained from your IdP and click Save."
+                ],
+                "excerpt": "Populate the empty fields using the metadata obtained from your IdP",
+                "url": null
+              },
+              {
+                "id": "source-4",
+                "claims": [
+                  "Using a generic SAML application or custom toolkit configuration."
+                ],
+                "excerpt": "Using a generic SAML application or custom toolkit configuration",
+                "url": null
+              }
+            ],
+            "citations": [],
+            "workflow_evidence": {
+              "source_id": "source-1",
+              "excerpt": "To set up custom SAML Single Sign-On (SSO) into Dialpad using metadata from your identity provider (IdP), follow the documented step-by-step workflow below."
+            },
+            "oauth_evidence": null
+          }
+        }
+      }
+    }
+  ]
+}

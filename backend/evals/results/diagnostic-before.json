@@ -1,0 +1,403 @@
+{
+  "label": "diagnostic-before",
+  "models": {
+    "research": "gemini-3.5-flash-lite",
+    "synthesis": "gemini-3.5-flash-lite",
+    "chat": "gemini-3.8-flash"
+  },
+  "cases": [
+    {
+      "id": "research_google_login",
+      "mode": "research",
+      "question": "Let users sign in to my web app using their Google account",
+      "expectation": "google_supported",
+      "status": "fail",
+      "seconds": 12.259,
+      "first_token_seconds": null,
+      "checks": {
+        "finished": true,
+        "not_tested": true,
+        "source_backed_steps": true,
+        "no_approval_estimate": false,
+        "usable_supported_guide": false
+      },
+      "output": {
+        "status": "ready",
+        "guide": {
+          "provider_name": "Google",
+          "provider_website": "https://accounts.google.com/",
+          "oauth_support_status": "supported",
+          "summary": "Implement Google Identity Services for users to sign in to your web application using their Google account via standard OpenID Connect and OAuth 2.0.",
+          "clarification_questions": [],
+          "recommended_auth_path": "Google Identity Services JavaScript Library and OAuth 2.0 Authorization Code Flow",
+          "difficulty": "Easy",
+          "estimated_setup_minutes": 15,
+          "estimated_approval_days": 0,
+          "setup_confidence": "high",
+          "approval_confidence": "high",
+          "assumptions": [
+            "You have an active Google Cloud account.",
+            "Your web app has valid HTTPS URIs for production redirect handling."
+          ],
+          "prerequisites": [
+            "A Google Cloud Console project.",
+            "A configured OAuth consent screen."
+          ],
+          "approval_requirement": "None for testing; publishing to external users may require consent screen verification depending on requested scopes.",
+          "approval_materials": [
+            "App privacy policy URL",
+            "App terms of service URL"
+          ],
+          "while_waiting": [
+            "Review the Google Identity Services developer documentation."
+          ],
+          "uncertainties": [],
+          "blockers": [],
+          "sources": [
+            {
+              "id": "source-1",
+              "title": "google.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH1SidhkUti_Gs2XlC0MMNqMVgqlvhUYzGv40IPwLdv0SSXnTsO2Msa2-ETr8MpAUjGjlHI87Lv0uA8o6YcrhjHhNFfWVSD-w4hrVN7U6gWM49_ntCRh6g-IaVlTh_L3xVms3Hc7d5AJOBrmX4ittQN8Wour2FWNFN4AmqgSrhc",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-28T19:59:01.927204+00:00",
+              "claims": [
+                "Go to the Google Cloud Console. Create a new project or select an existing one."
+              ],
+              "excerpt": "Google Cloud Console to obtain OAuth 2.0 credentials, set a",
+              "text_fragment_url": "https://developers.google.com/identity/openid-connect/openid-connect#:~:text=Google%20Cloud%20Console%20to%20obtain%20OAuth%202.0%20credentials%2C%20set%20a",
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "configure-project": "https://developers.google.com/identity/openid-connect/openid-connect#:~:text=Google%20Cloud%20Console%20to%20obtain%20OAuth%202.0%20credentials%2C%20set%20a"
+              }
+            },
+            {
+              "id": "source-2",
+              "title": "therootcompany.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF-8OfdSk-xz68x74md7Ci19WNNoB8GEqIE71qdoHPAwHyJe_D_69JWxgv9TkLdxu_i7Uc7UoolO2TNZL55zz0FT3TGsUT1p7FdBAnnNFhEOXsAOA--r07uRJgC_7P1o9Bf3P3c-f74-CKEl_62N1OzVn0mIUIv1VqU",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-28T19:59:01.927232+00:00",
+              "claims": [],
+              "excerpt_verified": false
+            },
+            {
+              "id": "source-3",
+              "title": "oidc-spa.dev",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHFsmSM9eW-0gU3M1ne0p3gbA720wHurm8c_H3N3BDOtz5FgA4_tTQcJoP190z8RWAqkt5W8LiPpbfxsv3YMC7iH1YJ8W3BiRVgck1k_rCN5BHgSCofhz1qHxOWERnC5FF6q3cHLD-R2XzdWnJAMcz1ltq2pQk8siQy",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-28T19:59:01.927243+00:00",
+              "claims": [],
+              "excerpt_verified": false
+            },
+            {
+              "id": "source-4",
+              "title": "logto.io",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG8Rhzmxl5EWj7nwwBToMu7AsBITYzRHIUiWLYCMlY47DBOEN3EvnLg_tG1BSqT_K-AxyfUohhFI45YaTTd8uinZqXPj7R2W4u52iYHeSJaY83fhaNqRPpXB3rJhrFqSZqCDwT1ro-8gO79Nw==",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-28T19:59:01.927248+00:00",
+              "claims": [],
+              "excerpt_verified": false
+            }
+          ],
+          "citations": [],
+          "last_verified_at": "2026-10-28T19:59:01.927204+00:00",
+          "id": "956f3ea0-affa-4cdc-93cc-c904b46a32af",
+          "version_number": 1,
+          "provider": {
+            "id": "41aaf49a-c780-43f2-a682-d9c8d1b5692a",
+            "name": "Google",
+            "slug": "resolved-google-41aaf49a",
+            "website_url": "https://accounts.google.com/",
+            "official_domain": "accounts.google.com",
+            "aliases": [
+              "google",
+              "accounts.google.com"
+            ],
+            "oauth_support_status": "supported"
+          },
+          "steps": [
+            {
+              "id": "2c7f12cb-9ec3-4237-adf6-4bb02686b1af",
+              "title": "Configure a Project in Google Cloud",
+              "description": "Create or select a Google Cloud project, configure the OAuth consent screen, and create OAuth client credentials.",
+              "why_it_matters": "Google requires an OAuth client ID and consent screen configuration to issue tokens and identify your web application securely.",
+              "instructions": [
+                "Go to the [Google Cloud Console](https://console.cloud.google.com/).",
+                "Create a new project or select an existing one.",
+                "Navigate to APIs & Services > OAuth consent screen and configure your application name, support email, and user scopes.",
+                "Go to APIs & Services > Credentials, click Create Credentials, and choose OAuth client ID.",
+                "Select Web application as the application type, add authorized domains, and retrieve your Client ID and Client Secret."
+              ],
+              "estimated_minutes": 10,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://console.cloud.google.com/",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "configure-project",
+              "position": 0,
+              "notes": []
+            }
+          ],
+          "share_slug": "b152c65e-df97-40cb-811b-f7d20dc4f2a9",
+          "created_at": "2026-10-28 19:59:07.777359",
+          "guide_is_stale": false,
+          "freshness_days": 30,
+          "next_best_action": "Configure a Project in Google Cloud",
+          "conversation_anchor_message_id": "088b5f28-a39b-49fb-ba47-cafc5d2d2ae2",
+          "clarification_message_id": null,
+          "clarification_needed": false
+        },
+        "events": [
+          {
+            "event": "research_started",
+            "at": "2026-10-28T19:58:57.220496",
+            "message": "Investigating provider identity and official OAuth documentation."
+          },
+          {
+            "event": "provider_resolved",
+            "at": "2026-10-28T19:59:01.928699",
+            "message": "Provider identity investigated; validating documented requirements."
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-28T19:59:01.931106",
+            "message": "google.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-28T19:59:01.932398",
+            "message": "therootcompany.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-28T19:59:01.933635",
+            "message": "oidc-spa.dev"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-28T19:59:01.934857",
+            "message": "logto.io"
+          },
+          {
+            "event": "requirements_identified",
+            "at": "2026-10-28T19:59:01.935877",
+            "message": "Extracted authentication, permission, and configuration evidence."
+          },
+          {
+            "event": "approval_analyzed",
+            "at": "2026-10-28T19:59:01.936909",
+            "message": "Reviewing distribution and approval evidence separately from registration."
+          },
+          {
+            "event": "guide_generating",
+            "at": "2026-10-28T19:59:01.937889",
+            "message": "Validating a structured guide against the returned evidence."
+          },
+          {
+            "event": "guide_ready",
+            "at": "2026-10-28T19:59:07.784151",
+            "message": "Your evidence-backed integration guide is ready."
+          }
+        ],
+        "error": null,
+        "evidence_debug": {
+          "research": "To let users sign in to your web application using their Google account, you can implement **Google Identity Services**, which conforms to the OpenID Connect (OIDC) standard. \n\nHere is an overview of the steps required to configure and integrate Google Sign-In into your web app:\n\n### 1. Configure a Project in Google Cloud\n1. Go to the [Google Cloud Console](https://console.cloud.google.com/).\n2. Create a new project or select an existing one.\n3. Navigate to **APIs & Services** > **OAuth consent screen**. Configure your application name, support email, and user scopes (such as `email` and `profile`).\n4. Go to **APIs & Services** > **Credentials**:\n   * Click **Create Credentials** and choose **OAuth client ID**.\n   * Select **Web application** as the application type.\n   * Add your app's origin domains to **Authorized JavaScript origins** and your callback/redirect URLs to **Authorized redirect URIs**.\n5. Retrieve your generated **Client ID** (and **Client Secret** if performing server-side validation).\n\n---\n\n### 2. Implementation Options\nYou can implement Google Sign-In either via frontend client libraries or standard OAuth 2.0 / OIDC authorization flows:\n\n* **Google Identity Services JavaScript Library (Recommended for Websites):**\n  Embeds the official \"Sign in with Google\" button and handles token generation seamlessly on the client side.\n  * *Authorization Endpoint:* `https://accounts.google.com/o/oauth2/v2/auth`\n  * *Token Endpoint:* `https://oauth2.googleapis.com/token`\n  * *OIDC Discovery Document:* `https://accounts.google.com/.well-known/openid-configuration`\n\n* **Handling the Token:**\n  Upon successful authentication, Google returns an OpenID Connect **ID Token** (a JWT) to your application. Your frontend or backend can verify this token's signature using Google's public keys available at the JWKS URI (`https://www.googleapis.com/oauth2/v3/certs`) to securely identify the user.",
+          "draft": {
+            "provider_name": "Google",
+            "provider_website": "https://accounts.google.com/",
+            "oauth_support_status": "supported",
+            "summary": "Implement Google Identity Services for users to sign in to your web application using their Google account via standard OpenID Connect and OAuth 2.0.",
+            "clarification_questions": [],
+            "recommended_auth_path": "Google Identity Services JavaScript Library and OAuth 2.0 Authorization Code Flow",
+            "difficulty": "Easy",
+            "estimated_setup_minutes": 15,
+            "estimated_approval_days": 0,
+            "setup_confidence": "high",
+            "approval_confidence": "high",
+            "assumptions": [
+              "You have an active Google Cloud account.",
+              "Your web app has valid HTTPS URIs for production redirect handling."
+            ],
+            "prerequisites": [
+              "A Google Cloud Console project.",
+              "A configured OAuth consent screen."
+            ],
+            "approval_requirement": "None for testing; publishing to external users may require consent screen verification depending on requested scopes.",
+            "approval_materials": [
+              "App privacy policy URL",
+              "App terms of service URL"
+            ],
+            "while_waiting": [
+              "Review the Google Identity Services developer documentation."
+            ],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "configure-project",
+                "title": "Configure a Project in Google Cloud",
+                "description": "Create or select a Google Cloud project, configure the OAuth consent screen, and create OAuth client credentials.",
+                "why_it_matters": "Google requires an OAuth client ID and consent screen configuration to issue tokens and identify your web application securely.",
+                "instructions": [
+                  "Go to the [Google Cloud Console](https://console.cloud.google.com/).",
+                  "Create a new project or select an existing one.",
+                  "Navigate to APIs & Services > OAuth consent screen and configure your application name, support email, and user scopes.",
+                  "Go to APIs & Services > Credentials, click Create Credentials, and choose OAuth client ID.",
+                  "Select Web application as the application type, add authorized domains, and retrieve your Client ID and Client Secret."
+                ],
+                "estimated_minutes": 10,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://console.cloud.google.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "Go to the Google Cloud Console. Create a new project or select an existing one."
+                ],
+                "excerpt": "Go to the Google Cloud Console.",
+                "url": null
+              },
+              {
+                "id": "source-2",
+                "claims": [],
+                "excerpt": null,
+                "url": null
+              },
+              {
+                "id": "source-3",
+                "claims": [],
+                "excerpt": null,
+                "url": null
+              },
+              {
+                "id": "source-4",
+                "claims": [],
+                "excerpt": null,
+                "url": null
+              }
+            ],
+            "citations": [],
+            "oauth_evidence": {
+              "source_id": "source-1",
+              "authorization_url": "https://accounts.google.com/o/oauth2/v2/auth",
+              "token_url": "https://oauth2.googleapis.com/token"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "research_jira_tickets",
+      "mode": "research",
+      "question": "My customers should connect Jira Cloud so my app can read their tickets",
+      "expectation": "jira_supported",
+      "status": "fail",
+      "seconds": 13.797,
+      "first_token_seconds": null,
+      "checks": {
+        "finished": false,
+        "expected_guide_or_limitation": false
+      },
+      "output": {
+        "status": "research_failed",
+        "guide": null,
+        "events": [
+          {
+            "event": "research_started",
+            "at": "2026-10-28T19:59:09.293620",
+            "message": "Investigating provider identity and official OAuth documentation."
+          },
+          {
+            "event": "provider_resolved",
+            "at": "2026-10-28T19:59:14.634798",
+            "message": "Provider identity investigated; validating documented requirements."
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-28T19:59:14.637289",
+            "message": "atlassian.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-28T19:59:14.638711",
+            "message": "atlassian.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-28T19:59:14.639946",
+            "message": "atlassian.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-28T19:59:14.641075",
+            "message": "atlassian.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-28T19:59:14.642129",
+            "message": "github.com"
+          },
+          {
+            "event": "requirements_identified",
+            "at": "2026-10-28T19:59:14.643108",
+            "message": "Extracted authentication, permission, and configuration evidence."
+          },
+          {
+            "event": "approval_analyzed",
+            "at": "2026-10-28T19:59:14.644048",
+            "message": "Reviewing distribution and approval evidence separately from registration."
+          },
+          {
+            "event": "guide_generating",
+            "at": "2026-10-28T19:59:14.644905",
+            "message": "Validating a structured guide against the returned evidence."
+          },
+          {
+            "event": "research_failed",
+            "at": "2026-10-28T19:59:21.586649",
+            "message": "The AI request could not complete. Check backend model configuration and connectivity, then retry."
+          }
+        ],
+        "error": "The AI request could not complete. Check backend model configuration and connectivity, then retry.",
+        "evidence_debug": {}
+      }
+    }
+  ]
+}

@@ -1,0 +1,2060 @@
+{
+  "label": "research-final",
+  "models": {
+    "research": "gemini-3.5-flash-lite",
+    "synthesis": "gemini-3.5-flash-lite",
+    "chat": "gemini-3.5-flash-lite"
+  },
+  "cases": [
+    {
+      "id": "research_google_login",
+      "mode": "research",
+      "question": "Let users sign in to my web app using their Google account",
+      "expectation": "google_supported",
+      "status": "pass",
+      "seconds": 15.456,
+      "first_token_seconds": null,
+      "checks": {
+        "finished": true,
+        "not_tested": true,
+        "source_backed_steps": true,
+        "no_approval_estimate": true,
+        "usable_supported_guide": true
+      },
+      "output": {
+        "status": "ready",
+        "guide": {
+          "provider_name": "Google",
+          "provider_website": "https://accounts.google.com/",
+          "oauth_support_status": "supported",
+          "authentication_method": "oidc",
+          "summary": "Integrate Google Sign-In into your web application using the OpenID Connect (OIDC) protocol via the Authorization Code Flow.",
+          "clarification_questions": [],
+          "recommended_auth_path": "Authorization Code Flow with PKCE or client secret",
+          "difficulty": "Easy",
+          "estimated_setup_minutes": null,
+          "estimated_approval_days": null,
+          "setup_confidence": "High",
+          "approval_confidence": "High",
+          "assumptions": [
+            "The application has a backend server capable of handling secure credential exchange and token validation."
+          ],
+          "prerequisites": [
+            "A Google Cloud Console account and an active project.",
+            "A backend server with an HTTPS redirect endpoint or a configured local development URI."
+          ],
+          "approval_requirement": "None for testing; publishing an app with sensitive scopes may require Google verification.",
+          "approval_materials": [],
+          "while_waiting": [],
+          "uncertainties": [],
+          "blockers": [],
+          "sources": [
+            {
+              "id": "source-1",
+              "title": "google.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGjH8a-C_DiqQctTFq9bRDm-I4shR-x0z6LZcpdpwr_BrRkxvfb9sbsNiY4CjiVnqet4kKGQ6pA37LsLeXa3LVtGyyi6FUkOriGOVR0r4DaA7901PFJxXkS0ETSCa3pxCbINmo8_uTm0XjXDFB9M4rn4jUkvB0pBPeipGMLdzus",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:09:50.090936+00:00",
+              "claims": [
+                "To let users sign in to your web application using their Google account, you must implement the OpenID Connect (OIDC) protocol over OAuth 2.0 using the Authorization Code Flow."
+              ],
+              "excerpt": "Google's OAuth 2.0 APIs support authentication and authorization, conforming to the OpenID Connect specification and are OpenID Certified.",
+              "text_fragment_url": "https://developers.google.com/identity/openid-connect/openid-connect#:~:text=Google%27s%20OAuth%202.0%20APIs%20support%20authentication%20and%20authorization%2C%20conforming%20to%20the%20OpenID%20Connect%20specification%20and%20are%20OpenID%20Certified.",
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "configure-credentials": "https://developers.google.com/identity/openid-connect/openid-connect#:~:text=Google%20Cloud%20Console%20to%20obtain%20OAuth%202.0%20credentials%2C%20set%20a",
+                "implement-flow": "https://developers.google.com/identity/openid-connect/openid-connect#:~:text=state%20should%20include%20the%20value%20of%20the%20anti%2Dforgery%20unique%20session%20token%2C%20as",
+                "verify-integration": "https://developers.google.com/identity/openid-connect/openid-connect#:~:text=Google%20Cloud%20Console%20to%20obtain%20OAuth%202.0%20credentials%2C%20set%20a"
+              }
+            },
+            {
+              "id": "source-2",
+              "title": "medium.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGiyCeXXnWrQpFgkQdtiTqfULM95U8LQz34pmBV-E8UwyHaUOLcQJwiAxoEOfseqco8vIlasD2lwZQkBT6GdJvFFXJibhnhayWIwhYktygGxdw5YtuhZ98SD_Otn4mwtGCs2alxm-gRAQhg1iJZ3hW6lxAbLBHuCPiW3QD81oGu9UzZv6hk-hNgDQD3e8OjnRAqdAdKtQJ0WIC9_barQDJR8Osks7emhn-f7a5EDTwHXtIpI6d6fko=",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:09:50.090962+00:00",
+              "claims": [],
+              "excerpt_verified": false
+            },
+            {
+              "id": "source-3",
+              "title": "google.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFWuek2X2PI1b7v9kuJ4hZavG2rSNjc3czICJNJoewY5xPjfJ6RyqxkShYYTbH4Bp5KtQuRi-ogY7RFGlJxZ9RAV11e1okwgIwIPGYOVh2CuBes8HJ5L9u9OFQ-vXjqFZUA-78ey5Aj5mp8xCKRUXdAPUabpVg=",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:09:50.090969+00:00",
+              "claims": [],
+              "excerpt_verified": false
+            },
+            {
+              "id": "source-4",
+              "title": "dev.to",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFBnc4M0RrIdQjHNyNHZtHQqnUw6alKqlwyoqT0yKVSqm2i00IYUCTNzj8GiOJy4TT47qrPg3aMXvtyM7QeE-eWOYDziXdkq_OYsp14XwAJe3Lh3q9-rzxm3xSC0rRtPFwD4s_ZYSR5HaOS40bwtzr87Xo7W2-O8UNhKkWIzQxx5r5saCqoVXsQ1RExYqs2zi0dXEboiSG8-WOckD7Q82Ze",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:09:50.090973+00:00",
+              "claims": [],
+              "excerpt_verified": false
+            }
+          ],
+          "citations": [],
+          "last_verified_at": "2026-10-29T05:09:50.090936+00:00",
+          "id": "38fd3327-56b3-474d-91f3-ee40c4d825c1",
+          "version_number": 1,
+          "provider": {
+            "id": "c527f07d-e65c-4f6d-bb06-c0bfcb8e0577",
+            "name": "Google",
+            "slug": "resolved-google-c527f07d",
+            "website_url": "https://accounts.google.com/",
+            "official_domain": "accounts.google.com",
+            "aliases": [
+              "google",
+              "accounts.google.com"
+            ],
+            "oauth_support_status": "supported"
+          },
+          "steps": [
+            {
+              "id": "bb9c49ce-cf01-4e0e-a263-c4a5f06027ed",
+              "title": "Configure Google Cloud Credentials",
+              "description": "Create OAuth credentials in the Google Cloud Console and set up the OAuth consent screen.",
+              "why_it_matters": "Google requires an OAuth client ID and consent screen configuration to issue authorization codes and tokens.",
+              "instructions": [
+                "Go to the Google Cloud Console (https://console.cloud.google.com/).",
+                "Create a new project or select an existing one.",
+                "Navigate to APIs & Services > OAuth consent screen, choose External or Internal, and fill in the mandatory app details.",
+                "Navigate to APIs & Services > Credentials, click Create Credentials, and select OAuth client ID.",
+                "Select Web application, add your authorized redirect URIs, and click Create to get your Client ID and Client Secret."
+              ],
+              "estimated_minutes": 10,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://console.cloud.google.com/",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "configure-credentials",
+              "position": 0,
+              "notes": []
+            },
+            {
+              "id": "86d60b82-d3f0-43b5-8cc5-0bdbb5072c62",
+              "title": "Implement the Authorization Code Flow",
+              "description": "Redirect users to Google's authorization endpoint, handle the callback, and exchange the code for tokens on your backend server.",
+              "why_it_matters": "Exchanging the authorization code securely on the server prevents exposure of tokens and enables user authentication.",
+              "instructions": [
+                "Construct an anti-forgery state token, save it in the user's session, and redirect the browser to Google's authorization endpoint.",
+                "Handle the callback at your redirect URI, validating the state parameter against the session value.",
+                "Send a POST request from your backend server to Google's token endpoint to exchange the authorization code for an ID token and access token.",
+                "Cryptographically validate the received ID token and extract user claims to establish a session."
+              ],
+              "estimated_minutes": 15,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": null,
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 2,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "implement-flow",
+              "position": 1,
+              "notes": []
+            },
+            {
+              "id": "f129ab43-9dd9-4e12-a1e4-f0c9f3ba8a34",
+              "title": "End-to-End Verification",
+              "description": "Verify the sign-in flow locally or in a sandbox, confirming correct redirection and token validation.",
+              "why_it_matters": "Testing ensures that the sign-in flow handles errors correctly and successfully provisions or logs in users.",
+              "instructions": [
+                "Ensure local development redirect URIs are registered under your Google Cloud Console credentials.",
+                "Click the sign-in link on your web app and verify redirection to the Google account chooser and consent screen.",
+                "Confirm that approving the prompt redirects back to your application with a query parameter code.",
+                "Inspect server logs to ensure the code exchange returns a 200 OK with valid JSON containing the ID token."
+              ],
+              "estimated_minutes": 10,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": false,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": null,
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 3,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "verify-integration",
+              "position": 2,
+              "notes": []
+            }
+          ],
+          "share_slug": "36288057-6c22-4e59-bb4a-dcd4ab000591",
+          "created_at": "2026-10-29 05:09:57.172256",
+          "guide_is_stale": false,
+          "freshness_days": 30,
+          "next_best_action": "Configure Google Cloud Credentials",
+          "conversation_anchor_message_id": "da2ed83a-76c6-4267-8e6b-54d70af13562",
+          "clarification_message_id": null,
+          "clarification_needed": false
+        },
+        "events": [
+          {
+            "event": "research_started",
+            "at": "2026-10-29T05:09:43.163789",
+            "message": "Investigating provider identity and official OAuth documentation."
+          },
+          {
+            "event": "provider_resolved",
+            "at": "2026-10-29T05:09:50.092112",
+            "message": "Provider identity investigated; validating documented requirements."
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:09:50.094472",
+            "message": "google.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:09:50.095667",
+            "message": "medium.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:09:50.096858",
+            "message": "google.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:09:50.098011",
+            "message": "dev.to"
+          },
+          {
+            "event": "requirements_identified",
+            "at": "2026-10-29T05:09:50.099074",
+            "message": "Extracted authentication, permission, and configuration evidence."
+          },
+          {
+            "event": "approval_analyzed",
+            "at": "2026-10-29T05:09:50.100197",
+            "message": "Reviewing distribution and approval evidence separately from registration."
+          },
+          {
+            "event": "guide_generating",
+            "at": "2026-10-29T05:09:50.101104",
+            "message": "Validating a structured guide against the returned evidence."
+          },
+          {
+            "event": "guide_ready",
+            "at": "2026-10-29T05:09:57.178026",
+            "message": "Your evidence-backed integration guide is ready."
+          }
+        ],
+        "error": null,
+        "evidence_debug": {
+          "synthesis_json": {
+            "provider_name": "Google",
+            "provider_website": "https://accounts.google.com",
+            "oauth_support_status": "supported",
+            "authentication_method": "oidc",
+            "summary": "Integrate Google Sign-In into your web application using the OpenID Connect (OIDC) protocol via the Authorization Code Flow.",
+            "recommended_auth_path": "Authorization Code Flow with PKCE or client secret",
+            "difficulty": "Easy",
+            "estimated_setup_minutes": 20,
+            "estimated_approval_days": 0,
+            "setup_confidence": "High",
+            "approval_confidence": "High",
+            "assumptions": [
+              "The application has a backend server capable of handling secure credential exchange and token validation."
+            ],
+            "prerequisites": [
+              "A Google Cloud Console account and an active project.",
+              "A backend server with an HTTPS redirect endpoint or a configured local development URI."
+            ],
+            "approval_requirement": "None for testing; publishing an app with sensitive scopes may require Google verification.",
+            "approval_materials": [],
+            "while_waiting": [],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "configure-credentials",
+                "title": "Configure Google Cloud Credentials",
+                "description": "Create OAuth credentials in the Google Cloud Console and set up the OAuth consent screen.",
+                "why_it_matters": "Google requires an OAuth client ID and consent screen configuration to issue authorization codes and tokens.",
+                "instructions": [
+                  "Go to the Google Cloud Console (https://console.cloud.google.com/).",
+                  "Create a new project or select an existing one.",
+                  "Navigate to APIs & Services > OAuth consent screen, choose External or Internal, and fill in the mandatory app details.",
+                  "Navigate to APIs & Services > Credentials, click Create Credentials, and select OAuth client ID.",
+                  "Select Web application, add your authorized redirect URIs, and click Create to get your Client ID and Client Secret."
+                ],
+                "estimated_minutes": 10,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://console.cloud.google.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "implement-flow",
+                "title": "Implement the Authorization Code Flow",
+                "description": "Redirect users to Google's authorization endpoint, handle the callback, and exchange the code for tokens on your backend server.",
+                "why_it_matters": "Exchanging the authorization code securely on the server prevents exposure of tokens and enables user authentication.",
+                "instructions": [
+                  "Construct an anti-forgery state token, save it in the user's session, and redirect the browser to Google's authorization endpoint.",
+                  "Handle the callback at your redirect URI, validating the state parameter against the session value.",
+                  "Send a POST request from your backend server to Google's token endpoint to exchange the authorization code for an ID token and access token.",
+                  "Cryptographically validate the received ID token and extract user claims to establish a session."
+                ],
+                "estimated_minutes": 15,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 2,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "verify-integration",
+                "title": "End-to-End Verification",
+                "description": "Verify the sign-in flow locally or in a sandbox, confirming correct redirection and token validation.",
+                "why_it_matters": "Testing ensures that the sign-in flow handles errors correctly and successfully provisions or logs in users.",
+                "instructions": [
+                  "Ensure local development redirect URIs are registered under your Google Cloud Console credentials.",
+                  "Click the sign-in link on your web app and verify redirection to the Google account chooser and consent screen.",
+                  "Confirm that approving the prompt redirects back to your application with a query parameter code.",
+                  "Inspect server logs to ensure the code exchange returns a 200 OK with valid JSON containing the ID token."
+                ],
+                "estimated_minutes": 10,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": false,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 3,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "To let users sign in to your web application using their Google account, you must implement the OpenID Connect (OIDC) protocol over OAuth 2.0 using the Authorization Code Flow."
+                ],
+                "excerpt": "To let users sign in to your web application using their Google account, you must implement the OpenID Connect (OIDC) protocol over OAuth 2.0 using the Authorization Code Flow."
+              },
+              {
+                "id": "source-2",
+                "claims": [],
+                "excerpt": null
+              },
+              {
+                "id": "source-3",
+                "claims": [],
+                "excerpt": null
+              },
+              {
+                "id": "source-4",
+                "claims": [],
+                "excerpt": null
+              }
+            ],
+            "workflow_evidence": {
+              "source_id": "source-1",
+              "excerpt": "To let users sign in to your web application using their Google account, you must implement the OpenID Connect (OIDC) protocol over OAuth 2.0 using the Authorization Code Flow."
+            },
+            "oauth_evidence": {
+              "source_id": "source-1",
+              "authorization_url": "https://accounts.google.com/o/oauth2/v2/auth",
+              "token_url": "https://oauth2.googleapis.com/token"
+            }
+          },
+          "research": "To let users sign in to your web application using their Google account, you must implement the OpenID Connect (OIDC) protocol over OAuth 2.0 using the **Authorization Code Flow**. \n\nBelow is a complete, source-backed setup workflow and verification guide.\n\n---\n\n### Step 1: Configure Google Cloud Credentials\n1. Go to the [Google Cloud Console](https://console.cloud.google.com/).\n2. Create a new project or select an existing one.\n3. Navigate to **APIs & Services** > **OAuth consent screen**:\n   * Choose **External** (or Internal depending on your workspace) and click **Create**.\n   * Fill in the mandatory app details (App name, User support email, Developer contact information) and save.\n4. Navigate to **APIs & Services** > **Credentials**:\n   * Click **Create Credentials** and select **OAuth client ID**.\n   * Select **Web application** as the application type.\n   * Under **Authorized redirect URIs**, specify the exact callback endpoint on your server that will receive the authorization code (e.g., `https://your-app.com/auth/google/callback`).\n   * Click **Create** to generate your **Client ID** and **Client Secret**.\n\n---\n\n### Step 2: Implement the Authorization Code Flow\n\n#### 1. Redirect to Google's Authorization Endpoint\nWhen a user clicks \"Sign in with Google,\" construct an anti-forgery state token, save it in the user's session, and redirect your browser to Google's authorization endpoint with the following parameters:\n\n```http\nGET https://accounts.google.com/o/oauth2/v2/auth?\n  client_id=YOUR_CLIENT_ID.apps.googleusercontent.com\n  &redirect_uri=https%3A%2F%2Fyour-app.com%2Fauth/google/callback\n  &response_type=code\n  &scope=openid%20email%20profile\n  &state=YOUR_ANTI_FORGERY_STATE_TOKEN\n```\n\n#### 2. Handle the Callback & Exchange the Code\nWhen the user authenticates and grants consent, Google redirects them back to your `redirect_uri` with an authorization `code` and the `state` parameter. \n\n1. Validate that the returned `state` matches the state stored in the user's session to prevent Cross-Site Request Forgery (CSRF).\n2. Send a POST request from your **backend server** to Google's token endpoint to exchange the authorization code for an ID token and access token:\n\n```http\nPOST https://oauth2.googleapis.com/token\nContent-Type: application/x-www-form-urlencoded\n\ncode=4/0AX4XfWh...\n&client_id=YOUR_CLIENT_ID.apps.googleusercontent.com\n&client_secret=YOUR_CLIENT_SECRET\n&redirect_uri=https://your-app.com/auth/google/callback\n&grant_type=authorization_code\n```\n\n#### 3. Parse and Validate the ID Token\nGoogle responds with a JSON payload containing an `id_token` (a JSON Web Token / JWT). Your server must cryptographically validate this ID token (checking its signature, issuer (`https://accounts.google.com` or `accounts.google.com`), audience (your `client_id`), and expiration time (`exp`)). \n\nOnce validated, extract the user claims payload:\n* `sub` (Unique Google ID)\n* `email` (User's email address)\n* `email_verified` (Boolean indicating if Google verified the email)\n* `name` / `picture` (Profile metadata)\n\nMatch the `sub` or `email` against your user database to either log the existing user in or provision a new account, then establish an authenticated session for your web app.\n\n---\n\n### End-to-End Verification\n\n1. **Local Test / Sandbox Routing:** Ensure your local development redirect URIs (e.g., `http://localhost:3000/auth/google/callback`) are registered under your Google Cloud Console credentials if testing locally.\n2. **Flow Verification:** \n   * Click the sign-in link on your web app.\n   * Verify that you are cleanly redirected to the Google account chooser and consent screen.\n   * Confirm that approving the prompt redirects back to your application handler with a query parameter `code`.\n3. **Token Validation Check:** Inspect your server logs to ensure the code exchange returns a 200 OK with valid JSON containing the `id_token`, and that your backend successfully decodes the user's email and profile details without throwing signature or expiration exceptions.",
+          "draft": {
+            "provider_name": "Google",
+            "provider_website": "https://accounts.google.com/",
+            "oauth_support_status": "supported",
+            "authentication_method": "oidc",
+            "summary": "Integrate Google Sign-In into your web application using the OpenID Connect (OIDC) protocol via the Authorization Code Flow.",
+            "clarification_questions": [],
+            "recommended_auth_path": "Authorization Code Flow with PKCE or client secret",
+            "difficulty": "Easy",
+            "estimated_setup_minutes": 20,
+            "estimated_approval_days": 0,
+            "setup_confidence": "High",
+            "approval_confidence": "High",
+            "assumptions": [
+              "The application has a backend server capable of handling secure credential exchange and token validation."
+            ],
+            "prerequisites": [
+              "A Google Cloud Console account and an active project.",
+              "A backend server with an HTTPS redirect endpoint or a configured local development URI."
+            ],
+            "approval_requirement": "None for testing; publishing an app with sensitive scopes may require Google verification.",
+            "approval_materials": [],
+            "while_waiting": [],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "configure-credentials",
+                "title": "Configure Google Cloud Credentials",
+                "description": "Create OAuth credentials in the Google Cloud Console and set up the OAuth consent screen.",
+                "why_it_matters": "Google requires an OAuth client ID and consent screen configuration to issue authorization codes and tokens.",
+                "instructions": [
+                  "Go to the Google Cloud Console (https://console.cloud.google.com/).",
+                  "Create a new project or select an existing one.",
+                  "Navigate to APIs & Services > OAuth consent screen, choose External or Internal, and fill in the mandatory app details.",
+                  "Navigate to APIs & Services > Credentials, click Create Credentials, and select OAuth client ID.",
+                  "Select Web application, add your authorized redirect URIs, and click Create to get your Client ID and Client Secret."
+                ],
+                "estimated_minutes": 10,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://console.cloud.google.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "implement-flow",
+                "title": "Implement the Authorization Code Flow",
+                "description": "Redirect users to Google's authorization endpoint, handle the callback, and exchange the code for tokens on your backend server.",
+                "why_it_matters": "Exchanging the authorization code securely on the server prevents exposure of tokens and enables user authentication.",
+                "instructions": [
+                  "Construct an anti-forgery state token, save it in the user's session, and redirect the browser to Google's authorization endpoint.",
+                  "Handle the callback at your redirect URI, validating the state parameter against the session value.",
+                  "Send a POST request from your backend server to Google's token endpoint to exchange the authorization code for an ID token and access token.",
+                  "Cryptographically validate the received ID token and extract user claims to establish a session."
+                ],
+                "estimated_minutes": 15,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 2,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "verify-integration",
+                "title": "End-to-End Verification",
+                "description": "Verify the sign-in flow locally or in a sandbox, confirming correct redirection and token validation.",
+                "why_it_matters": "Testing ensures that the sign-in flow handles errors correctly and successfully provisions or logs in users.",
+                "instructions": [
+                  "Ensure local development redirect URIs are registered under your Google Cloud Console credentials.",
+                  "Click the sign-in link on your web app and verify redirection to the Google account chooser and consent screen.",
+                  "Confirm that approving the prompt redirects back to your application with a query parameter code.",
+                  "Inspect server logs to ensure the code exchange returns a 200 OK with valid JSON containing the ID token."
+                ],
+                "estimated_minutes": 10,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": false,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 3,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "To let users sign in to your web application using their Google account, you must implement the OpenID Connect (OIDC) protocol over OAuth 2.0 using the Authorization Code Flow."
+                ],
+                "excerpt": "To let users sign in to your web application using their Google account, you must implement the OpenID Connect (OIDC) protocol over OAuth 2.0 using the Authorization Code Flow.",
+                "url": null
+              },
+              {
+                "id": "source-2",
+                "claims": [],
+                "excerpt": null,
+                "url": null
+              },
+              {
+                "id": "source-3",
+                "claims": [],
+                "excerpt": null,
+                "url": null
+              },
+              {
+                "id": "source-4",
+                "claims": [],
+                "excerpt": null,
+                "url": null
+              }
+            ],
+            "citations": [],
+            "workflow_evidence": {
+              "source_id": "source-1",
+              "excerpt": "To let users sign in to your web application using their Google account, you must implement the OpenID Connect (OIDC) protocol over OAuth 2.0 using the Authorization Code Flow."
+            },
+            "oauth_evidence": {
+              "source_id": "source-1",
+              "authorization_url": "https://accounts.google.com/o/oauth2/v2/auth",
+              "token_url": "https://oauth2.googleapis.com/token"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "research_jira_tickets",
+      "mode": "research",
+      "question": "My customers should connect Jira Cloud so my app can read their tickets",
+      "expectation": "jira_supported",
+      "status": "pass",
+      "seconds": 17.854,
+      "first_token_seconds": null,
+      "checks": {
+        "finished": true,
+        "not_tested": true,
+        "source_backed_steps": true,
+        "no_approval_estimate": true,
+        "usable_supported_guide": true
+      },
+      "output": {
+        "status": "ready",
+        "guide": {
+          "provider_name": "Atlassian Jira Cloud",
+          "provider_website": "https://developer.atlassian.com/",
+          "oauth_support_status": "supported",
+          "authentication_method": "oauth2",
+          "summary": "Connect Jira Cloud using OAuth 2.0 (3-Legged OAuth / 3LO) to allow external customers to securely grant your app access to read their tickets via the Jira REST API.",
+          "clarification_questions": [],
+          "recommended_auth_path": "OAuth 2.0 (3-Legged OAuth / 3LO)",
+          "difficulty": "Moderate",
+          "estimated_setup_minutes": null,
+          "estimated_approval_days": null,
+          "setup_confidence": "high",
+          "approval_confidence": "high",
+          "assumptions": [
+            "You have an active Atlassian developer account and the necessary administrative permissions to register apps."
+          ],
+          "prerequisites": [
+            "An Atlassian Developer Console account",
+            "A backend server capable of securely storing client secrets and handling callback requests"
+          ],
+          "approval_requirement": "None for development; production distribution may require reviewing Atlassian marketplace guidelines if publicly listed.",
+          "approval_materials": [],
+          "while_waiting": [],
+          "uncertainties": [],
+          "blockers": [],
+          "sources": [
+            {
+              "id": "source-1",
+              "title": "atlassian.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFG81RPGIRQ-xDh1y0H3VrC_QuxUZPcGxwG1i0yGvLbyXKZ12dkZzFHOoM_reH3W7baHgS83urYL_psArIi3Nm7QCH17YTaAxN3le5Bdxgq7IEhPmdHqgPq5J3dH4ZZt6bzCozb5Dh1wJxX-6GneaJ7wtJhE3bO3fopD3iG",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:10:05.237180+00:00",
+              "claims": [
+                "To enable external customers to connect their Jira Cloud accounts so your application can read their tickets, you must implement OAuth 2.0 (3-Legged OAuth / 3LO)."
+              ],
+              "excerpt": "Before you can implement OAuth 2.0 (3LO) for your app, you need to enable it for your app using the",
+              "text_fragment_url": "https://developer.atlassian.com/cloud/confluence/oauth-2-3lo-apps/#:~:text=Before%20you%20can%20implement%20OAuth%202.0%20%283LO%29%20for%20your%20app%2C%20you%20need%20to%20enable%20it%20for%20your%20app%20using%20the",
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "register-app": "https://developer.atlassian.com/cloud/confluence/oauth-2-3lo-apps/#:~:text=In%20the%20Developer%20console%2C%20select%20the%20Create%20dropdown%20and%20choose%20OAuth%202.0%20integration%20to",
+                "implement-auth-code-flow": "https://developer.atlassian.com/cloud/confluence/oauth-2-3lo-apps/#:~:text=%2D%2Ddata%20%27%7B%22grant_type%22%3A%20%22authorization_code%22%2C%22client_id%22%3A%20%22YOUR_CLIENT_ID%22%2C%22client_secret%22%3A%20%22YOUR_CLIENT_SECRET%22%2C%22code%22%3A%20%22YOUR_AUTHORIZATION_CODE%22%2C%22redirect_uri%22%3A%20%22https%3A%2F%2FYOUR_APP_CALLBACK_URL%22%7D%27",
+                "discover-resources": "https://developer.atlassian.com/cloud/confluence/oauth-2-3lo-apps/#:~:text=Make%20a%20GET%20request%20to%20https%3A%2F%2Fapi.atlassian.com%2Foauth%2Ftoken%2Faccessible%2Dresources%20passing%20the%20access",
+                "verify-integration": "https://developer.atlassian.com/cloud/confluence/oauth-2-3lo-apps/#:~:text=Make%20a%20GET%20request%20to%20https%3A%2F%2Fapi.atlassian.com%2Foauth%2Ftoken%2Faccessible%2Dresources%20passing%20the%20access"
+              }
+            },
+            {
+              "id": "source-2",
+              "title": "copado.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHj5MfKPLDSEmsKc1GlSuEM1ZZFA1mVly9lq3KwIY5f3nzyMI5c0nDDnNfJaW-_oEYuyTcmZT5jUpTdDWfJ1IOpebp58LIECKcARPbhKODZ90zESsQD3JrAdT7MRY3zCA_i3pVqS4-rwjNRMv2Mdji0LIhZSxGtDsarfHPtj9yv5qzpQMG1h_CjM3nOSQ==",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:10:05.237224+00:00",
+              "claims": [
+                "General integration platform reference."
+              ],
+              "excerpt_verified": false
+            },
+            {
+              "id": "source-3",
+              "title": "atlassian.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHn7v7Hd0qSq1Cc-dbp2FCZEPOyNZHiBOtpRm0Q9PNTxP1eOgCsV3KX25D-3Y7M3C7D4WmPOtAAys6o1okSgqYhm6YD4dsMvOSuPyJ1KvGAtYHsvu1UzA0mgQVVp5_mDNxtm0UrpYfw96LMuZwLuvAXKJOKY15dJTdfNuqQ-2r2Bi3gSYWMwl7B9LUMPbFRmVLMRmebMZN-b1tBB-WBj4nGgtQWaTmZBQPuEw==",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:10:05.237230+00:00",
+              "claims": [
+                "Atlassian documentation reference."
+              ],
+              "excerpt": "Consult the relevant REST API reference documentation to determine the scopes needed for each operation and create a list of scopes.",
+              "text_fragment_url": "https://community.developer.atlassian.com/t/action-required-update-scopes-for-forge-and-oauth-2-0-3lo-apps/53299#:~:text=Consult%20the%20relevant%20REST%20API%20reference%20documentation%20to%20determine%20the%20scopes%20needed%20for%20each%20operation%20and%20create%20a%20list%20of%20scopes.",
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {}
+            }
+          ],
+          "citations": [
+            {
+              "field": "summary",
+              "index": null,
+              "source_ids": [
+                "source-1"
+              ]
+            },
+            {
+              "field": "recommended_auth_path",
+              "index": null,
+              "source_ids": [
+                "source-1"
+              ]
+            }
+          ],
+          "last_verified_at": "2026-10-29T05:10:05.237180+00:00",
+          "id": "e30b7c1b-298e-40d2-bec7-f050c4d944b5",
+          "version_number": 1,
+          "provider": {
+            "id": "015d0c38-36e1-4fc3-9f26-02651e991c7c",
+            "name": "Atlassian Jira Cloud",
+            "slug": "resolved-atlassian-jira-cloud-015d0c38",
+            "website_url": "https://developer.atlassian.com/",
+            "official_domain": "developer.atlassian.com",
+            "aliases": [
+              "atlassian jira cloud",
+              "developer.atlassian.com"
+            ],
+            "oauth_support_status": "supported"
+          },
+          "steps": [
+            {
+              "id": "2373f03b-97ac-4a46-a2ab-35fb72eeed15",
+              "title": "Register an App in the Atlassian Developer Console",
+              "description": "Create a new OAuth 2.0 (3LO) integration app in the Atlassian Developer Console, configure required scopes, and obtain your credentials.",
+              "why_it_matters": "App registration provides the Client ID and Client Secret needed to authenticate your requests against Atlassian's APIs.",
+              "instructions": [
+                "Go to the Atlassian Developer Console (https://developer.atlassian.com/).",
+                "Click Create App and choose OAuth 2.0 (3LO Integration).",
+                "Provide an app name and accept the terms.",
+                "Navigate to Permissions and configure the required scopes: read:issue-details:jira, read:jql:jira, read:project:jira, and read:me.",
+                "Navigate to Authorization / Callback URL and register your app's redirect URI.",
+                "Go to Settings to copy your Client ID and Client Secret."
+              ],
+              "estimated_minutes": 10,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://developer.atlassian.com/",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "register-app",
+              "position": 0,
+              "notes": []
+            },
+            {
+              "id": "69d61d31-95cc-498c-9728-7d36143d942f",
+              "title": "Implement the Authorization Code Flow",
+              "description": "Redirect customers to Atlassian for authorization and handle the callback code exchange on your backend.",
+              "why_it_matters": "This establishes a secure delegated session, allowing your app to obtain short-lived access tokens and persistent refresh tokens on behalf of the user.",
+              "instructions": [
+                "Construct the authorization URL with your client_id, redirect_uri, requested scopes, and a secure state parameter, then redirect the customer.",
+                "Receive the authorization code at your callback route and validate the state parameter against CSRF.",
+                "Exchange the authorization code for an access token and refresh token via a backend POST request to https://auth.atlassian.com/oauth/token."
+              ],
+              "estimated_minutes": 15,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": null,
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 2,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "implement-auth-code-flow",
+              "position": 1,
+              "notes": []
+            },
+            {
+              "id": "b2f0a231-be74-48f4-b429-816b5f5ac12b",
+              "title": "Discover Accessible Cloud Resources",
+              "description": "Fetch the accessible Jira Cloud sites (instances) associated with the authenticated user's token.",
+              "why_it_matters": "An OAuth token is not tied to a single site directly; you must discover the correct cloudId values belonging to the customer.",
+              "instructions": [
+                "Make a GET request to https://api.atlassian.com/oauth/token/accessible-resources using the Bearer access token.",
+                "Store the returned id (cloudId) securely mapped to your customer's tenant profile in your database."
+              ],
+              "estimated_minutes": 5,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": null,
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "discover-resources",
+              "position": 2,
+              "notes": []
+            },
+            {
+              "id": "0fd56fc2-ab20-4d5e-bc0d-36964477a338",
+              "title": "End-to-End Verification",
+              "description": "Perform an API request to read issue details using the discovered cloudId and access token to confirm the integration works.",
+              "why_it_matters": "Verifying the setup ensures that token exchange, resource discovery, and permissions are correctly configured before deploying to production.",
+              "instructions": [
+                "Send a GET request to https://api.atlassian.com/ex/jira/{cloudId}/rest/api/3/issue/{issueIdOrKey} with the Bearer access token.",
+                "Confirm the response returns the expected ticket JSON payload containing summaries, descriptions, and statuses."
+              ],
+              "estimated_minutes": 5,
+              "actor": "developer",
+              "status": "not_started",
+              "blocking": false,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": null,
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "verify-integration",
+              "position": 3,
+              "notes": []
+            }
+          ],
+          "share_slug": "c545c372-f511-4a13-a88e-7f305a3e993c",
+          "created_at": "2026-10-29 05:10:15.027177",
+          "guide_is_stale": false,
+          "freshness_days": 30,
+          "next_best_action": "Register an App in the Atlassian Developer Console",
+          "conversation_anchor_message_id": "2e736dce-1206-4606-ab9e-81192bd0e8b9",
+          "clarification_message_id": null,
+          "clarification_needed": false
+        },
+        "events": [
+          {
+            "event": "research_started",
+            "at": "2026-10-29T05:09:58.583060",
+            "message": "Investigating provider identity and official OAuth documentation."
+          },
+          {
+            "event": "provider_resolved",
+            "at": "2026-10-29T05:10:05.239242",
+            "message": "Provider identity investigated; validating documented requirements."
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:10:05.242223",
+            "message": "atlassian.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:10:05.243862",
+            "message": "copado.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:10:05.245199",
+            "message": "atlassian.com"
+          },
+          {
+            "event": "requirements_identified",
+            "at": "2026-10-29T05:10:05.246454",
+            "message": "Extracted authentication, permission, and configuration evidence."
+          },
+          {
+            "event": "approval_analyzed",
+            "at": "2026-10-29T05:10:05.247587",
+            "message": "Reviewing distribution and approval evidence separately from registration."
+          },
+          {
+            "event": "guide_generating",
+            "at": "2026-10-29T05:10:05.248703",
+            "message": "Validating a structured guide against the returned evidence."
+          },
+          {
+            "event": "guide_ready",
+            "at": "2026-10-29T05:10:15.034025",
+            "message": "Your evidence-backed integration guide is ready."
+          }
+        ],
+        "error": null,
+        "evidence_debug": {
+          "synthesis_json": {
+            "provider_name": "Atlassian Jira Cloud",
+            "provider_website": "https://developer.atlassian.com/",
+            "oauth_support_status": "supported",
+            "authentication_method": "oauth2",
+            "summary": "Connect Jira Cloud using OAuth 2.0 (3-Legged OAuth / 3LO) to allow external customers to securely grant your app access to read their tickets via the Jira REST API.",
+            "recommended_auth_path": "OAuth 2.0 (3-Legged OAuth / 3LO)",
+            "difficulty": "Moderate",
+            "estimated_setup_minutes": 30,
+            "estimated_approval_days": null,
+            "setup_confidence": "high",
+            "approval_confidence": "high",
+            "assumptions": [
+              "You have an active Atlassian developer account and the necessary administrative permissions to register apps."
+            ],
+            "prerequisites": [
+              "An Atlassian Developer Console account",
+              "A backend server capable of securely storing client secrets and handling callback requests"
+            ],
+            "approval_requirement": "None for development; production distribution may require reviewing Atlassian marketplace guidelines if publicly listed.",
+            "approval_materials": [],
+            "while_waiting": [],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "register-app",
+                "title": "Register an App in the Atlassian Developer Console",
+                "description": "Create a new OAuth 2.0 (3LO) integration app in the Atlassian Developer Console, configure required scopes, and obtain your credentials.",
+                "why_it_matters": "App registration provides the Client ID and Client Secret needed to authenticate your requests against Atlassian's APIs.",
+                "instructions": [
+                  "Go to the Atlassian Developer Console (https://developer.atlassian.com/).",
+                  "Click Create App and choose OAuth 2.0 (3LO Integration).",
+                  "Provide an app name and accept the terms.",
+                  "Navigate to Permissions and configure the required scopes: read:issue-details:jira, read:jql:jira, read:project:jira, and read:me.",
+                  "Navigate to Authorization / Callback URL and register your app's redirect URI.",
+                  "Go to Settings to copy your Client ID and Client Secret."
+                ],
+                "estimated_minutes": 10,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://developer.atlassian.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "implement-auth-code-flow",
+                "title": "Implement the Authorization Code Flow",
+                "description": "Redirect customers to Atlassian for authorization and handle the callback code exchange on your backend.",
+                "why_it_matters": "This establishes a secure delegated session, allowing your app to obtain short-lived access tokens and persistent refresh tokens on behalf of the user.",
+                "instructions": [
+                  "Construct the authorization URL with your client_id, redirect_uri, requested scopes, and a secure state parameter, then redirect the customer.",
+                  "Receive the authorization code at your callback route and validate the state parameter against CSRF.",
+                  "Exchange the authorization code for an access token and refresh token via a backend POST request to https://auth.atlassian.com/oauth/token."
+                ],
+                "estimated_minutes": 15,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 2,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "discover-resources",
+                "title": "Discover Accessible Cloud Resources",
+                "description": "Fetch the accessible Jira Cloud sites (instances) associated with the authenticated user's token.",
+                "why_it_matters": "An OAuth token is not tied to a single site directly; you must discover the correct cloudId values belonging to the customer.",
+                "instructions": [
+                  "Make a GET request to https://api.atlassian.com/oauth/token/accessible-resources using the Bearer access token.",
+                  "Store the returned id (cloudId) securely mapped to your customer's tenant profile in your database."
+                ],
+                "estimated_minutes": 5,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "verify-integration",
+                "title": "End-to-End Verification",
+                "description": "Perform an API request to read issue details using the discovered cloudId and access token to confirm the integration works.",
+                "why_it_matters": "Verifying the setup ensures that token exchange, resource discovery, and permissions are correctly configured before deploying to production.",
+                "instructions": [
+                  "Send a GET request to https://api.atlassian.com/ex/jira/{cloudId}/rest/api/3/issue/{issueIdOrKey} with the Bearer access token.",
+                  "Confirm the response returns the expected ticket JSON payload containing summaries, descriptions, and statuses."
+                ],
+                "estimated_minutes": 5,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": false,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "To enable external customers to connect their Jira Cloud accounts so your application can read their tickets, you must implement OAuth 2.0 (3-Legged OAuth / 3LO)."
+                ],
+                "excerpt": "To enable external customers to connect their Jira Cloud accounts so your application can read their tickets, you must implement OAuth 2.0."
+              },
+              {
+                "id": "source-2",
+                "claims": [
+                  "General integration platform reference."
+                ],
+                "excerpt": null
+              },
+              {
+                "id": "source-3",
+                "claims": [
+                  "Atlassian documentation reference."
+                ],
+                "excerpt": null
+              }
+            ],
+            "citations": [
+              {
+                "field": "summary",
+                "index": null,
+                "source_ids": [
+                  "source-1"
+                ]
+              },
+              {
+                "field": "recommended_auth_path",
+                "index": null,
+                "source_ids": [
+                  "source-1"
+                ]
+              }
+            ],
+            "workflow_evidence": {
+              "source_id": "source-1",
+              "excerpt": "To enable external customers to connect their Jira Cloud accounts so your application can read their tickets, you must implement OAuth 2.0 (3-Legged OAuth / 3LO)."
+            },
+            "oauth_evidence": {
+              "source_id": "source-1",
+              "authorization_url": "https://auth.atlassian.com/authorize",
+              "token_url": "https://auth.atlassian.com/oauth/token"
+            }
+          },
+          "research": "To enable external customers to connect their Jira Cloud accounts so your application can read their tickets, you must implement **OAuth 2.0 (3-Legged OAuth / 3LO)**. This allows your multi-tenant app to securely act on behalf of the user to access Jira REST APIs.\n\n---\n\n### 1. Register an App in the Atlassian Developer Console\n1. Go to the [Atlassian Developer Console](https://developer.atlassian.com/).\n2. Click **Create App** and choose **OAuth 2.0 (3LO Integration)**.\n3. Provide an app name and accept the terms.\n4. Navigate to **Permissions** in the sidebar and configure the required scopes for reading issues:\n   * **Granular Scopes (Recommended):** `read:issue-details:jira`, `read:jql:jira`, `read:project:jira`\n   * **User Identity Scopes:** `read:me`\n5. Navigate to **Authorization** / **Callback URL** and register your app's redirect URI (e.g., `https://your-app.com/auth/jira/callback`).\n6. Go to **Settings** to copy your **Client ID** and **Client Secret**.\n\n---\n\n### 2. Implement the Authorization Code Flow (3LO)\n\n#### Step A: Redirect the Customer to Atlassian\nWhen a customer clicks \"Connect Jira\", redirect them to Atlassian\u2019s authorization URL with your Client ID, redirect URI, requested scopes, and a secure `state` parameter to prevent CSRF:\n\n```http\nGET https://auth.atlassian.com/authorize?\n  audience=api.atlassian.com&\n  client_id=YOUR_CLIENT_ID&\n  scope=read%3Aissue-details%3Ajira%20read%3Ajql%3Ajira%20read%3Aproject%3Ajira%20read%3Ame&\n  redirect_uri=https%3A%2F%2Fyour-app.com%2Fauth%2Fjira%2Fcallback&\n  state=YOUR_SECURE_CSRF_STATE&\n  response_type=code&\n  prompt=consent\n```\n\n#### Step B: Exchange the Authorization Code for Tokens\nWhen the user grants access, Atlassian redirects back to your callback route with an authorization `code`. Exchange this code for an access token and refresh token via a backend POST request:\n\n```http\nPOST https://auth.atlassian.com/oauth/token\nContent-Type: application/json\n\n{\n  \"grant_type\": \"authorization_code\",\n  \"client_id\": \"YOUR_CLIENT_ID\",\n  \"client_secret\": \"YOUR_CLIENT_SECRET\",\n  \"code\": \"AUTHORIZATION_CODE_FROM_CALLBACK\",\n  \"redirect_uri\": \"https://your-app.com/auth/jira/callback\"\n}\n```\n\nResponse payload:\n```json\n{\n  \"access_token\": \"Atlassian-Access-Token\",\n  \"refresh_token\": \"Atlassian-Refresh-Token\",\n  \"expires_in\": 3600\n}\n```\n\n---\n\n### 3. Discover Accessible Cloud Resources (Jira Sites)\nAn OAuth token is not tied to a single Jira site directly; a user may have access to multiple Jira Cloud sites (instances). Fetch the accessible resources to discover which `cloudId` values belong to this user:\n\n```http\nGET https://api.atlassian.com/oauth/token/accessible-resources\nAuthorization: Bearer Atlassian-Access-Token\nAccept: application/json\n```\n\nResponse payload:\n```json\n[\n  {\n    \"id\": \"1a2b3c4d-e5f6-7890-abcd-ef1234567890\",\n    \"name\": \"Customer Site Name\",\n    \"url\": \"https://your-customer.atlassian.net\",\n    \"scopes\": [\"read:issue-details:jira\", \"read:jql:jira\"]\n  }\n]\n```\n*Store the returned `id` (`cloudId`) mapped securely to your customer's tenant profile in your database.*\n\n---\n\n### 4. End-to-End Verification (Reading Tickets)\nTo confirm the integration is successful, make an API request to read issue details using the target site's `cloudId` and the user's access token:\n\n```http\nGET https://api.atlassian.com/ex/jira/{cloudId}/rest/api/3/issue/{issueIdOrKey}\nAuthorization: Bearer Atlassian-Access-Token\nAccept: application/json\n```\n\nIf the response returns the ticket JSON payload containing summaries, descriptions, and statuses without error, the integration is verified and functioning correctly.",
+          "draft": {
+            "provider_name": "Atlassian Jira Cloud",
+            "provider_website": "https://developer.atlassian.com/",
+            "oauth_support_status": "supported",
+            "authentication_method": "oauth2",
+            "summary": "Connect Jira Cloud using OAuth 2.0 (3-Legged OAuth / 3LO) to allow external customers to securely grant your app access to read their tickets via the Jira REST API.",
+            "clarification_questions": [],
+            "recommended_auth_path": "OAuth 2.0 (3-Legged OAuth / 3LO)",
+            "difficulty": "Moderate",
+            "estimated_setup_minutes": 30,
+            "estimated_approval_days": null,
+            "setup_confidence": "high",
+            "approval_confidence": "high",
+            "assumptions": [
+              "You have an active Atlassian developer account and the necessary administrative permissions to register apps."
+            ],
+            "prerequisites": [
+              "An Atlassian Developer Console account",
+              "A backend server capable of securely storing client secrets and handling callback requests"
+            ],
+            "approval_requirement": "None for development; production distribution may require reviewing Atlassian marketplace guidelines if publicly listed.",
+            "approval_materials": [],
+            "while_waiting": [],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "register-app",
+                "title": "Register an App in the Atlassian Developer Console",
+                "description": "Create a new OAuth 2.0 (3LO) integration app in the Atlassian Developer Console, configure required scopes, and obtain your credentials.",
+                "why_it_matters": "App registration provides the Client ID and Client Secret needed to authenticate your requests against Atlassian's APIs.",
+                "instructions": [
+                  "Go to the Atlassian Developer Console (https://developer.atlassian.com/).",
+                  "Click Create App and choose OAuth 2.0 (3LO Integration).",
+                  "Provide an app name and accept the terms.",
+                  "Navigate to Permissions and configure the required scopes: read:issue-details:jira, read:jql:jira, read:project:jira, and read:me.",
+                  "Navigate to Authorization / Callback URL and register your app's redirect URI.",
+                  "Go to Settings to copy your Client ID and Client Secret."
+                ],
+                "estimated_minutes": 10,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://developer.atlassian.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "implement-auth-code-flow",
+                "title": "Implement the Authorization Code Flow",
+                "description": "Redirect customers to Atlassian for authorization and handle the callback code exchange on your backend.",
+                "why_it_matters": "This establishes a secure delegated session, allowing your app to obtain short-lived access tokens and persistent refresh tokens on behalf of the user.",
+                "instructions": [
+                  "Construct the authorization URL with your client_id, redirect_uri, requested scopes, and a secure state parameter, then redirect the customer.",
+                  "Receive the authorization code at your callback route and validate the state parameter against CSRF.",
+                  "Exchange the authorization code for an access token and refresh token via a backend POST request to https://auth.atlassian.com/oauth/token."
+                ],
+                "estimated_minutes": 15,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 2,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "discover-resources",
+                "title": "Discover Accessible Cloud Resources",
+                "description": "Fetch the accessible Jira Cloud sites (instances) associated with the authenticated user's token.",
+                "why_it_matters": "An OAuth token is not tied to a single site directly; you must discover the correct cloudId values belonging to the customer.",
+                "instructions": [
+                  "Make a GET request to https://api.atlassian.com/oauth/token/accessible-resources using the Bearer access token.",
+                  "Store the returned id (cloudId) securely mapped to your customer's tenant profile in your database."
+                ],
+                "estimated_minutes": 5,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "verify-integration",
+                "title": "End-to-End Verification",
+                "description": "Perform an API request to read issue details using the discovered cloudId and access token to confirm the integration works.",
+                "why_it_matters": "Verifying the setup ensures that token exchange, resource discovery, and permissions are correctly configured before deploying to production.",
+                "instructions": [
+                  "Send a GET request to https://api.atlassian.com/ex/jira/{cloudId}/rest/api/3/issue/{issueIdOrKey} with the Bearer access token.",
+                  "Confirm the response returns the expected ticket JSON payload containing summaries, descriptions, and statuses."
+                ],
+                "estimated_minutes": 5,
+                "actor": "developer",
+                "status": "not_started",
+                "blocking": false,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "To enable external customers to connect their Jira Cloud accounts so your application can read their tickets, you must implement OAuth 2.0 (3-Legged OAuth / 3LO)."
+                ],
+                "excerpt": "To enable external customers to connect their Jira Cloud accounts so your application can read their tickets, you must implement OAuth 2.0.",
+                "url": null
+              },
+              {
+                "id": "source-2",
+                "claims": [
+                  "General integration platform reference."
+                ],
+                "excerpt": null,
+                "url": null
+              },
+              {
+                "id": "source-3",
+                "claims": [
+                  "Atlassian documentation reference."
+                ],
+                "excerpt": null,
+                "url": null
+              }
+            ],
+            "citations": [
+              {
+                "field": "summary",
+                "index": null,
+                "source_ids": [
+                  "source-1"
+                ]
+              },
+              {
+                "field": "recommended_auth_path",
+                "index": null,
+                "source_ids": [
+                  "source-1"
+                ]
+              }
+            ],
+            "workflow_evidence": {
+              "source_id": "source-1",
+              "excerpt": "To enable external customers to connect their Jira Cloud accounts so your application can read their tickets, you must implement OAuth 2.0 (3-Legged OAuth / 3LO)."
+            },
+            "oauth_evidence": {
+              "source_id": "source-1",
+              "authorization_url": "https://auth.atlassian.com/authorize",
+              "token_url": "https://auth.atlassian.com/oauth/token"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "research_dialpad_saml",
+      "mode": "research",
+      "question": "Set up SAML SSO login into Dialpad for my company. Investigate its custom SAML configuration workflow using metadata from our identity provider.",
+      "expectation": "saml_supported",
+      "status": "pass",
+      "seconds": 15.356,
+      "first_token_seconds": null,
+      "checks": {
+        "finished": true,
+        "not_tested": true,
+        "source_backed_steps": true,
+        "no_approval_estimate": true,
+        "usable_saml_workflow": true
+      },
+      "output": {
+        "status": "ready",
+        "guide": {
+          "provider_name": "Dialpad",
+          "provider_website": "https://dialpad.com/",
+          "oauth_support_status": "unknown",
+          "authentication_method": "saml",
+          "summary": "Set up custom SAML SSO login into Dialpad by configuring Dialpad as the Service Provider and exchanging metadata with your Identity Provider.",
+          "clarification_questions": [],
+          "recommended_auth_path": "Configure custom SAML via the Dialpad Admin Portal using your IdP metadata.",
+          "difficulty": "Medium",
+          "estimated_setup_minutes": null,
+          "estimated_approval_days": null,
+          "setup_confidence": "High",
+          "approval_confidence": "High",
+          "assumptions": [
+            "You have Company Admin privileges on Dialpad.",
+            "You have an enterprise Identity Provider that supports SAML 2.0."
+          ],
+          "prerequisites": [
+            "Company Admin privileges in Dialpad",
+            "Enterprise Identity Provider (such as Microsoft Entra ID, Okta, or JumpCloud)"
+          ],
+          "approval_requirement": "None",
+          "approval_materials": [],
+          "while_waiting": [],
+          "uncertainties": [],
+          "blockers": [],
+          "sources": [
+            {
+              "id": "source-1",
+              "title": "dialpad.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEqItz2UOFmFmkG5Za0KENDAVVxo-Biz_4_6e9vJqZOLns4NFlGLbZDRlk7NIFWya_E-DEnFXxVTMgkx9TxAcyp6Xn1KSvTwNhjilqNF8m3Si3b58k7zOVb2UOX7p_zRNCbEgQG7Jva26DVNOmkraA6eP1BrFrJaK47MMFhRhMEsp6AtAJz4DCIwakGzF1r8vpVZVWgNw3QOWYwkofZtS6F",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:10:24.048150+00:00",
+              "claims": [
+                "Log in to the Dialpad Admin Portal with Company Admin privileges.",
+                "Navigate to Admin Settings > My Company > Authentication > SAML."
+              ],
+              "excerpt": "To restrict the use of other authentication providers, navigate to your Admin Settings at Dialpad.com",
+              "text_fragment_url": "https://help.dialpad.com/hc/en-us/articles/55093970091803-Integrating-JumpCloud-SAML-SSO-with-Dialpad#:~:text=To%20restrict%20the%20use%20of%20other%20authentication%20providers%2C%20navigate%20to%20your%20Admin%20Settings%20at%20Dialpad.com",
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "retrieve-sp-details": "https://help.dialpad.com/hc/en-us/articles/55093970091803-Integrating-JumpCloud-SAML-SSO-with-Dialpad#:~:text=To%20restrict%20the%20use%20of%20other%20authentication%20providers%2C%20navigate%20to%20your%20Admin%20Settings%20at%20Dialpad.com",
+                "complete-saml-setup": "https://help.dialpad.com/hc/en-us/articles/55093970091803-Integrating-JumpCloud-SAML-SSO-with-Dialpad#:~:text=Update%20the%20SP%20Entity%20ID%20and%20ACS%20URL%20attributes%20with%20the%20values%20obtained%20from%20the%20Dialpad%20SAML%20configuration",
+                "end-to-end-verification": "https://help.dialpad.com/hc/en-us/articles/55093970091803-Integrating-JumpCloud-SAML-SSO-with-Dialpad#:~:text=Using%20the%20same%20test%20user%E2%80%99s%20browser%20session%2C%20navigate%20to%20Dialpad%20Login%20in%20a%20different%20tab"
+              }
+            },
+            {
+              "id": "source-2",
+              "title": "dialpad.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG94zwMTm71DjmcMuKsFuTUFixCHYklZ5nlz2UHjK-mFUQU7VPL0VYsrz3cX5ElB68p9vkXpIiplL7iV4CDmeUdO8LUTSW_wDNlGbB12OwsG8W3Ee5og4QSBlT2vx1LRGUITzGzj5c09W8YpyGwdOva-PB31-dXr_sfOKOrMrSYZgMw8ON-SPj3i0_i9dKMtQHK",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:10:24.048168+00:00",
+              "claims": [
+                "Set the Identifier (Entity ID) to the Dialpad SP Entity ID."
+              ],
+              "excerpt": null,
+              "text_fragment_url": null,
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "configure-idp": "https://help.dialpad.com/hc/en-us/articles/55094466618779-Okta-Single-Sign-On-via-SAML#:~:text=Company%20Admins%20add%20the%20Dialpad%20app%20in%20Okta%2C%20configure%20service%20provider%20and%20identity%20provider%20attributes%2C%20and%20save%20settings."
+              }
+            },
+            {
+              "id": "source-3",
+              "title": "okta.com",
+              "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG15dgGhZHn_un0Ec7PNqx4kydmoTMP7JBtQw9bIyzGleb7drnrh1l7yXM-Tk8jmemggpm2v8C2QmVGzCDuqxk78DXHOgtaRpLaRXqv1L2bNwaFZIXzEHO5iobgOpTN7P2sxciyLzfSqD3laQpW5wZijQByzzarn4xDoQYqPmIcQoqM2BjDlPPRTQ==",
+              "publisher": "Grounded search result",
+              "source_type": "grounded_search",
+              "retrieved_at": "2026-10-29T05:10:24.048173+00:00",
+              "claims": [
+                "Configure your IdP to release mandatory user claims."
+              ],
+              "excerpt": null,
+              "text_fragment_url": null,
+              "excerpt_verified": true,
+              "step_text_fragment_urls": {
+                "configure-idp": "https://saml-doc.okta.com/SAML_Docs/How-to-Configure-SAML-2.0-for-Dialpad.html#:~:text=How%20to%20Configure%20SAML%202.0%20for%20Dialpad"
+              }
+            }
+          ],
+          "citations": [
+            {
+              "field": "summary",
+              "index": null,
+              "source_ids": [
+                "source-1"
+              ]
+            }
+          ],
+          "last_verified_at": "2026-10-29T05:10:24.048150+00:00",
+          "id": "f7c38927-7520-43e9-80de-c1df5309cfab",
+          "version_number": 1,
+          "provider": {
+            "id": "6a7d0dc4-8375-4338-8948-544d68c2c531",
+            "name": "Dialpad",
+            "slug": "resolved-dialpad-6a7d0dc4",
+            "website_url": "https://dialpad.com/",
+            "official_domain": "dialpad.com",
+            "aliases": [
+              "dialpad",
+              "dialpad.com"
+            ],
+            "oauth_support_status": "unknown"
+          },
+          "steps": [
+            {
+              "id": "aeb39663-be9e-4e2d-9a80-3c0873aa1a46",
+              "title": "Retrieve Service Provider Details from Dialpad",
+              "description": "Log in to the Dialpad Admin Portal to retrieve the SP Entity ID and SP SSO URL (ACS).",
+              "why_it_matters": "These URLs are required to configure the custom SAML application within your Identity Provider.",
+              "instructions": [
+                "Log in to the Dialpad Admin Portal with Company Admin privileges.",
+                "Navigate to Admin Settings > My Company > Authentication > SAML.",
+                "From the Choose your provider dropdown, select Custom.",
+                "Note and copy the SP Entity ID and SP SSO URL (ACS)."
+              ],
+              "estimated_minutes": 5,
+              "actor": "administrator",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://dialpad.com/",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "retrieve-sp-details",
+              "position": 0,
+              "notes": []
+            },
+            {
+              "id": "e00f6094-bed7-4562-b22a-7d496cc0a12e",
+              "title": "Configure your Identity Provider",
+              "description": "Create a custom SAML application in your IdP using Dialpad parameters and export IdP metadata.",
+              "why_it_matters": "Your IdP must trust Dialpad as the Service Provider and release mandatory user attributes.",
+              "instructions": [
+                "Set the Identifier (Entity ID) to the Dialpad SP Entity ID.",
+                "Set the Reply URL / Assertion Consumer Service (ACS) URL to the Dialpad SP SSO URL (ACS).",
+                "Configure your IdP to release mandatory user claims: Email, FirstName, and LastName.",
+                "Extract the IdP Entity ID (Issuer), IdP SSO URL, and X.509 Certificate."
+              ],
+              "estimated_minutes": 15,
+              "actor": "administrator",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-2",
+                "source-3"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": null,
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-2"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "configure-idp",
+              "position": 1,
+              "notes": []
+            },
+            {
+              "id": "b2845018-e19e-4f28-a2c7-deccc9fce8c4",
+              "title": "Complete Custom SAML Setup in Dialpad",
+              "description": "Paste your IdP metadata values back into the Dialpad Admin Portal.",
+              "why_it_matters": "Finishing this configuration enables Dialpad to validate incoming SAML assertions from your IdP.",
+              "instructions": [
+                "Return to your open Dialpad Admin Settings > Authentication > SAML (Custom) configuration page.",
+                "Paste the IdP Entity ID (Issuer), IdP SSO URL, and Certificate.",
+                "Click Save."
+              ],
+              "estimated_minutes": 5,
+              "actor": "administrator",
+              "status": "not_started",
+              "blocking": true,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://dialpad.com/",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "complete-saml-setup",
+              "position": 2,
+              "notes": []
+            },
+            {
+              "id": "1cdae9d7-40ca-46f6-9a01-d0cb12e523c3",
+              "title": "End-to-End Verification",
+              "description": "Test the login flow to verify successful SAML integration.",
+              "why_it_matters": "Ensures users can successfully authenticate via your corporate IdP and establish a session in Dialpad.",
+              "instructions": [
+                "Ensure your user account is provisioned inside both your IdP directory and Dialpad.",
+                "Open a fresh browser window or incognito session and navigate to Dialpad Login.",
+                "Select Login with another provider, enter your company email/domain, and click Next.",
+                "Authenticate with your enterprise credentials to verify successful token exchange and session establishment."
+              ],
+              "estimated_minutes": 5,
+              "actor": "administrator",
+              "status": "not_started",
+              "blocking": false,
+              "source_ids": [
+                "source-1"
+              ],
+              "verification_status": "documented",
+              "warnings": [],
+              "action_url": "https://dialpad.com/",
+              "citations": [
+                {
+                  "field": "instructions",
+                  "index": 0,
+                  "source_ids": [
+                    "source-1"
+                  ],
+                  "scope": "claim"
+                }
+              ],
+              "stable_key": "end-to-end-verification",
+              "position": 3,
+              "notes": []
+            }
+          ],
+          "share_slug": "b2a73589-bfff-44ca-bd66-71b6d976d233",
+          "created_at": "2026-10-29 05:10:30.380920",
+          "guide_is_stale": false,
+          "freshness_days": 30,
+          "next_best_action": "Retrieve Service Provider Details from Dialpad",
+          "conversation_anchor_message_id": "8e46c529-ff6a-46e8-82a9-99ba1afab133",
+          "clarification_message_id": null,
+          "clarification_needed": false
+        },
+        "events": [
+          {
+            "event": "research_started",
+            "at": "2026-10-29T05:10:17.526455",
+            "message": "Investigating provider identity and official OAuth documentation."
+          },
+          {
+            "event": "provider_resolved",
+            "at": "2026-10-29T05:10:24.049094",
+            "message": "Provider identity investigated; validating documented requirements."
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:10:24.051541",
+            "message": "dialpad.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:10:24.052603",
+            "message": "dialpad.com"
+          },
+          {
+            "event": "source_found",
+            "at": "2026-10-29T05:10:24.053722",
+            "message": "okta.com"
+          },
+          {
+            "event": "requirements_identified",
+            "at": "2026-10-29T05:10:24.054905",
+            "message": "Extracted authentication, permission, and configuration evidence."
+          },
+          {
+            "event": "approval_analyzed",
+            "at": "2026-10-29T05:10:24.055972",
+            "message": "Reviewing distribution and approval evidence separately from registration."
+          },
+          {
+            "event": "guide_generating",
+            "at": "2026-10-29T05:10:24.056889",
+            "message": "Validating a structured guide against the returned evidence."
+          },
+          {
+            "event": "guide_ready",
+            "at": "2026-10-29T05:10:30.390626",
+            "message": "Your evidence-backed integration guide is ready."
+          }
+        ],
+        "error": null,
+        "evidence_debug": {
+          "synthesis_json": {
+            "provider_name": "Dialpad",
+            "provider_website": "https://dialpad.com",
+            "oauth_support_status": "unknown",
+            "authentication_method": "saml",
+            "summary": "Set up custom SAML SSO login into Dialpad by configuring Dialpad as the Service Provider and exchanging metadata with your Identity Provider.",
+            "recommended_auth_path": "Configure custom SAML via the Dialpad Admin Portal using your IdP metadata.",
+            "difficulty": "Medium",
+            "estimated_setup_minutes": 30,
+            "estimated_approval_days": null,
+            "setup_confidence": "High",
+            "approval_confidence": "High",
+            "assumptions": [
+              "You have Company Admin privileges on Dialpad.",
+              "You have an enterprise Identity Provider that supports SAML 2.0."
+            ],
+            "prerequisites": [
+              "Company Admin privileges in Dialpad",
+              "Enterprise Identity Provider (such as Microsoft Entra ID, Okta, or JumpCloud)"
+            ],
+            "approval_requirement": "None",
+            "approval_materials": [],
+            "while_waiting": [],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "retrieve-sp-details",
+                "title": "Retrieve Service Provider Details from Dialpad",
+                "description": "Log in to the Dialpad Admin Portal to retrieve the SP Entity ID and SP SSO URL (ACS).",
+                "why_it_matters": "These URLs are required to configure the custom SAML application within your Identity Provider.",
+                "instructions": [
+                  "Log in to the Dialpad Admin Portal with Company Admin privileges.",
+                  "Navigate to Admin Settings > My Company > Authentication > SAML.",
+                  "From the Choose your provider dropdown, select Custom.",
+                  "Note and copy the SP Entity ID and SP SSO URL (ACS)."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "configure-idp",
+                "title": "Configure your Identity Provider",
+                "description": "Create a custom SAML application in your IdP using Dialpad parameters and export IdP metadata.",
+                "why_it_matters": "Your IdP must trust Dialpad as the Service Provider and release mandatory user attributes.",
+                "instructions": [
+                  "Set the Identifier (Entity ID) to the Dialpad SP Entity ID.",
+                  "Set the Reply URL / Assertion Consumer Service (ACS) URL to the Dialpad SP SSO URL (ACS).",
+                  "Configure your IdP to release mandatory user claims: Email, FirstName, and LastName.",
+                  "Extract the IdP Entity ID (Issuer), IdP SSO URL, and X.509 Certificate."
+                ],
+                "estimated_minutes": 15,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-2",
+                  "source-3"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-2"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "complete-saml-setup",
+                "title": "Complete Custom SAML Setup in Dialpad",
+                "description": "Paste your IdP metadata values back into the Dialpad Admin Portal.",
+                "why_it_matters": "Finishing this configuration enables Dialpad to validate incoming SAML assertions from your IdP.",
+                "instructions": [
+                  "Return to your open Dialpad Admin Settings > Authentication > SAML (Custom) configuration page.",
+                  "Paste the IdP Entity ID (Issuer), IdP SSO URL, and Certificate.",
+                  "Click Save."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "end-to-end-verification",
+                "title": "End-to-End Verification",
+                "description": "Test the login flow to verify successful SAML integration.",
+                "why_it_matters": "Ensures users can successfully authenticate via your corporate IdP and establish a session in Dialpad.",
+                "instructions": [
+                  "Ensure your user account is provisioned inside both your IdP directory and Dialpad.",
+                  "Open a fresh browser window or incognito session and navigate to Dialpad Login.",
+                  "Select Login with another provider, enter your company email/domain, and click Next.",
+                  "Authenticate with your enterprise credentials to verify successful token exchange and session establishment."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": false,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "Log in to the Dialpad Admin Portal with Company Admin privileges.",
+                  "Navigate to Admin Settings > My Company > Authentication > SAML."
+                ],
+                "excerpt": "Log in to the Dialpad Admin Portal with Company Admin privileges."
+              },
+              {
+                "id": "source-2",
+                "claims": [
+                  "Set the Identifier (Entity ID) to the Dialpad SP Entity ID."
+                ],
+                "excerpt": "Set the Identifier (Entity ID) to the Dialpad SP Entity ID."
+              },
+              {
+                "id": "source-3",
+                "claims": [
+                  "Configure your IdP to release mandatory user claims."
+                ],
+                "excerpt": "Configure your IdP to release mandatory user claims"
+              }
+            ],
+            "citations": [
+              {
+                "field": "summary",
+                "index": null,
+                "source_ids": [
+                  "source-1"
+                ]
+              }
+            ],
+            "workflow_evidence": {
+              "source_id": "source-1",
+              "excerpt": "Setting up a custom SAML SSO login workflow into Dialpad using metadata from your Identity Provider (IdP) involves configuring Dialpad as the Service Provider (SP)."
+            },
+            "oauth_evidence": null
+          },
+          "research": "Setting up a custom SAML SSO login workflow into **Dialpad** using metadata from your Identity Provider (IdP) involves configuring Dialpad as the Service Provider (SP) and exchanging endpoint parameters and certificates with your IdP.\n\n---\n\n### Phase 1: Retrieve Service Provider (SP) Details from Dialpad\n1. Log in to the [Dialpad Admin Portal](https://dialpad.com) with **Company Admin** privileges.\n2. Navigate to **Admin Settings** > **My Company** > **Authentication** > **SAML**.\n3. From the **Choose your provider** dropdown, select **Custom**.\n4. Note and copy the following parameters generated by Dialpad to paste into your IdP configuration:\n   * **SP Entity ID** (e.g., `https://dialpad.com/api/saml/metadata/custom/yourcompany.com`)\n   * **SP SSO URL (ACS)** (e.g., `https://dialpad.com/saml/sso/custom/yourcompany.com`)\n   * Keep this settings browser tab open.\n\n---\n\n### Phase 2: Configure your Identity Provider (IdP)\nUsing the SP Entity ID and ACS URL collected from Dialpad, create a custom SAML application profile within your enterprise Identity Provider (such as Microsoft Entra ID, JumpCloud, Okta, or generic SAML 2.0 IdP):\n\n1. **Identifiers & URLs:**\n   * Set the **Identifier (Entity ID)** to the Dialpad **SP Entity ID**.\n   * Set the **Reply URL / Assertion Consumer Service (ACS) URL** to the Dialpad **SP SSO URL (ACS)**.\n2. **Attribute Statements / Mappings:**\n   Configure your IdP to release the following mandatory user claims/attributes to Dialpad:\n   * `Email` $\\rightarrow$ User's primary email address (NameID / email)\n   * `FirstName` $\\rightarrow$ User's given name\n   * `LastName` $\\rightarrow$ User's surname\n3. **Export IdP Metadata / Parameters:**\n   Extract the following configurations from your IdP's application settings or metadata file:\n   * **IdP Entity ID (Issuer)**\n   * **IdP SSO URL** (Single Sign-On Endpoint)\n   * **X.509 Certificate** (Base64-encoded certificate, omitting `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` headers if requested by the text input field)\n\n---\n\n### Phase 3: Complete Custom SAML Setup in Dialpad\n1. Return to your open **Dialpad Admin Settings** > **Authentication** > **SAML** (Custom) configuration page.\n2. Paste the corresponding metadata values obtained from your IdP:\n   * **IdP Entity ID (Issuer)**\n   * **IdP SSO URL**\n   * **Certificate**\n3. Click **Save**.\n\n---\n\n### Phase 4: End-to-End Verification\n1. Ensure your user account is provisioned inside both your IdP directory and Dialpad. \n2. Open a fresh browser window or incognito session and navigate to [Dialpad Login](https://dialpad.com).\n3. Select **Login with another provider**, enter your company email/domain, and click **Next**.\n4. You will be smoothly redirected to your corporate IdP login screen. Authenticate with your enterprise credentials to verify successful token exchange, attribute mapping, and session establishment into Dialpad.",
+          "draft": {
+            "provider_name": "Dialpad",
+            "provider_website": "https://dialpad.com/",
+            "oauth_support_status": "unknown",
+            "authentication_method": "saml",
+            "summary": "Set up custom SAML SSO login into Dialpad by configuring Dialpad as the Service Provider and exchanging metadata with your Identity Provider.",
+            "clarification_questions": [],
+            "recommended_auth_path": "Configure custom SAML via the Dialpad Admin Portal using your IdP metadata.",
+            "difficulty": "Medium",
+            "estimated_setup_minutes": 30,
+            "estimated_approval_days": null,
+            "setup_confidence": "High",
+            "approval_confidence": "High",
+            "assumptions": [
+              "You have Company Admin privileges on Dialpad.",
+              "You have an enterprise Identity Provider that supports SAML 2.0."
+            ],
+            "prerequisites": [
+              "Company Admin privileges in Dialpad",
+              "Enterprise Identity Provider (such as Microsoft Entra ID, Okta, or JumpCloud)"
+            ],
+            "approval_requirement": "None",
+            "approval_materials": [],
+            "while_waiting": [],
+            "uncertainties": [],
+            "blockers": [],
+            "steps": [
+              {
+                "id": "retrieve-sp-details",
+                "title": "Retrieve Service Provider Details from Dialpad",
+                "description": "Log in to the Dialpad Admin Portal to retrieve the SP Entity ID and SP SSO URL (ACS).",
+                "why_it_matters": "These URLs are required to configure the custom SAML application within your Identity Provider.",
+                "instructions": [
+                  "Log in to the Dialpad Admin Portal with Company Admin privileges.",
+                  "Navigate to Admin Settings > My Company > Authentication > SAML.",
+                  "From the Choose your provider dropdown, select Custom.",
+                  "Note and copy the SP Entity ID and SP SSO URL (ACS)."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "configure-idp",
+                "title": "Configure your Identity Provider",
+                "description": "Create a custom SAML application in your IdP using Dialpad parameters and export IdP metadata.",
+                "why_it_matters": "Your IdP must trust Dialpad as the Service Provider and release mandatory user attributes.",
+                "instructions": [
+                  "Set the Identifier (Entity ID) to the Dialpad SP Entity ID.",
+                  "Set the Reply URL / Assertion Consumer Service (ACS) URL to the Dialpad SP SSO URL (ACS).",
+                  "Configure your IdP to release mandatory user claims: Email, FirstName, and LastName.",
+                  "Extract the IdP Entity ID (Issuer), IdP SSO URL, and X.509 Certificate."
+                ],
+                "estimated_minutes": 15,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-2",
+                  "source-3"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": null,
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-2"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "complete-saml-setup",
+                "title": "Complete Custom SAML Setup in Dialpad",
+                "description": "Paste your IdP metadata values back into the Dialpad Admin Portal.",
+                "why_it_matters": "Finishing this configuration enables Dialpad to validate incoming SAML assertions from your IdP.",
+                "instructions": [
+                  "Return to your open Dialpad Admin Settings > Authentication > SAML (Custom) configuration page.",
+                  "Paste the IdP Entity ID (Issuer), IdP SSO URL, and Certificate.",
+                  "Click Save."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": true,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              },
+              {
+                "id": "end-to-end-verification",
+                "title": "End-to-End Verification",
+                "description": "Test the login flow to verify successful SAML integration.",
+                "why_it_matters": "Ensures users can successfully authenticate via your corporate IdP and establish a session in Dialpad.",
+                "instructions": [
+                  "Ensure your user account is provisioned inside both your IdP directory and Dialpad.",
+                  "Open a fresh browser window or incognito session and navigate to Dialpad Login.",
+                  "Select Login with another provider, enter your company email/domain, and click Next.",
+                  "Authenticate with your enterprise credentials to verify successful token exchange and session establishment."
+                ],
+                "estimated_minutes": 5,
+                "actor": "administrator",
+                "status": "not_started",
+                "blocking": false,
+                "source_ids": [
+                  "source-1"
+                ],
+                "verification_status": "documented",
+                "warnings": [],
+                "action_url": "https://dialpad.com/",
+                "citations": [
+                  {
+                    "field": "instructions",
+                    "index": 0,
+                    "source_ids": [
+                      "source-1"
+                    ],
+                    "scope": "claim"
+                  }
+                ]
+              }
+            ],
+            "sources": [
+              {
+                "id": "source-1",
+                "claims": [
+                  "Log in to the Dialpad Admin Portal with Company Admin privileges.",
+                  "Navigate to Admin Settings > My Company > Authentication > SAML."
+                ],
+                "excerpt": "Log in to the Dialpad Admin Portal with Company Admin privileges.",
+                "url": null
+              },
+              {
+                "id": "source-2",
+                "claims": [
+                  "Set the Identifier (Entity ID) to the Dialpad SP Entity ID."
+                ],
+                "excerpt": "Set the Identifier (Entity ID) to the Dialpad SP Entity ID.",
+                "url": null
+              },
+              {
+                "id": "source-3",
+                "claims": [
+                  "Configure your IdP to release mandatory user claims."
+                ],
+                "excerpt": "Configure your IdP to release mandatory user claims",
+                "url": null
+              }
+            ],
+            "citations": [
+              {
+                "field": "summary",
+                "index": null,
+                "source_ids": [
+                  "source-1"
+                ]
+              }
+            ],
+            "workflow_evidence": {
+              "source_id": "source-1",
+              "excerpt": "Setting up a custom SAML SSO login workflow into Dialpad using metadata from your Identity Provider (IdP) involves configuring Dialpad as the Service Provider (SP)."
+            },
+            "oauth_evidence": null
+          }
+        }
+      }
+    }
+  ]
+}
