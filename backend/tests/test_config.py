@@ -15,3 +15,15 @@ def test_deployment_uses_environment_without_local_file(tmp_path, monkeypatch):
     monkeypatch.setenv("GOOGLE_CLOUD_PROJECT", "deployment-project")
     settings = Settings(_env_file=tmp_path / "missing.env")
     assert settings.google_cloud_project == "deployment-project"
+
+
+def test_frontend_origins_are_exact_normalized_and_unique(tmp_path):
+    settings = Settings(
+        _env_file=tmp_path / "missing.env",
+        frontend_url="https://web.example/",
+        frontend_urls="https://web.example|https://web-regional.example/",
+    )
+    assert settings.allowed_frontend_origins == [
+        "https://web.example",
+        "https://web-regional.example",
+    ]

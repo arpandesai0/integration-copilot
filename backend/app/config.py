@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     mongodb_uri: str = ""
     mongodb_database: str = "integration_copilot"
     frontend_url: str = "http://localhost:3000"
+    frontend_urls: str = ""
     cookie_secure: bool = False
     guide_freshness_days: int = 30
     model_config = SettingsConfigDict(
@@ -40,6 +41,15 @@ class Settings(BaseSettings):
         # An explicit local file is authoritative over inherited desktop/shell
         # settings. Deployments without that file continue to use environment vars.
         return init_settings, dotenv_settings, env_settings, file_secret_settings
+
+    @property
+    def allowed_frontend_origins(self) -> list[str]:
+        values = [self.frontend_url, *self.frontend_urls.split("|")]
+        return list(
+            dict.fromkeys(
+                value.strip().rstrip("/") for value in values if value.strip()
+            )
+        )
 
 
 settings = Settings()

@@ -53,7 +53,7 @@ async def lifespan(app):
 app = FastAPI(title="Integration Copilot API", version="0.1.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_url],
+    allow_origins=settings.allowed_frontend_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["Content-Type", "Last-Event-ID", "X-Device-ID"],
@@ -64,7 +64,7 @@ app.add_middleware(
 async def check_origin(request: Request, call_next):
     if request.method in ("POST", "PATCH", "DELETE", "PUT"):
         origin = request.headers.get("origin")
-        if origin and origin != settings.frontend_url:
+        if origin and origin.rstrip("/") not in settings.allowed_frontend_origins:
             return JSONResponse({"detail": "Origin is not allowed"}, status_code=403)
         if (
             request.headers.get("content-length", "").isdigit()

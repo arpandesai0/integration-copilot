@@ -154,10 +154,12 @@ gcloud run deploy "${frontend_service}" \
 
 frontend_url="$(gcloud run services describe "${frontend_service}" --region "${region}" --format='value(status.url)')"
 [[ -n "${frontend_url}" ]] || die "could not determine frontend URL"
+frontend_regional_url="https://${frontend_service}-${project_number}.${region}.run.app"
+frontend_origins="${frontend_url}|${frontend_regional_url}"
 
 gcloud run services update "${backend_service}" \
   --region "${region}" \
-  --update-env-vars "FRONTEND_URL=${frontend_url},COOKIE_SECURE=true" >/dev/null
+  --update-env-vars "FRONTEND_URL=${frontend_url},FRONTEND_URLS=${frontend_origins},COOKIE_SECURE=true" >/dev/null
 
 wait_for_url() {
   local label="$1"
@@ -179,7 +181,8 @@ wait_for_url() {
 wait_for_url "backend health" "${backend_url}/health" '"chat_store":"mongodb"'
 wait_for_url "backend API" "${backend_url}/api/v1/providers" '"slug"'
 wait_for_url "frontend" "${frontend_url}"
+wait_for_url "frontend regional alias" "${frontend_regional_url}"
 
-printf '\nDeployment complete.\nFrontend: %s\nBackend:  %s\n' "${frontend_url}" "${backend_url}"
+printf '\nDeployment complete.\nFrontend: %s\nFrontend alias: %s\nBackend:  %s\n' "${frontend_url}" "${frontend_regional_url}" "${backend_url}"
 printf 'The backend keeps %s minimum instance(s) warm for evaluator stability. SQLite metadata is still demo-only and not durable across revision replacement.\n' "${backend_min_instances}"
 

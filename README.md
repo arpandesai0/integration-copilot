@@ -131,7 +131,7 @@ Deploy the frontend as a Node.js Next.js application and the backend as a Python
 
 Use the Atlas SRV URI through `MONGODB_URI`; never commit the real password. The optional `docker compose up -d mongo` command starts local MongoDB, which can be selected with `MONGODB_URI=mongodb://localhost:27017`. Chat records are indexed by the hashed device ID, thread, and creation time.
 
-`GUIDE_FRESHNESS_DAYS` defaults to 30; older or undated evidence is flagged for refresh. CORS must allow the exact frontend origin and the `X-Device-ID` header. A device ID identifies one browser profile; clearing site storage intentionally starts a new private workspace identity.
+`GUIDE_FRESHNESS_DAYS` defaults to 30; older or undated evidence is flagged for refresh. CORS allows the exact frontend origins and the `X-Device-ID` header; the deployment script configures both Cloud Run-generated frontend URL aliases without using a wildcard. A device ID identifies one browser profile; clearing site storage intentionally starts a new private workspace identity.
 
 Run the backend with `uvicorn app.main:app --host 0.0.0.0 --port 8000` from `backend/`. Run `npm run build` followed by `npm start` from `frontend/`. Provide Google Cloud identity, model configuration, and the MongoDB URI to the backend only. Mount persistent storage for the remaining SQLite guide metadata until it is migrated to MongoDB.
 
