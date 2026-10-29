@@ -27,3 +27,8 @@ test-results/
 # Local developer documentation must not be committed or pushed.
 /docs/dev/
 
+# Local assignment submission materials.
+/submit.md
+/docs/images/integration-copilot-steps.png
+/docs/images/integration-copilot-step-chat.png
+
