@@ -142,6 +142,7 @@ fi
 
 gcloud builds submit "${repo_dir}/frontend" \
   --config "${script_dir}/cloudbuild.frontend.yaml" \
+  --ignore-file "${repo_dir}/frontend/.gcloudignore" \
   --substitutions "_IMAGE=${image},_NEXT_PUBLIC_API_URL=${backend_url}"
 
 gcloud run deploy "${frontend_service}" \
