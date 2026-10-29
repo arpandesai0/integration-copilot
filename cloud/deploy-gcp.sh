@@ -60,6 +60,17 @@ gcloud services enable \
   secretmanager.googleapis.com \
   aiplatform.googleapis.com
 
+project_number="$(gcloud projects describe "${project_id}" --format='value(projectNumber)')"
+[[ -n "${project_number}" ]] || die "could not determine the Google Cloud project number"
+build_sa="${project_number}-compute@developer.gserviceaccount.com"
+
+# Cloud Run source deployments use the default Compute Engine account for the
+# build unless another account is specified. It must be able to read the source
+# archive and publish the resulting image.
+gcloud projects add-iam-policy-binding "${project_id}" \
+  --member="serviceAccount:${build_sa}" \
+  --role="roles/run.builder" >/dev/null
+
 for account_name in "${backend_sa_name}" "${frontend_sa_name}"; do
   account_email="${account_name}@${project_id}.iam.gserviceaccount.com"
   if ! gcloud iam service-accounts describe "${account_email}" >/dev/null 2>&1; then
@@ -101,6 +112,7 @@ gcloud secrets add-iam-policy-binding "${secret_name}" \
 
 gcloud run deploy "${backend_service}" \
   --source "${repo_dir}/backend" \
+  --build-service-account "projects/${project_id}/serviceAccounts/${build_sa}" \
   --region "${region}" \
   --service-account "${backend_sa}" \
   --allow-unauthenticated \

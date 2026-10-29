@@ -98,8 +98,9 @@ make check
 ## Google Cloud deployment
 
 The tracked [`cloud/deploy-gcp.sh`](cloud/deploy-gcp.sh) script provisions the
-runtime service accounts, stores the MongoDB Atlas URI in Secret Manager, and
-deploys the backend and frontend as separate Cloud Run services. Run it with:
+runtime service accounts, grants the Cloud Run Builder role to the project build
+identity, stores the MongoDB Atlas URI in Secret Manager, and deploys the
+backend and frontend as separate Cloud Run services. Run it with:
 
 ```sh
 PROJECT_ID=your-project-id \
