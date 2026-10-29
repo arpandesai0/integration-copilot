@@ -13,7 +13,24 @@ def test_reviewed_seed_bindings():
     github = seed_guide('github')
     register = next(s for s in github.steps if s.id == 'register-app')
     assert register.citations[0].source_ids == ['github-app-register']
-    assert register.citations[1].source_ids == ['github-register']
+    assert register.citations[1].source_ids == ['github-app-register']
+
+
+def test_reviewed_seeds_make_authentication_choice_explicit():
+    github = seed_guide('github')
+    assert 'GitHub App' in github.recommended_auth_path
+    assert 'login' in github.recommended_auth_path
+    assert github.steps[0].title == 'Choose login or GitHub integration access'
+    assert all('OAuth App path' not in instruction
+               for step in github.steps[1:] for instruction in step.instructions)
+
+    slack = seed_guide('slack')
+    assert slack.steps[0].title == 'Choose the flow and create your Slack app'
+    assert 'separate OpenID Connect flow' in slack.recommended_auth_path
+
+    drive = seed_guide('google-drive')
+    assert drive.steps[0].title == 'Choose the flow and prepare your Cloud project'
+    assert 'Drive OAuth authorization' in drive.recommended_auth_path
 
 
 @pytest.mark.parametrize('citation', [
@@ -51,7 +68,7 @@ def test_legacy_projection_preserves_provenance_without_guessing():
     assert all(c['scope'] == 'step' for c in single)
     ambiguous = projected['steps'][1]['citations']
     assert ambiguous == [{'field': 'description', 'index': None,
-                          'source_ids': ['github-register', 'github-app-register'], 'scope': 'step'}]
+                          'source_ids': ['github-types', 'github-app-register'], 'scope': 'step'}]
     assert data['steps'][0]['citations'] == []
     data['sources'][0]['claims'] = [data['steps'][0]['instructions'][0]]
     exact = project_citations(data)['steps'][0]['citations'][0]

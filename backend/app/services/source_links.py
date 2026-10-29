@@ -10,7 +10,7 @@ from urllib.parse import quote, urljoin, urlsplit, urlunsplit
 import httpx
 from pydantic import HttpUrl
 
-# Short passages checked against official documentation on 2026-10-28.
+# Short passages checked against official documentation on 2026-10-29.
 # These also upgrade existing seed versions without a database migration.
 SEED_EXCERPTS = {
     "https://docs.slack.dev/reference/methods/chat.postMessage/": "chat:write",
@@ -20,17 +20,24 @@ SEED_EXCERPTS = {
     "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps": "GitHub's OAuth implementation supports the standard authorization code grant type",
     "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/about-oauth-app-access-restrictions": "Users can request owner approval for OAuth apps they'd like to use",
     "https://docs.slack.dev/authentication/installing-with-oauth/": "The redirect_uri must use HTTPS.",
+    "https://docs.slack.dev/authentication/sign-in-with-slack/": "The flow is based on the OpenID Connect standard",
     "https://docs.slack.dev/app-management/distribution/": "apps intended for commercial distribution should be submitted and approved for listing in the Slack Marketplace",
     "https://docs.slack.dev/app-management/quickstart-app-settings/": "Select the Workspace where you'll be developing your app.",
     "https://developers.google.com/workspace/drive/api/guides/api-specific-auth": "Whenever possible, use non-sensitive scopes",
     "https://developers.google.com/workspace/guides/configure-oauth-consent": "Configuring your app's OAuth consent screen defines what is displayed to users and app reviewers",
     "https://developers.google.com/workspace/guides/create-credentials": "Requires your app to request and receive consent from the user.",
     "https://developers.google.com/identity/protocols/oauth2/web-server": "It is designed for applications that can store confidential information and maintain state.",
+    "https://developers.google.com/identity/openid-connect/openid-connect": "your application can get permission to use other Google APIs on behalf of the user",
 }
 
 
 # Reuse short reviewed passages for matching steps; other steps retain the page link.
 SEED_STEP_EXCERPTS = {
+    "https://docs.slack.dev/authentication/sign-in-with-slack/": {
+        "create-app": SEED_EXCERPTS[
+            "https://docs.slack.dev/authentication/sign-in-with-slack/"
+        ]
+    },
     "https://docs.slack.dev/authentication/installing-with-oauth/": {
         "scopes": "Bot scopes should be added",
         "redirect-uri": "The redirect_uri must use HTTPS.",
@@ -92,6 +99,11 @@ SEED_STEP_EXCERPTS = {
             "https://developers.google.com/identity/protocols/oauth2/web-server"
         ]
         for key in ("redirect-uri", "test-authorization")
+    },
+    "https://developers.google.com/identity/openid-connect/openid-connect": {
+        "cloud-project": SEED_EXCERPTS[
+            "https://developers.google.com/identity/openid-connect/openid-connect"
+        ]
     },
 }
 

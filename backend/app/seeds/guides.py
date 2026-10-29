@@ -1,11 +1,11 @@
-"""Conservative seed requirements reviewed against official docs on 2026-10-28.
+"""Conservative seed requirements reviewed against official docs on 2026-10-29.
 No provider flow has been executed; documented never means tested.
 """
 
 from app.schemas import Guide
 from app.services.source_links import source_link
 
-CHECKED = "2026-10-28T00:00:00Z"
+CHECKED = "2026-10-29T00:00:00Z"
 CATALOG = [
     {
         "name": "GitHub",
@@ -81,8 +81,8 @@ def seed_guide(slug):
             **common,
             "provider_name": "GitHub",
             "provider_website": "https://github.com",
-            "summary": "Choose GitHub App or OAuth App before registering. GitHub generally recommends GitHub Apps for fine-grained repository permissions and installation-based access.",
-            "recommended_auth_path": "Evaluate a GitHub App first; use a custom OAuth App when its user-delegated access model matches your requirements. No managed OAuth service is assumed.",
+            "summary": "Choose one path based on the job: use Sign in with GitHub through an OAuth App when you only need user login, or use a GitHub App when the product needs repository or organization API access.",
+            "recommended_auth_path": "GitHub App for repository and organization integrations. Use Sign in with GitHub through an OAuth App only when the requirement is login without installation-based repository access.",
             "difficulty": "Depends on app type and repository permissions",
             "prerequisites": [
                 "A GitHub account; organization permission if registering under an organization.",
@@ -124,36 +124,36 @@ def seed_guide(slug):
             "steps": [
                 step(
                     "choose-app",
-                    "Choose GitHub App or OAuth App",
-                    "Match the permission model to the product before registering.",
+                    "Choose login or GitHub integration access",
+                    "Choose one application model before registering; do not implement both by default.",
                     [
-                        "Compare fine-grained GitHub App permissions with OAuth user scopes.",
-                        "Prefer repository-scoped installations when that fits your integration.",
+                        "For user login only, choose Sign in with GitHub through an OAuth App and request only identity scopes.",
+                        "For repository or organization API access, choose a GitHub App with installation-based, fine-grained permissions.",
                     ],
                     ["github-types"],
                 ),
                 step(
                     "register-app",
-                    "Register the application",
-                    "Register the chosen application under the appropriate account.",
+                    "Register the GitHub App",
+                    "This guide follows the GitHub App path for repository and organization integration access.",
                     [
-                        "For the recommended GitHub App path, open Developer settings → GitHub Apps → New GitHub App and configure its permissions and installation audience.",
-                        "For the OAuth App path, open Developer settings → OAuth Apps → New OAuth App.",
-                        "Provide the application details and callback URLs for your chosen path.",
+                        "Open Developer settings → GitHub Apps → New GitHub App.",
+                        "Configure the app identity, installation audience, and callback URL.",
+                        "If your product is login-only, stop and use the separate OAuth App flow instead of following the remaining GitHub App steps.",
                     ],
-                    ["github-register", "github-app-register"],
+                    ["github-types", "github-app-register"],
                     "https://github.com/settings/developers",
                 ),
                 step(
                     "redirect-uri",
-                    "Configure the authorization callback",
-                    "Your backend must receive and validate the authorization result.",
+                    "Configure GitHub App callbacks",
+                    "Your backend must handle GitHub App installation and user authorization callbacks securely.",
                     [
-                        "Configure the callback endpoint for your deployed backend.",
-                        "Implement state validation and the authorization-code exchange server-side.",
-                        "Keep client secrets outside browser code.",
+                        "Configure the GitHub App callback URL for your deployed backend.",
+                        "If the app acts on behalf of a user, implement state validation and the user authorization-code exchange server-side.",
+                        "Keep the GitHub App private key and client secret outside browser code.",
                     ],
-                    ["github-register", "github-flow"],
+                    ["github-app-register", "github-types"],
                 ),
                 step(
                     "permissions",
@@ -161,20 +161,20 @@ def seed_guide(slug):
                     "Permissions should match the operations your customers need.",
                     [
                         "List required repository and account operations.",
-                        "Select minimal GitHub App permissions or OAuth scopes for the chosen path.",
+                        "Select the minimum GitHub App repository, organization, and account permissions required by those operations.",
                     ],
-                    ["github-types", "github-flow"],
+                    ["github-types", "github-app-register"],
                 ),
                 step(
                     "test-authorization",
                     "Test account and organization access",
                     "Exercise the actual selected authorization path before launch.",
                     [
-                        "Authorize using a test account and confirm the minimum API operation succeeds.",
-                        "Test denied consent and organization restrictions.",
+                        "Install the GitHub App on a test account or organization and select only the repositories needed for the test.",
+                        "Confirm the minimum API operation succeeds, then test denied installation or organization restrictions.",
                         "Do not mark this step complete until you execute those checks.",
                     ],
-                    ["github-flow", "github-org"],
+                    ["github-types", "github-org"],
                 ),
                 step(
                     "distribution",
@@ -193,8 +193,8 @@ def seed_guide(slug):
             **common,
             "provider_name": "Slack",
             "provider_website": "https://slack.com",
-            "summary": "Create a Slack app, choose bot or user permissions, configure an HTTPS callback, and implement OAuth v2 installation. Distribution and Marketplace review depend on your rollout.",
-            "recommended_auth_path": "Custom Slack app registration with OAuth v2 for customer workspace installations. Reuse an existing app only if you control it and its permissions match.",
+            "summary": "Choose one primary flow: use Sign in with Slack through OpenID Connect for login, or install a Slack app with OAuth v2 when the product needs workspace API access.",
+            "recommended_auth_path": "Slack app installation with OAuth v2 for workspace API access. Use Sign in with Slack only for login, in a separate OpenID Connect flow with openid, profile, and email scopes.",
             "difficulty": "Moderate; distribution adds requirements",
             "prerequisites": [
                 "A Slack account and a development workspace in which app installation is permitted.",
@@ -202,6 +202,12 @@ def seed_guide(slug):
             ],
             "approval_requirement": "Unlisted distribution can support early-customer pilots. Apps intended for commercial distribution should be submitted and approved for Slack Marketplace listing. Workspace admin installation policies apply separately.",
             "sources": [
+                source(
+                    "slack-signin",
+                    "Sign in with Slack",
+                    "https://docs.slack.dev/authentication/sign-in-with-slack/",
+                    "Sign in with Slack is an OpenID Connect login flow and its scopes must not be combined with Slack app API scopes in one authorization flow.",
+                ),
                 source(
                     "slack-oauth",
                     "Install with OAuth",
@@ -230,13 +236,16 @@ def seed_guide(slug):
             "steps": [
                 step(
                     "create-app",
-                    "Create your Slack app",
-                    "Start with an app in a development workspace.",
+                    "Choose the flow and create your Slack app",
+                    "Choose login or workspace API access before configuring the app.",
                     [
+                        "For login only, use Sign in with Slack through OpenID Connect with openid, profile, and email scopes.",
+                        "For workspace data or actions, use Slack app installation with OAuth v2; the remaining steps follow this path.",
+                        "Do not combine Sign in with Slack scopes and Slack app API scopes in the same OAuth flow.",
                         "Create a new app and choose your development workspace.",
                         "Confirm the workspace permits your app installation.",
                     ],
-                    ["slack-create"],
+                    ["slack-signin", "slack-oauth", "slack-create"],
                     "https://api.slack.com/apps",
                 ),
                 step(
@@ -246,7 +255,7 @@ def seed_guide(slug):
                     [
                         "Map product features to Slack methods and scopes.",
                         "Keep bot scopes and user scopes distinct.",
-                        "Do not combine Sign in with Slack identity scopes with other scopes in the same flow.",
+                        "Keep this installation flow separate from any Sign in with Slack login flow.",
                         "For chat.postMessage as a bot, request chat:write and give the bot access to the target channel. Choose additional permissions only for additional operations.",
                     ],
                     ["slack-oauth", "slack-message"],
@@ -307,8 +316,8 @@ def seed_guide(slug):
             **common,
             "provider_name": "Google Drive",
             "provider_website": "https://drive.google.com",
-            "summary": "Configure a Google Cloud OAuth client and consent experience, choose the narrowest Drive scopes, and assess verification before external launch. Broad restricted scopes can introduce security assessment requirements.",
-            "recommended_auth_path": "Custom Google OAuth client for external customer authorization. Prefer drive.file with a file picker when user-selected files satisfy the product.",
+            "summary": "Choose the flow by purpose: use Sign in with Google through OpenID Connect for login, or request Drive OAuth scopes when the product needs access to a user's files.",
+            "recommended_auth_path": "Google Drive OAuth authorization for file access, preferably drive.file with Google Picker when user-selected files are sufficient. Use Sign in with Google alone only for login.",
             "difficulty": "Scope-dependent; broad Drive access adds review",
             "prerequisites": [
                 "A Google Cloud project with Drive API enabled and permission to configure OAuth.",
@@ -316,6 +325,12 @@ def seed_guide(slug):
             ],
             "approval_requirement": "Verification depends on audience and requested scopes. Sensitive and restricted scopes add review; restricted data stored or transmitted by servers may require a security assessment. Non-sensitive scopes still have applicable basic verification requirements.",
             "sources": [
+                source(
+                    "google-signin",
+                    "Sign in with Google using OpenID Connect",
+                    "https://developers.google.com/identity/openid-connect/openid-connect",
+                    "OpenID Connect authenticates the user; Google API access depends on the additional authorization scopes requested and granted.",
+                ),
                 source(
                     "drive-scopes",
                     "Choose Google Drive API scopes",
@@ -344,13 +359,16 @@ def seed_guide(slug):
             "steps": [
                 step(
                     "cloud-project",
-                    "Prepare your Google Cloud project",
-                    "Configure the project that owns your OAuth client.",
+                    "Choose the flow and prepare your Cloud project",
+                    "Choose login or Drive file access before configuring the OAuth client.",
                     [
+                        "For login only, use Sign in with Google through OpenID Connect with openid, email, and profile.",
+                        "For Drive file access, request the minimum Drive OAuth scopes; the remaining steps follow this path.",
+                        "Do not request Drive scopes when the product only needs user authentication.",
                         "Select a project you control and enable the Drive API.",
                         "Confirm your permissions allow OAuth configuration.",
                     ],
-                    ["google-client"],
+                    ["google-signin", "drive-scopes", "google-client"],
                     "https://console.cloud.google.com/",
                 ),
                 step(
@@ -414,15 +432,15 @@ def seed_guide(slug):
     instruction_sources = {
         "github": {
             "choose-app": [["github-types"], ["github-types"]],
-            "register-app": [["github-app-register"], ["github-register"], ["github-register", "github-app-register"]],
-            "redirect-uri": [["github-register"], ["github-flow"], ["github-flow"]],
-            "permissions": [[], ["github-types", "github-flow"]],
-            "test-authorization": [["github-flow"], ["github-org"], []],
+            "register-app": [["github-app-register"], ["github-app-register"], ["github-types"]],
+            "redirect-uri": [["github-app-register"], ["github-types"], ["github-app-register"]],
+            "permissions": [[], ["github-types", "github-app-register"]],
+            "test-authorization": [["github-types"], ["github-org"], []],
             "distribution": [["github-org"], ["github-org", "github-types"]],
         },
         "slack": {s["id"]: [s["source_ids"] for _ in s["instructions"]] for s in data["steps"]},
         "google-drive": {
-            "cloud-project": [["google-client"], ["google-client"]],
+            "cloud-project": [["google-signin"], ["drive-scopes"], ["google-signin", "drive-scopes"], ["google-client"], ["google-client"]],
             "consent": [["google-consent"], ["google-consent"], ["google-consent"]],
             "scopes": [["drive-scopes"], ["drive-scopes"], ["drive-scopes"]],
             "redirect-uri": [["google-client"], ["google-client", "google-web"], ["google-web"]],
@@ -431,6 +449,7 @@ def seed_guide(slug):
         },
     }[slug]
     if slug == "slack":
+        instruction_sources["create-app"] = [["slack-signin"], ["slack-oauth"], ["slack-signin", "slack-oauth"], ["slack-create"], ["slack-create"]]
         instruction_sources["scopes"] = [["slack-oauth"], ["slack-oauth"], ["slack-oauth"], ["slack-message"]]
     for item in data["steps"]:
         item["citations"] = [
@@ -443,8 +462,8 @@ def seed_guide(slug):
         ]
     top_sources = {
         "github": {"summary": ["github-types"], "recommended_auth_path": ["github-types"], "approval_requirement": ["github-org", "github-types"]},
-        "slack": {"summary": ["slack-oauth", "slack-distribution"], "recommended_auth_path": ["slack-oauth"], "approval_requirement": ["slack-distribution"]},
-        "google-drive": {"summary": ["drive-scopes", "google-client"], "recommended_auth_path": ["drive-scopes", "google-client"], "approval_requirement": ["drive-scopes"]},
+        "slack": {"summary": ["slack-signin", "slack-oauth"], "recommended_auth_path": ["slack-signin", "slack-oauth"], "approval_requirement": ["slack-distribution"]},
+        "google-drive": {"summary": ["google-signin", "drive-scopes"], "recommended_auth_path": ["google-signin", "drive-scopes"], "approval_requirement": ["drive-scopes"]},
     }[slug]
     data["citations"] = [{"field": field, "source_ids": ids} for field, ids in top_sources.items()]
     return Guide.model_validate(data)
