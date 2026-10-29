@@ -16,6 +16,20 @@ Developers can open reviewed guides for GitHub, Slack, and Google Drive or enter
 
 Developers can also ask questions in the main chat or open a discussion attached to a specific guide step. Step discussions retain their own context and history. A read-only guide can be shared without exposing private conversations.
 
+## Product screenshots
+
+### Actionable setup steps
+
+![Integration Copilot showing timed Slack OAuth setup steps](docs/images/integration-copilot-steps.png)
+
+The generated guide breaks the integration into ordered, source-backed steps. Each step shows who should perform it, a rough time estimate, detailed instructions, and a direct action for asking a contextual question.
+
+### Ask about this step
+
+![Integration Copilot answering a question in the step-level chat](docs/images/integration-copilot-step-chat.png)
+
+Selecting **Ask about this step** opens a dedicated discussion beside the guide. The assistant answers using that step's context and evidence, while the conversation remains attached to the step for later reference.
+
 ## Setup and documentation
 
 The repository [README](https://github.com/arpandesai0/integration-copilot#readme) contains:
