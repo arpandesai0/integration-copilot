@@ -46,7 +46,12 @@ export function Discovery() {
         body: JSON.stringify({ prompt: value }),
       }),
     onSuccess: (workspace) => {
-      query.invalidateQueries({ queryKey: ["workspaces"] });
+      query.setQueryData(["workspace", workspace.id], workspace);
+      query.setQueryData<Workspace[]>(["workspaces"], (saved = []) =>
+        saved.some((item) => item.id === workspace.id)
+          ? saved
+          : [workspace, ...saved],
+      );
       router.push(`/workspaces/${workspace.id}`);
     },
   });
