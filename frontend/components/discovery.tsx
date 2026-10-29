@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { api, API_URL } from "@/lib/api";
 import type { Provider, Workspace } from "@/lib/types";
-import { Sidebar } from "./sidebar";
 import { ThemeToggle } from "./theme-toggle";
 import { ProviderIcon, ErrorBox } from "./common";
 
@@ -67,8 +66,6 @@ export function Discovery() {
     : [];
 
   return (
-    <div className="discovery-shell">
-      <Sidebar />
       <main
         className="discovery-main"
         style={{
@@ -432,6 +429,5 @@ export function Discovery() {
           </p>
         </div>
       </main>
-    </div>
   );
 }

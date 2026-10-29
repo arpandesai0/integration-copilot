@@ -294,11 +294,17 @@ kbd,
   padding: 0 28px !important;
 }
 /* Bound app content and absolutely positioned accessibility helpers to the viewport. */
-.workspace-shell,
-.discovery-shell {
+.app-shell {
   position: relative;
   display: flex;
   height: 100dvh;
+  overflow: hidden;
+}
+
+.app-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
   overflow: hidden;
 }
 

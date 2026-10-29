@@ -22,7 +22,6 @@ import type {
   Thread,
   Workspace as WorkspaceType,
 } from "@/lib/types";
-import { Sidebar } from "./sidebar";
 import { ThemeToggle } from "./theme-toggle";
 import { ChatSkeleton, ErrorBox, Loading, titleCase } from "./common";
 import { GuideScrollProgress } from "./guide-scroll-progress";
@@ -183,12 +182,9 @@ export function Workspace({ id }: { id: string }) {
   };
   if (workspace.isPending)
     return (
-      <div className="workspace-shell">
-        <Sidebar />
-        <main className="chat-loading-pane">
-          <ChatSkeleton />
-        </main>
-      </div>
+      <main className="chat-loading-pane">
+        <ChatSkeleton />
+      </main>
     );
   if (workspace.error)
     return (
@@ -274,8 +270,7 @@ export function Workspace({ id }: { id: string }) {
     </section>
   ) : null;
   return (
-    <div className="workspace-shell">
-      <Sidebar workspace={w} />
+    <>
       <div
         style={{
           flex: 1,
@@ -463,7 +458,7 @@ export function Workspace({ id }: { id: string }) {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }
 function Research({

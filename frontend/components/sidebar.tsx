@@ -26,7 +26,7 @@ import {
   DialogFooter,
 } from "./ui/dialog";
 
-export function Sidebar({ workspace }: { workspace?: Workspace }) {
+export function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const query = useQueryClient();
@@ -130,7 +130,7 @@ export function Sidebar({ workspace }: { workspace?: Workspace }) {
             {filtered.map((w) => (
               <div
                 key={w.id}
-                className={`integration-nav-item${workspace?.id === w.id ? " is-active" : ""}`}
+                className={`integration-nav-item${pathname === `/chats/${w.id}` ? " is-active" : ""}`}
               >
                 <Link
                   href={`/chats/${w.id}`}
