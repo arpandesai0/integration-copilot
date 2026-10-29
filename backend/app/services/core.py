@@ -423,12 +423,13 @@ def match_providers(db, prompt):
     return [
         p
         for p in db.scalars(select(Provider))
+        if not p.slug.startswith("research-")
         if any(
             re.search(r"(?<![a-z0-9])" + re.escape(a.lower()) + r"(?![a-z0-9])", text)
             for a in [
                 p.name,
                 p.slug,
-                *([] if p.slug.startswith("research-") else p.aliases),
+                *p.aliases,
             ]
         )
     ]

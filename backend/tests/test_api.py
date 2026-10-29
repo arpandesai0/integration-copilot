@@ -1,5 +1,5 @@
 from app import database, api
-from app.database import ConversationThread
+from app.database import ConversationThread, Provider
 from app.services.core import context_package
 
 
@@ -7,6 +7,37 @@ def new(client, prompt="Slack"):
     response = client.post("/api/v1/chats", json={"prompt": prompt})
     assert response.status_code == 201, response.text
     return response.json()
+
+
+def test_resolved_provider_wins_over_stale_provisional_identity(client):
+    with database.SessionLocal() as db:
+        db.add(
+            Provider(
+                name="Help me integrate linear.app",
+                slug="research-stale-linear",
+                website_url="",
+                official_domain="",
+                aliases=[],
+                oauth_support_status="unknown",
+            )
+        )
+        db.add(
+            Provider(
+                name="Linear",
+                slug="resolved-linear-test",
+                website_url="https://linear.app/",
+                official_domain="linear.app",
+                aliases=["linear", "linear.app"],
+                oauth_support_status="supported",
+            )
+        )
+        db.commit()
+
+    response = client.post(
+        "/api/v1/chats", json={"prompt": "Help me integrate linear.app."}
+    )
+    assert response.status_code == 201, response.text
+    assert response.json()["provider"]["name"] == "Linear"
 
 
 def test_health_and_seed_guides(client):
