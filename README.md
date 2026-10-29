@@ -95,6 +95,23 @@ Run project checks with:
 make check
 ```
 
+## Google Cloud deployment
+
+The tracked [`cloud/deploy-gcp.sh`](cloud/deploy-gcp.sh) script provisions the
+runtime service accounts, stores the MongoDB Atlas URI in Secret Manager, and
+deploys the backend and frontend as separate Cloud Run services. Run it with:
+
+```sh
+PROJECT_ID=your-project-id \
+GCLOUD_ACCOUNT=your-account@example.com \
+ALLOW_EPHEMERAL_SQLITE=1 \
+cloud/deploy-gcp.sh
+```
+
+`ALLOW_EPHEMERAL_SQLITE=1` acknowledges the current demo-only SQLite metadata
+store. MongoDB chat data remains persistent in Atlas, but the application must
+migrate metadata to durable storage before a production deployment.
+
 ## Deployment
 
 Deploy the frontend as a Node.js Next.js application and the backend as a Python ASGI service. Set the frontend's `NEXT_PUBLIC_API_URL` at build time, configure the backend's `FRONTEND_URL` to its exact browser origin, and use HTTPS in deployment. Allow the deployment host in MongoDB Atlas Network Access and store `MONGODB_URI` only in the backend secret manager.

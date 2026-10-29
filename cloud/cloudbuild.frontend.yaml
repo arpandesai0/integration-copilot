@@ -1,0 +1,13 @@
+# Build the frontend with the deployed backend URL embedded by Next.js.
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --build-arg
+      - NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}
+      - --tag
+      - ${_IMAGE}
+      - .
+images:
+  - ${_IMAGE}
+
