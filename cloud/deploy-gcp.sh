@@ -126,6 +126,7 @@ gcloud run deploy "${backend_service}" \
   --set-env-vars "GOOGLE_CLOUD_PROJECT=${project_id},GOOGLE_CLOUD_LOCATION=${vertex_location},MONGODB_DATABASE=${mongodb_database},FRONTEND_URL=https://example.invalid,COOKIE_SECURE=true" \
   --set-secrets "MONGODB_URI=${secret_name}:${secret_version}"
 
+backend_url=""
 backend_url="$(gcloud run services describe "${backend_service}" --region "${region}" --format='value(status.url)')"
 [[ -n "${backend_url}" ]] || die "could not determine backend URL"
 
@@ -148,6 +149,7 @@ gcloud run deploy "${frontend_service}" \
   --allow-unauthenticated \
   --port 3000
 
+frontend_url=""
 frontend_url="$(gcloud run services describe "${frontend_service}" --region "${region}" --format='value(status.url)')"
 [[ -n "${frontend_url}" ]] || die "could not determine frontend URL"
 frontend_regional_url="https://${frontend_service}-${project_number}.${region}.run.app"

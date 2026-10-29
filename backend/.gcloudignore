@@ -1,0 +1,15 @@
+.gcloudignore
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+.venv
+__pycache__
+**/__pycache__
+.pytest_cache
+tests
+*.db
+*.db-shm
+*.db-wal
+*.sqlite*
