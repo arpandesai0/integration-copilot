@@ -72,13 +72,17 @@ def seed_guide(slug):
             "Assumes a web application connecting external customers. Confirm capabilities before selecting permissions."
         ],
         "uncertainties": [
-            "Hands-on setup and approval duration have not been established for your application."
+            "Time values are rough planning estimates for this demo, not provider-published SLAs. Actual setup and approval time depends on scopes, distribution, organization policy, and review feedback."
         ],
         "blockers": [],
     }
     if slug == "github":
         data = {
             **common,
+            "estimated_setup_minutes": 75,
+            "estimated_approval_days": 7,
+            "setup_confidence": "inferred",
+            "approval_confidence": "inferred",
             "provider_name": "GitHub",
             "provider_website": "https://github.com",
             "summary": "Choose one path based on the job: use Sign in with GitHub through an OAuth App when you only need user login, or use a GitHub App when the product needs repository or organization API access.",
@@ -191,6 +195,10 @@ def seed_guide(slug):
     elif slug == "slack":
         data = {
             **common,
+            "estimated_setup_minutes": 90,
+            "estimated_approval_days": 10,
+            "setup_confidence": "inferred",
+            "approval_confidence": "inferred",
             "provider_name": "Slack",
             "provider_website": "https://slack.com",
             "summary": "Choose one primary flow: use Sign in with Slack through OpenID Connect for login, or install a Slack app with OAuth v2 when the product needs workspace API access.",
@@ -314,6 +322,10 @@ def seed_guide(slug):
     else:
         data = {
             **common,
+            "estimated_setup_minutes": 120,
+            "estimated_approval_days": 15,
+            "setup_confidence": "inferred",
+            "approval_confidence": "inferred",
             "provider_name": "Google Drive",
             "provider_website": "https://drive.google.com",
             "summary": "Choose the flow by purpose: use Sign in with Google through OpenID Connect for login, or request Drive OAuth scopes when the product needs access to a user's files.",
@@ -465,5 +477,12 @@ def seed_guide(slug):
         "slack": {"summary": ["slack-signin", "slack-oauth"], "recommended_auth_path": ["slack-signin", "slack-oauth"], "approval_requirement": ["slack-distribution"]},
         "google-drive": {"summary": ["google-signin", "drive-scopes"], "recommended_auth_path": ["google-signin", "drive-scopes"], "approval_requirement": ["drive-scopes"]},
     }[slug]
+    step_minutes = {
+        "github": [10, 15, 15, 15, 10, 10],
+        "slack": [15, 15, 15, 20, 10, 15],
+        "google-drive": [20, 20, 20, 20, 20, 20],
+    }[slug]
+    for item, minutes in zip(data["steps"], step_minutes, strict=True):
+        item["estimated_minutes"] = minutes
     data["citations"] = [{"field": field, "source_ids": ids} for field, ids in top_sources.items()]
     return Guide.model_validate(data)

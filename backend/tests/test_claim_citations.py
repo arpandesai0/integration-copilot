@@ -33,6 +33,22 @@ def test_reviewed_seeds_make_authentication_choice_explicit():
     assert 'Drive OAuth authorization' in drive.recommended_auth_path
 
 
+def test_reviewed_seeds_have_inferred_demo_time_estimates():
+    expected = {
+        'github': (75, 7),
+        'slack': (90, 10),
+        'google-drive': (120, 15),
+    }
+    for slug, (setup_minutes, approval_days) in expected.items():
+        guide = seed_guide(slug)
+        assert guide.estimated_setup_minutes == setup_minutes
+        assert guide.estimated_approval_days == approval_days
+        assert guide.setup_confidence == 'inferred'
+        assert guide.approval_confidence == 'inferred'
+        assert sum(step.estimated_minutes or 0 for step in guide.steps) == setup_minutes
+        assert 'not provider-published SLAs' in guide.uncertainties[0]
+
+
 @pytest.mark.parametrize('citation', [
     {'field': 'instructions', 'index': 99, 'source_ids': ['github-types']},
     {'field': 'instructions', 'source_ids': ['github-types']},

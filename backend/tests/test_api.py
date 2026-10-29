@@ -47,7 +47,11 @@ def test_health_and_seed_guides(client):
         w = new(client, name)
         g = client.get(f"/api/v1/chats/{w['id']}/guide").json()
         assert len(g["steps"]) >= 5 and g["sources"]
-        assert g["estimated_approval_days"] is None
+        assert g["estimated_setup_minutes"] > 0
+        assert g["estimated_approval_days"] > 0
+        assert g["setup_confidence"] == "inferred"
+        assert g["approval_confidence"] == "inferred"
+        assert all(step["estimated_minutes"] > 0 for step in g["steps"])
         assert all(s["verification_status"] == "documented" for s in g["steps"])
         assert all(s["url"].startswith("https://") for s in g["sources"])
 
