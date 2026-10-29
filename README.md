@@ -119,6 +119,12 @@ Secret rotation requires both `ROTATE_MONGODB_SECRET=1` and `MONGODB_URI`.
 Successful deployments create normal Cloud Run revisions and container image
 versions, not duplicate services.
 
+For evaluator stability, the script keeps one backend instance warm and verifies
+MongoDB initialization, the provider API, and the frontend after deployment.
+This incurs Cloud Run minimum-instance usage. Override it with
+`BACKEND_MIN_INSTANCES=0` only when cold starts and ephemeral SQLite resets are
+acceptable.
+
 ## Deployment
 
 Deploy the frontend as a Node.js Next.js application and the backend as a Python ASGI service. Set the frontend's `NEXT_PUBLIC_API_URL` at build time, configure the backend's `FRONTEND_URL` to its exact browser origin, and use HTTPS in deployment. Allow the deployment host in MongoDB Atlas Network Access and store `MONGODB_URI` only in the backend secret manager.

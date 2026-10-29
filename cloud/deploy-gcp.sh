@@ -15,6 +15,7 @@ frontend_sa_name="${FRONTEND_SA_NAME:-integration-copilot-web}"
 secret_name="${MONGODB_SECRET_NAME:-integration-copilot-mongodb-uri}"
 mongodb_database="${MONGODB_DATABASE:-integration_copilot}"
 artifact_repo="${ARTIFACT_REPO:-integration-copilot}"
+backend_min_instances="${BACKEND_MIN_INSTANCES:-1}"
 
 die() {
   printf 'error: %s\n' "$*" >&2
@@ -22,6 +23,7 @@ die() {
 }
 
 command -v gcloud >/dev/null 2>&1 || die "gcloud CLI is not installed"
+command -v curl >/dev/null 2>&1 || die "curl is not installed"
 [[ -n "${project_id}" ]] || die "set PROJECT_ID to the target Google Cloud project"
 
 if [[ "${ALLOW_EPHEMERAL_SQLITE:-0}" != "1" ]]; then
@@ -123,6 +125,7 @@ gcloud run deploy "${backend_service}" \
   --allow-unauthenticated \
   --port 8000 \
   --timeout 300 \
+  --min-instances "${backend_min_instances}" \
   --max-instances 1 \
   --set-env-vars "GOOGLE_CLOUD_PROJECT=${project_id},GOOGLE_CLOUD_LOCATION=${vertex_location},MONGODB_DATABASE=${mongodb_database},FRONTEND_URL=https://example.invalid,COOKIE_SECURE=true" \
   --set-secrets "MONGODB_URI=${secret_name}:${secret_version}"
@@ -155,6 +158,27 @@ gcloud run services update "${backend_service}" \
   --region "${region}" \
   --update-env-vars "FRONTEND_URL=${frontend_url},COOKIE_SECURE=true" >/dev/null
 
+wait_for_url() {
+  local label="$1"
+  local url="$2"
+  local expected="${3:-}"
+  local response=""
+  for _ in {1..18}; do
+    if response="$(curl --fail --silent --show-error --max-time 20 "${url}" 2>/dev/null)"; then
+      if [[ -z "${expected}" || "${response}" == *"${expected}"* ]]; then
+        printf 'Verified %s: %s\n' "${label}" "${url}"
+        return 0
+      fi
+    fi
+    sleep 5
+  done
+  die "${label} did not pass its post-deploy check at ${url}"
+}
+
+wait_for_url "backend health" "${backend_url}/health" '"chat_store":"mongodb"'
+wait_for_url "backend API" "${backend_url}/api/v1/providers" '"slug"'
+wait_for_url "frontend" "${frontend_url}"
+
 printf '\nDeployment complete.\nFrontend: %s\nBackend:  %s\n' "${frontend_url}" "${backend_url}"
-printf 'Important: configure MongoDB Atlas Network Access for Cloud Run egress. SQLite metadata remains ephemeral in this demo deployment.\n'
+printf 'The backend keeps %s minimum instance(s) warm for evaluator stability. SQLite metadata is still demo-only and not durable across revision replacement.\n' "${backend_min_instances}"
 
