@@ -19,7 +19,6 @@ Configure `backend/.env`:
 ```dotenv
 GOOGLE_CLOUD_PROJECT=your-project-id
 GOOGLE_CLOUD_LOCATION=us-central1
-GEMINI_MODEL=your-supported-gemini-model
 DATABASE_URL=sqlite:///./integration_copilot.db
 MONGODB_URI=mongodb+srv://USERNAME:PASSWORD@YOUR_CLUSTER.mongodb.net/?retryWrites=true&w=majority
 MONGODB_DATABASE=integration_copilot
@@ -39,9 +38,9 @@ gcloud auth application-default login
 gcloud auth application-default set-quota-project YOUR_PROJECT_ID
 ```
 
-Enable the Vertex AI API and grant the authenticated identity the necessary Vertex AI permissions. In a hosted environment, use an attached service account or workload identity. Keep credentials out of frontend variables and source control. `GEMINI_SYNTHESIS_MODEL` optionally selects a faster model for formatting researched evidence; it falls back to `GEMINI_MODEL`. `GEMINI_CHAT_MODEL` optionally selects a faster model for streamed main/step replies, falling back to `GEMINI_MODEL`. `GEMINI_RESEARCH_MODEL` separately selects the model for focused grounded searches (also falls back to `GEMINI_MODEL`); the local setup uses `gemini-3.5-flash-lite` for both. A fast, tool-free scope check asks for missing requirements before searching. The local setup currently uses a verified `gemini-3.5-flash-lite` formatter while retaining the primary research/chat model. Research is bounded to 240 seconds overall, with up to 150 seconds for search and 75 seconds for synthesis, plus optional passage verification. Chat allows 180 seconds; clarification routing and replies allow 60 and 90 seconds respectively. These limits are configurable in the backend environment.
+Enable the Vertex AI API and grant the authenticated identity the necessary Vertex AI permissions. In a hosted environment, use an attached service account or workload identity. Keep credentials out of frontend variables and source control. Model selection is defined in `backend/app/config.py`: the primary model is `gemini-3.8-flash`, while research, synthesis, and chat use `gemini-3.5-flash-lite`. A fast, tool-free scope check asks for missing requirements before searching. Research is bounded to 240 seconds overall, with up to 150 seconds for search and 75 seconds for synthesis, plus optional passage verification. Chat allows 180 seconds; clarification routing and replies allow 60 and 90 seconds respectively. These limits are configurable in the backend environment.
 
-Select a model available in your project and region; the application deliberately does not assume a universal model name. The local `backend/.env` takes precedence over inherited shell settings; without that file, deployment environment variables apply. Restart the backend after editing configuration.
+Ensure the coded models are available in your project and region. The local `backend/.env` takes precedence over inherited shell settings for deployment configuration such as project and location; without that file, deployment environment variables apply. Restart the backend after editing configuration.
 
 Start these in separate terminals:
 

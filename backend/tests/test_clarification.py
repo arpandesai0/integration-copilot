@@ -213,13 +213,12 @@ def test_short_clarification_uses_fast_model_and_forwards_sdk_deltas(monkeypatch
     monkeypatch.setattr(workflows, "client", lambda: SimpleNamespace(
         aio=SimpleNamespace(models=SimpleNamespace(generate_content_stream=generate))
     ))
-    monkeypatch.setattr(workflows.settings, "gemini_synthesis_model", "fast-model")
     async def collect():
         return [part async for part in workflows.clarification_reply_stream(
             {}, "auth?", SimpleNamespace(action="reply", intent="sign-in versus API access")
         )]
     assert asyncio.run(collect()) == ["Do you mean ", "signing users in?"]
-    assert requested[0]["model"] == "fast-model"
+    assert requested[0]["model"] == "gemini-3.5-flash-lite"
 
 
 def test_explicit_missing_requirement_is_not_hidden_by_assumed_steps(client):

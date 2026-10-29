@@ -1,14 +1,15 @@
 from pathlib import Path
+from typing import ClassVar
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    gemini_model: ClassVar[str] = "gemini-3.8-flash"
+    gemini_chat_model: ClassVar[str] = "gemini-3.5-flash-lite"
+    gemini_synthesis_model: ClassVar[str] = "gemini-3.5-flash-lite"
+    gemini_research_model: ClassVar[str] = "gemini-3.5-flash-lite"
     google_cloud_project: str = ""
     google_cloud_location: str = "us-central1"
-    gemini_model: str = ""
-    gemini_chat_model: str = ""
-    gemini_synthesis_model: str = ""
-    gemini_research_model: str = ""
     research_timeout_seconds: float = 240
     research_search_timeout_seconds: float = 150
     research_synthesis_timeout_seconds: float = 75

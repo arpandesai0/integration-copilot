@@ -8,9 +8,9 @@ class AIUnavailable(Exception):
 
 
 def client():
-    if not settings.google_cloud_project or not settings.gemini_model:
+    if not settings.google_cloud_project:
         raise AIUnavailable(
-            "Configure GOOGLE_CLOUD_PROJECT and GEMINI_MODEL on the backend to enable live research and conversations."
+            "Configure GOOGLE_CLOUD_PROJECT on the backend to enable live research and conversations."
         )
     return genai.Client(
         vertexai=True,

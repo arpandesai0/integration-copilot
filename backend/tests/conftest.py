@@ -22,7 +22,7 @@ def client(monkeypatch):
     monkeypatch.setattr(main, "engine", engine)
     monkeypatch.setattr(api, "SessionLocal", sessions)
     monkeypatch.setattr(workflows, "SessionLocal", sessions)
-    monkeypatch.setattr(workflows.settings, "gemini_model", "")
+    monkeypatch.setattr(workflows.settings, "google_cloud_project", "")
     # Unit research tests stub routing independently of their grounded SDK mocks.
     # Scope-specific tests override this stub explicitly.
     from app.services.scope_triage import ScopeDecision

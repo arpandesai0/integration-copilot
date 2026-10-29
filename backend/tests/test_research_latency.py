@@ -98,13 +98,13 @@ def test_research_has_bounded_stages_and_one_terminal_event(client, monkeypatch,
 
 
 def test_research_thinking_and_transport_settings_do_not_change_chat(monkeypatch):
-    monkeypatch.setattr(workflows.settings, "gemini_model", "gemini-3.8-flash")
-    config = workflows.research_config(0.05, max_output_tokens=3000)
+    config = workflows.research_config(
+        0.05, model="gemini-3.8-flash", max_output_tokens=3000
+    )
     assert config.thinking_config.thinking_level.value == "LOW"
     assert config.http_options.timeout == 50
     assert config.http_options.retry_options.attempts == 1
-    monkeypatch.setattr(workflows.settings, "gemini_model", "gemini-2.5-flash")
-    assert workflows.research_config(1).thinking_config is None
+    assert workflows.research_config(1, model="gemini-2.5-flash").thinking_config is None
 
 
 @pytest.mark.parametrize("error_kind", ["transport", "provider_deadline"])

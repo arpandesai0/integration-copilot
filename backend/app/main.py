@@ -82,7 +82,7 @@ async def check_origin(request: Request, call_next):
 def health():
     return {
         "status": "ok",
-        "ai_configured": bool(settings.google_cloud_project and settings.gemini_model),
+        "ai_configured": bool(settings.google_cloud_project),
         "chat_store": "mongodb" if settings.mongodb_uri else "relational_fallback",
     }
 
