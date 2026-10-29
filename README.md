@@ -113,6 +113,12 @@ cloud/deploy-gcp.sh
 store. MongoDB chat data remains persistent in Atlas, but the application must
 migrate metadata to durable storage before a production deployment.
 
+The script is safe to rerun: named service accounts, secrets, repositories, and
+Cloud Run services are reused. It also reuses the current MongoDB secret version.
+Secret rotation requires both `ROTATE_MONGODB_SECRET=1` and `MONGODB_URI`.
+Successful deployments create normal Cloud Run revisions and container image
+versions, not duplicate services.
+
 ## Deployment
 
 Deploy the frontend as a Node.js Next.js application and the backend as a Python ASGI service. Set the frontend's `NEXT_PUBLIC_API_URL` at build time, configure the backend's `FRONTEND_URL` to its exact browser origin, and use HTTPS in deployment. Allow the deployment host in MongoDB Atlas Network Access and store `MONGODB_URI` only in the backend secret manager.

@@ -91,19 +91,24 @@ if ! gcloud secrets describe "${secret_name}" >/dev/null 2>&1; then
 fi
 
 secret_version=""
-if [[ -n "${MONGODB_URI:-}" ]]; then
+existing_secret_version="$(gcloud secrets versions list "${secret_name}" --filter='state=ENABLED' --sort-by='~createTime' --limit=1 --format='value(name)')"
+if [[ "${ROTATE_MONGODB_SECRET:-0}" == "1" ]]; then
+  [[ -n "${MONGODB_URI:-}" ]] || die "set MONGODB_URI when ROTATE_MONGODB_SECRET=1"
   secret_ref="$(printf '%s' "${MONGODB_URI}" | gcloud secrets versions add "${secret_name}" --data-file=- --format='value(name)')"
   secret_version="${secret_ref##*/}"
-elif ! gcloud secrets versions list "${secret_name}" --filter='state=ENABLED' --format='value(name)' --limit=1 | grep -q .; then
-  read -r -s -p "MongoDB Atlas URI: " mongodb_uri
-  printf '\n'
-  [[ -n "${mongodb_uri}" ]] || die "MongoDB URI cannot be empty"
-  secret_ref="$(printf '%s' "${mongodb_uri}" | gcloud secrets versions add "${secret_name}" --data-file=- --format='value(name)')"
-  unset mongodb_uri
+elif [[ -z "${existing_secret_version}" ]]; then
+  if [[ -n "${MONGODB_URI:-}" ]]; then
+    secret_ref="$(printf '%s' "${MONGODB_URI}" | gcloud secrets versions add "${secret_name}" --data-file=- --format='value(name)')"
+  else
+    read -r -s -p "MongoDB Atlas URI: " mongodb_uri
+    printf '\n'
+    [[ -n "${mongodb_uri}" ]] || die "MongoDB URI cannot be empty"
+    secret_ref="$(printf '%s' "${mongodb_uri}" | gcloud secrets versions add "${secret_name}" --data-file=- --format='value(name)')"
+    unset mongodb_uri
+  fi
   secret_version="${secret_ref##*/}"
 else
-  secret_version="$(gcloud secrets versions list "${secret_name}" --filter='state=ENABLED' --sort-by='~createTime' --limit=1 --format='value(name)')"
-  secret_version="${secret_version##*/}"
+  secret_version="${existing_secret_version##*/}"
 fi
 
 gcloud secrets add-iam-policy-binding "${secret_name}" \
