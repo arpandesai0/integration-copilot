@@ -37,6 +37,13 @@ function clarificationQuestion(guide: Guide): string {
   );
 }
 
+function approvalRequirement(value: string): string {
+  const normalized = value.trim().toLowerCase().replace(/[.]+$/, "");
+  if (["none", "n/a", "not applicable"].includes(normalized))
+    return "No distribution or approval requirement was identified.";
+  return value;
+}
+
 export function GuideView({
   guide,
   selectedStep,
@@ -438,34 +445,21 @@ export function GuideView({
           </div>
         </section>
       ))}
-      <section
-        style={{
-          borderTop: "1px solid var(--border)",
-          padding: "28px 0",
-          marginTop: 30,
-        }}
-      >
-        <h2
-          style={{
-            fontSize: 17,
-            fontWeight: 550,
-            letterSpacing: "-.3px",
-            margin: "0 0 14px",
-          }}
-        >
-          Distribution & approval
-        </h2>
-        <ResponseContent
-          sources={guide.sources}
-          trailing={citationNote(
-            guide.citations,
-            "approval_requirement",
-            undefined,
-            guide.sources,
-          )}
-        >
-          {guide.approval_requirement}
-        </ResponseContent>
+      <section className="guide-approval-section">
+        <h2 className="guide-section-title">Distribution &amp; approval</h2>
+        <div className="guide-approval-summary">
+          <ResponseContent
+            sources={guide.sources}
+            trailing={citationNote(
+              guide.citations,
+              "approval_requirement",
+              undefined,
+              guide.sources,
+            )}
+          >
+            {approvalRequirement(guide.approval_requirement)}
+          </ResponseContent>
+        </div>
         <div className="muted" style={{ fontSize: 12, lineHeight: 1.8 }}>
           Approval estimate confidence: {titleCase(guide.approval_confidence)}
         </div>
