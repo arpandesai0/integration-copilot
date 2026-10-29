@@ -32,7 +32,7 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 | 4 | Implemented; mocked tests and successful live Linear research verified after applying the selected project |
 | 5 | Thread/context behavior tested; persistence, failure handling, and successful live main/step answers verified |
 | 6 | Implemented and verified; optional finding-save UI deferred |
-| 7 | Cloud Run deployment is live; durable MongoDB metadata restoration is implemented and locally verified; formal production demo is pending |
+| 7 | Cloud Run deployment, durable MongoDB restoration, and all five formal production scenarios are verified |
 
 ## Stage 1 — Project scaffold
 
@@ -126,7 +126,7 @@ The user’s subsequent UI direction supersedes the original multi-discussion co
 
 **Deliverable:** A verified end-to-end demo with reproducible setup, deployment, and candid limitations.
 
-- [ ] Run the five scenarios from section 15: existing provider, unknown-provider research, discussion fork, approval uncertainty, and persistence/sharing.
+- [x] Run the five scenarios from section 15 against production: existing provider, unknown-provider research, discussion fork, approval uncertainty, and persistence/sharing.
 - [x] Verify GitHub, Slack, and Google Drive examples against official sources and record what was checked and when.
 - [x] Run meaningful backend tests for context isolation, ownership, persistence, evidence validation, streaming failures, and public serialization.
 - [x] Run frontend type, lint, and build checks plus browser checks for the complete journey, responsive layout, loading, and recoverable errors.
