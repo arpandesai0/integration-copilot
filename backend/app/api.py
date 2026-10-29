@@ -9,7 +9,7 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy import select, delete, update
 from app.database import *
 from app.schemas import (
-    CreateWorkspace,
+    CreateChat,
     CreateThread,
     SendMessage,
     UpdateStep,
@@ -75,15 +75,15 @@ def providers(q: str = "", db: Session = Depends(get_db)):
     return [provider_dict(p) for p in ps if not p.slug.startswith("research-")]
 
 
-@router.post("/workspaces", status_code=201)
-def new_workspace(
-    body: CreateWorkspace, identity=Depends(owner), db: Session = Depends(get_db)
+@router.post("/chats", status_code=201)
+def new_chat(
+    body: CreateChat, identity=Depends(owner), db: Session = Depends(get_db)
 ):
     return workspace_dict(db, create_workspace(db, identity, body))
 
 
-@router.get("/workspaces")
-def workspaces(identity=Depends(owner), db: Session = Depends(get_db)):
+@router.get("/chats")
+def chats(identity=Depends(owner), db: Session = Depends(get_db)):
     return [
         workspace_dict(db, w)
         for w in db.scalars(
@@ -94,15 +94,15 @@ def workspaces(identity=Depends(owner), db: Session = Depends(get_db)):
     ]
 
 
-@router.get("/workspaces/{workspace_id}")
-def workspace(
+@router.get("/chats/{workspace_id}")
+def chat(
     workspace_id: str, identity=Depends(owner), db: Session = Depends(get_db)
 ):
     return workspace_dict(db, owned(db, workspace_id, identity))
 
 
-@router.delete("/workspaces/{workspace_id}")
-def delete_workspace(
+@router.delete("/chats/{workspace_id}")
+def delete_chat(
     workspace_id: str, identity=Depends(owner), db: Session = Depends(get_db)
 ):
     w = owned(db, workspace_id, identity)
@@ -126,8 +126,8 @@ def delete_workspace(
     version_ids = select(GuideVersion.id).where(GuideVersion.workspace_id == w.id)
     run_ids = select(ResearchRun.id).where(ResearchRun.workspace_id == w.id)
 
-    # Purge private and published workspace data in foreign-key-safe order.
-    # Provider records are shared by other workspaces and remain in the catalog.
+    # Purge private and published chat data in foreign-key-safe order.
+    # Provider records are shared by other chats and remain in the catalog.
     db.execute(delete(StepNote).where(StepNote.step_id.in_(step_ids)))
     db.execute(delete(Message).where(Message.thread_id.in_(thread_ids)))
     db.execute(
@@ -154,8 +154,8 @@ def delete_workspace(
     return {"deleted": True, "id": workspace_id}
 
 
-@router.get("/workspaces/{workspace_id}/guide")
-def workspace_guide(
+@router.get("/chats/{workspace_id}/guide")
+def chat_guide(
     workspace_id: str, identity=Depends(owner), db: Session = Depends(get_db)
 ):
     return guide_dict(db, owned(db, workspace_id, identity))
@@ -169,7 +169,7 @@ def public_guide(share_slug: str, db: Session = Depends(get_db)):
     return guide_dict(db, w, public=True)
 
 
-@router.patch("/workspaces/{workspace_id}/steps/{step_id}")
+@router.patch("/chats/{workspace_id}/steps/{step_id}")
 def update_step(
     workspace_id: str,
     step_id: str,
@@ -190,7 +190,7 @@ def update_step(
     return step_dict(db, step)
 
 
-@router.post("/workspaces/{workspace_id}/steps/{step_id}/notes", status_code=201)
+@router.post("/chats/{workspace_id}/steps/{step_id}/notes", status_code=201)
 def add_note(
     workspace_id: str,
     step_id: str,
@@ -214,7 +214,7 @@ def add_note(
     return {"id": note.id, "content": note.content}
 
 
-@router.get("/workspaces/{workspace_id}/threads")
+@router.get("/chats/{workspace_id}/threads")
 def threads(workspace_id: str, identity=Depends(owner), db: Session = Depends(get_db)):
     owned(db, workspace_id, identity)
     return [
@@ -227,7 +227,7 @@ def threads(workspace_id: str, identity=Depends(owner), db: Session = Depends(ge
     ]
 
 
-@router.post("/workspaces/{workspace_id}/threads", status_code=201)
+@router.post("/chats/{workspace_id}/threads", status_code=201)
 def new_thread(
     workspace_id: str,
     body: CreateThread,
@@ -254,9 +254,9 @@ def new_thread(
             else None
         )
         if not step or step.workspace_id != w.id:
-            raise HTTPException(422, "Step must belong to this workspace")
+            raise HTTPException(422, "Step must belong to this chat")
         if not parent or parent.workspace_id != w.id or parent.type != "main":
-            raise HTTPException(422, "Parent must be this workspace’s main thread")
+            raise HTTPException(422, "Parent must be this chat’s main thread")
     t = ConversationThread(
         workspace_id=w.id,
         type=body.type,
@@ -391,7 +391,7 @@ async def send_message(
     )
 
 
-@router.post("/workspaces/{workspace_id}/research", status_code=202)
+@router.post("/chats/{workspace_id}/research", status_code=202)
 async def start_research(
     workspace_id: str, identity=Depends(owner), db: Session = Depends(get_db)
 ):
@@ -425,7 +425,7 @@ def launch_research(db, w):
 
 
 
-@router.post("/workspaces/{workspace_id}/clarify")
+@router.post("/chats/{workspace_id}/clarify")
 async def clarify_request(
     workspace_id: str, body: SendMessage, identity=Depends(owner), db: Session = Depends(get_db)
 ):

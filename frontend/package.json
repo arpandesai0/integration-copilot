@@ -1,7 +1,7 @@
 {
   "name": "integration-copilot-web",
   "version": "0.1.0",
-  "description": "Source-backed integration setup workspace",
+  "description": "Source-backed integration setup copilot",
   "scripts": {
     "dev": "next dev",
     "build": "next build && node scripts/prepare-standalone.mjs",

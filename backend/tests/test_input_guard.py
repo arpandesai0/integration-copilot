@@ -9,13 +9,13 @@ from app.database import Provider, ResearchRun, Workspace
 
 @pytest.mark.parametrize("prompt", ["hi", " HELLO! ", "hey there", "thanks", "   "])
 def test_greetings_do_not_create_workspaces_or_research(client, prompt):
-    response = client.post("/api/v1/workspaces", json={"prompt": prompt})
+    response = client.post("/api/v1/chats", json={"prompt": prompt})
 
     assert response.status_code == 422
     assert response.json()["detail"] == (
         "Enter a provider name or website, such as Slack or linear.app."
     )
-    assert client.get("/api/v1/workspaces").json() == []
+    assert client.get("/api/v1/chats").json() == []
     with database.SessionLocal() as session:
         assert session.scalar(select(func.count()).select_from(Workspace)) == 0
         assert session.scalar(select(func.count()).select_from(ResearchRun)) == 0
@@ -24,7 +24,7 @@ def test_greetings_do_not_create_workspaces_or_research(client, prompt):
 
 @pytest.mark.parametrize("prompt", ["Linear", "linear.app", "X", "HiBob", "hi.com"])
 def test_unknown_and_short_provider_names_can_still_be_researched(client, prompt):
-    response = client.post("/api/v1/workspaces", json={"prompt": prompt})
+    response = client.post("/api/v1/chats", json={"prompt": prompt})
 
     assert response.status_code == 201
     workspace = response.json()
@@ -33,7 +33,7 @@ def test_unknown_and_short_provider_names_can_still_be_researched(client, prompt
 
 
 def test_retry_of_legacy_greeting_workspace_does_not_start_research(client):
-    client.get("/api/v1/workspaces")
+    client.get("/api/v1/chats")
     owner = hashlib.sha256(client.cookies["copilot_session"].encode()).hexdigest()
     with database.SessionLocal() as session:
         provider = Provider(
@@ -56,7 +56,7 @@ def test_retry_of_legacy_greeting_workspace_does_not_start_research(client):
         session.commit()
         workspace_id = workspace.id
 
-    response = client.post(f"/api/v1/workspaces/{workspace_id}/research")
+    response = client.post(f"/api/v1/chats/{workspace_id}/research")
 
     assert response.status_code == 422
     assert response.json()["detail"] == (

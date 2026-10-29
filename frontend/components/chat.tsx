@@ -244,7 +244,7 @@ export function Composer({
     try {
       await stream(
         clarificationWorkspaceId
-          ? `/workspaces/${clarificationWorkspaceId}/clarify`
+          ? `/chats/${clarificationWorkspaceId}/clarify`
           : `/threads/${threadId}/messages`,
         { method: "POST", body: JSON.stringify({ content }) },
         ({ event, data }) => {

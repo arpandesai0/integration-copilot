@@ -27,14 +27,14 @@ from app.services.core import context_package, persist_guide
 
 
 def workspace(client, prompt="Slack"):
-    response = client.post("/api/v1/workspaces", json={"prompt": prompt})
+    response = client.post("/api/v1/chats", json={"prompt": prompt})
     assert response.status_code == 201, response.text
     return response.json()
 
 
 def step_thread(client, w, step):
     response = client.post(
-        f"/api/v1/workspaces/{w['id']}/threads",
+        f"/api/v1/chats/{w['id']}/threads",
         json={
             "type": "step",
             "step_id": step["id"],
@@ -47,7 +47,7 @@ def step_thread(client, w, step):
 
 def test_other_session_cannot_read_or_mutate_private_workspace(client):
     w = workspace(client)
-    base = f"/api/v1/workspaces/{w['id']}"
+    base = f"/api/v1/chats/{w['id']}"
     guide = client.get(base + "/guide").json()
     step = guide["steps"][0]
     thread = step_thread(client, w, step)
@@ -77,7 +77,7 @@ def test_other_session_cannot_read_or_mutate_private_workspace(client):
     assert client.post(base + "/threads", json={"type": "main"}).status_code == 404
     assert client.post(base + "/research").status_code == 404
     assert client.get(f"/api/v1/research-runs/{run_id}/events").status_code == 404
-    assert client.get("/api/v1/workspaces").json() == []
+    assert client.get("/api/v1/chats").json() == []
     assert client.get(f"/api/v1/guides/{guide['share_slug']}").status_code == 200
 
 
@@ -93,7 +93,7 @@ def test_unknown_provider_search_does_not_expose_another_sessions_request(client
 
 def test_step_context_keeps_latest_messages_when_history_exceeds_budget(client):
     w = workspace(client)
-    guide = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+    guide = client.get(f"/api/v1/chats/{w['id']}/guide").json()
     thread = step_thread(client, w, guide["steps"][0])
     with database.SessionLocal() as db:
         timestamp = now()
@@ -116,7 +116,7 @@ def test_step_context_keeps_latest_messages_when_history_exceeds_budget(client):
 
 def test_chat_context_replaces_grounding_redirects_with_verified_destinations(client):
     w = workspace(client)
-    guide = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+    guide = client.get(f"/api/v1/chats/{w['id']}/guide").json()
     redirect = (
         "https://vertexaisearch.cloud.google.com/grounding-api-redirect/opaque"
     )
@@ -195,7 +195,7 @@ def test_chat_context_replaces_grounding_redirects_with_verified_destinations(cl
 
 def test_public_guide_excludes_private_notes_messages_and_session_hash(client):
     w = workspace(client)
-    base = f"/api/v1/workspaces/{w['id']}"
+    base = f"/api/v1/chats/{w['id']}"
     guide = client.get(base + "/guide").json()
     thread = step_thread(client, w, guide["steps"][0])
     with database.SessionLocal() as db:
@@ -230,7 +230,7 @@ def test_public_guide_excludes_private_notes_messages_and_session_hash(client):
 
 def test_refresh_retains_historical_discussion_with_original_step_context(client):
     w = workspace(client)
-    old_guide = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+    old_guide = client.get(f"/api/v1/chats/{w['id']}/guide").json()
     thread = step_thread(client, w, old_guide["steps"][0])
     with database.SessionLocal() as db:
         old_step = db.get(GuideStep, old_guide["steps"][0]["id"])
@@ -245,7 +245,7 @@ def test_refresh_retains_historical_discussion_with_original_step_context(client
         new_guide.steps[0].description = "Updated registration description"
         persist_guide(db, db.get(Workspace, w["id"]), new_guide)
         context = context_package(db, db.get(ConversationThread, thread["id"]))
-    current = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+    current = client.get(f"/api/v1/chats/{w['id']}/guide").json()
     assert current["version_number"] == 2
     assert current["steps"][0]["status"] == "completed"
     assert context["guide_version"] == old_guide["id"]
@@ -307,7 +307,7 @@ def test_research_reconnection_returns_only_events_after_cursor(client):
 
 def test_cross_origin_private_mutation_is_rejected(client):
     response = client.post(
-        "/api/v1/workspaces",
+        "/api/v1/chats",
         json={"prompt": "Slack"},
         headers={"Origin": "https://untrusted.example"},
     )
@@ -386,7 +386,7 @@ def test_research_pipeline_validates_grounded_sources_before_persistence(
     with database.SessionLocal() as db:
         status = db.get(ResearchRun, run_id).status
     events = client.get(f"/api/v1/research-runs/{run_id}/events").text
-    response = client.get(f"/api/v1/workspaces/{w['id']}/guide")
+    response = client.get(f"/api/v1/chats/{w['id']}/guide")
     if result_kind in {"tampered-source", "unknown-source"}:
         assert status == "failed"
         assert "research_failed" in events

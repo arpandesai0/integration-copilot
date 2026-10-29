@@ -41,7 +41,7 @@ export function Discovery() {
   });
   const create = useMutation({
     mutationFn: (value: string) =>
-      api<Workspace>("/workspaces", {
+      api<Workspace>("/chats", {
         method: "POST",
         body: JSON.stringify({ prompt: value }),
       }),
@@ -52,7 +52,7 @@ export function Discovery() {
           ? saved
           : [workspace, ...saved],
       );
-      router.push(`/workspaces/${workspace.id}`);
+      router.push(`/chats/${workspace.id}`);
     },
   });
   const catalog = providers.data || [];

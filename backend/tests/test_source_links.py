@@ -48,8 +48,8 @@ def test_all_seed_sources_have_reviewed_passage_links_and_old_versions_upgrade(c
             s.excerpt and s.excerpt_verified and ":~:text=" in str(s.text_fragment_url)
             for s in guide.sources
         )
-        workspace = client.post("/api/v1/workspaces", json={"prompt": provider}).json()
-        result = client.get(f"/api/v1/workspaces/{workspace['id']}/guide").json()
+        workspace = client.post("/api/v1/chats", json={"prompt": provider}).json()
+        result = client.get(f"/api/v1/chats/{workspace['id']}/guide").json()
         assert all(":~:text=" in s["text_fragment_url"] for s in result["sources"])
     old = {"url": "https://docs.slack.dev/app-management/distribution/"}
     assert source_links.source_link(old)["excerpt_verified"] is True

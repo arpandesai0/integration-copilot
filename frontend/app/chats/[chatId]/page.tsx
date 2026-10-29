@@ -1,14 +1,15 @@
 import { Suspense } from "react";
 import { Workspace } from "@/components/workspace";
+
 export default async function Page({
   params,
 }: {
-  params: Promise<{ workspaceId: string }>;
+  params: Promise<{ chatId: string }>;
 }) {
-  const { workspaceId } = await params;
+  const { chatId } = await params;
   return (
     <Suspense>
-      <Workspace key={workspaceId} id={workspaceId} />
+      <Workspace id={chatId} />
     </Suspense>
   );
 }

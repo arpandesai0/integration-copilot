@@ -19,7 +19,7 @@ from app.services.core import persist_guide
 
 
 def create_workspace(client, prompt="Slack"):
-    response = client.post("/api/v1/workspaces", json={"prompt": prompt})
+    response = client.post("/api/v1/chats", json={"prompt": prompt})
     assert response.status_code == 201
     return response.json()
 
@@ -31,7 +31,7 @@ def test_delete_purges_nested_chat_and_revokes_share_preserving_other_workspace(
         db.commit()
     workspace = create_workspace(client)
     other = create_workspace(client)
-    base = f"/api/v1/workspaces/{workspace['id']}"
+    base = f"/api/v1/chats/{workspace['id']}"
     guide = client.get(base + "/guide").json()
     thread = client.post(
         base + "/threads",
@@ -79,8 +79,8 @@ def test_delete_purges_nested_chat_and_revokes_share_preserving_other_workspace(
     assert client.get(f"/api/v1/threads/{thread['id']}/messages").status_code == 404
     assert client.get(f"/api/v1/research-runs/{run_id}/events").status_code == 404
     assert client.delete(base).status_code == 404
-    assert [w["id"] for w in client.get("/api/v1/workspaces").json()] == [other["id"]]
-    assert client.get(f"/api/v1/workspaces/{other['id']}/guide").status_code == 200
+    assert [w["id"] for w in client.get("/api/v1/chats").json()] == [other["id"]]
+    assert client.get(f"/api/v1/chats/{other['id']}/guide").status_code == 200
     with database.SessionLocal() as db:
         assert db.get(Provider, workspace["provider"]["id"]) is not None
         assert (
@@ -126,7 +126,7 @@ def test_delete_purges_nested_chat_and_revokes_share_preserving_other_workspace(
 def test_delete_requires_ownership(client):
     workspace = create_workspace(client)
     client.cookies.clear()
-    assert client.delete(f"/api/v1/workspaces/{workspace['id']}").status_code == 404
+    assert client.delete(f"/api/v1/chats/{workspace['id']}").status_code == 404
     with database.SessionLocal() as db:
         assert db.get(Workspace, workspace["id"]) is not None
 
@@ -147,15 +147,15 @@ def test_delete_waits_for_active_generation(client, active):
                 )
             )
         db.commit()
-    response = client.delete(f"/api/v1/workspaces/{workspace['id']}")
+    response = client.delete(f"/api/v1/chats/{workspace['id']}")
     assert response.status_code == 409
     assert "finish" in response.json()["detail"]
-    assert client.get(f"/api/v1/workspaces/{workspace['id']}/guide").status_code == 200
+    assert client.get(f"/api/v1/chats/{workspace['id']}/guide").status_code == 200
 
 
 def test_delete_browser_cors_and_origin(client):
     workspace = create_workspace(client)
-    path = f"/api/v1/workspaces/{workspace['id']}"
+    path = f"/api/v1/chats/{workspace['id']}"
     response = client.options(
         path,
         headers={

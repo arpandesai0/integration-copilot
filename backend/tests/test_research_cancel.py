@@ -4,7 +4,7 @@ from app.database import ResearchEvent, ResearchRun, Workspace
 
 
 def running_workspace(client):
-    workspace = client.post("/api/v1/workspaces", json={"prompt": "Xbox"}).json()
+    workspace = client.post("/api/v1/chats", json={"prompt": "Xbox"}).json()
     with database.SessionLocal() as db:
         run = ResearchRun(workspace_id=workspace["id"])
         db.add(run)

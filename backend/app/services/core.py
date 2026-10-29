@@ -142,7 +142,7 @@ def guide_is_stale(data):
 def owned(db, workspace_id, owner):
     w = db.get(Workspace, workspace_id)
     if not w or w.owner != owner:
-        raise HTTPException(404, "Workspace not found")
+        raise HTTPException(404, "Chat not found")
     return w
 
 

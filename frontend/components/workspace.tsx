@@ -24,7 +24,7 @@ import type {
 } from "@/lib/types";
 import { Sidebar } from "./sidebar";
 import { ThemeToggle } from "./theme-toggle";
-import { ErrorBox, Loading, titleCase } from "./common";
+import { ChatSkeleton, ErrorBox, Loading, titleCase } from "./common";
 import { GuideScrollProgress } from "./guide-scroll-progress";
 import { GuideView, needsClarification } from "./guide";
 import { Composer, Messages } from "./chat";
@@ -58,17 +58,17 @@ export function Workspace({ id }: { id: string }) {
   const scroll = useRef<HTMLDivElement>(null);
   const workspace = useQuery({
     queryKey: ["workspace", id],
-    queryFn: () => api<WorkspaceType>(`/workspaces/${id}`),
+    queryFn: () => api<WorkspaceType>(`/chats/${id}`),
   });
   const guide = useQuery({
     queryKey: ["guide", id],
-    queryFn: () => api<Guide>(`/workspaces/${id}/guide`),
+    queryFn: () => api<Guide>(`/chats/${id}/guide`),
     enabled: !!workspace.data?.guide_available,
     retry: 0,
   });
   const threads = useQuery({
     queryKey: ["threads", id],
-    queryFn: () => api<Thread[]>(`/workspaces/${id}/threads`),
+    queryFn: () => api<Thread[]>(`/chats/${id}/threads`),
     enabled: !!workspace.data,
   });
   const linkedThread = threads.data?.find(
@@ -140,11 +140,11 @@ export function Workspace({ id }: { id: string }) {
     mutationFn: async (step: Step) => {
       const saved = await query.ensureQueryData<Thread[]>({
         queryKey: ["threads", id],
-        queryFn: () => api<Thread[]>(`/workspaces/${id}/threads`),
+        queryFn: () => api<Thread[]>(`/chats/${id}/threads`),
       });
       const existing = saved.find((thread) => matchesStep(thread, step));
       if (existing) return existing;
-      return api<Thread>(`/workspaces/${id}/threads`, {
+      return api<Thread>(`/chats/${id}/threads`, {
         method: "POST",
         body: JSON.stringify({
           type: "step",
@@ -181,7 +181,15 @@ export function Workspace({ id }: { id: string }) {
       /* Keep this step's empty discussion visible. */
     }
   };
-  if (workspace.isPending) return <Loading />;
+  if (workspace.isPending)
+    return (
+      <div className="workspace-shell">
+        <Sidebar />
+        <main className="chat-loading-pane">
+          <ChatSkeleton />
+        </main>
+      </div>
+    );
   if (workspace.error)
     return (
       <main style={{ maxWidth: 650, margin: "70px auto", padding: 30 }}>
@@ -406,7 +414,7 @@ export function Workspace({ id }: { id: string }) {
             <DialogTitle>Share this integration guide</DialogTitle>
             <DialogDescription>
               Anyone with this link can read the guide. Your conversations and
-              private workspace stay private.
+              private chats stay private.
             </DialogDescription>
           </DialogHeader>
           <div
@@ -574,7 +582,7 @@ function Research({
                 status: string;
                 started_at?: string;
                 timeout_seconds?: number;
-              }>(`/workspaces/${workspace.id}/research`, {
+              }>(`/chats/${workspace.id}/research`, {
                 method: "POST",
                 body: "{}",
               });

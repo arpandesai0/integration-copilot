@@ -11,7 +11,7 @@ from app.services.scope_triage import ScopeDecision
 
 
 def run_for(client, prompt="i want to integrate google", capabilities=None):
-    workspace = client.post("/api/v1/workspaces", json={"prompt": prompt}).json()
+    workspace = client.post("/api/v1/chats", json={"prompt": prompt}).json()
     with database.SessionLocal() as db:
         if capabilities:
             db.get(Workspace, workspace["id"]).capabilities = capabilities
@@ -94,6 +94,6 @@ def test_awaiting_initial_scope_can_use_clarify_endpoint(client, monkeypatch):
         yield "You're welcome!"
     monkeypatch.setattr(api, "clarify_intent", decide)
     monkeypatch.setattr(api, "clarification_reply_stream", reply)
-    response = client.post(f"/api/v1/workspaces/{workspace['id']}/clarify", json={"content": "thanks"})
+    response = client.post(f"/api/v1/chats/{workspace['id']}/clarify", json={"content": "thanks"})
     assert response.status_code == 200
     assert "You're welcome!" in response.text

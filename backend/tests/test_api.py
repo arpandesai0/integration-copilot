@@ -4,7 +4,7 @@ from app.services.core import context_package
 
 
 def new(client, prompt="Slack"):
-    response = client.post("/api/v1/workspaces", json={"prompt": prompt})
+    response = client.post("/api/v1/chats", json={"prompt": prompt})
     assert response.status_code == 201, response.text
     return response.json()
 
@@ -14,7 +14,7 @@ def test_health_and_seed_guides(client):
     assert len(client.get("/api/v1/providers").json()) == 3
     for name in ["Slack", "GitHub", "Google Drive"]:
         w = new(client, name)
-        g = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+        g = client.get(f"/api/v1/chats/{w['id']}/guide").json()
         assert len(g["steps"]) >= 5 and g["sources"]
         assert g["estimated_approval_days"] is None
         assert all(s["verification_status"] == "documented" for s in g["steps"])
@@ -23,7 +23,7 @@ def test_health_and_seed_guides(client):
 
 def test_step_progress_and_share_no_private_notes(client):
     w = new(client)
-    base = f"/api/v1/workspaces/{w['id']}"
+    base = f"/api/v1/chats/{w['id']}"
     g = client.get(base + "/guide").json()
     step = g["steps"][0]
     assert (
@@ -62,7 +62,7 @@ def test_independent_threads_and_context(client, monkeypatch):
 
     monkeypatch.setattr(api, "answer_stream", fake)
     w = new(client)
-    base = f"/api/v1/workspaces/{w['id']}"
+    base = f"/api/v1/chats/{w['id']}"
     g = client.get(base + "/guide").json()
     ids = []
     for step in g["steps"][:2]:
@@ -112,7 +112,7 @@ def test_missing_ai_is_explicit_and_persisted(client):
 def test_unknown_research_failure_reconnect(client):
     w = new(client, "Help me integrate linear.app")
     assert w["research_needed"] and not w["guide_available"]
-    r = client.post(f"/api/v1/workspaces/{w['id']}/research")
+    r = client.post(f"/api/v1/chats/{w['id']}/research")
     assert r.status_code == 202
     run = r.json()["id"]
     events = client.get("/api/v1/research-runs/" + run + "/events")
@@ -124,15 +124,15 @@ def test_unknown_research_failure_reconnect(client):
 def test_ambiguous_provider_and_invalid_thread(client):
     assert (
         client.post(
-            "/api/v1/workspaces", json={"prompt": "Slack and GitHub"}
+            "/api/v1/chats", json={"prompt": "Slack and GitHub"}
         ).status_code
         == 409
     )
     a = new(client)
     b = new(client, "GitHub")
-    g = client.get(f"/api/v1/workspaces/{a['id']}/guide").json()
+    g = client.get(f"/api/v1/chats/{a['id']}/guide").json()
     r = client.post(
-        f"/api/v1/workspaces/{a['id']}/threads",
+        f"/api/v1/chats/{a['id']}/threads",
         json={
             "type": "step",
             "step_id": g["steps"][0]["id"],
@@ -187,17 +187,17 @@ def test_research_synthesis_persists_returned_sources(client, monkeypatch):
         lambda: SimpleNamespace(aio=SimpleNamespace(models=Models())),
     )
     w = new(client, "unfamiliar.example")
-    run = client.post(f"/api/v1/workspaces/{w['id']}/research").json()["id"]
+    run = client.post(f"/api/v1/chats/{w['id']}/research").json()["id"]
     events = client.get("/api/v1/research-runs/" + run + "/events").text
     assert "guide_ready" in events and "research_failed" not in events, events
-    g = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+    g = client.get(f"/api/v1/chats/{w['id']}/guide").json()
     assert g["version_number"] == 1 and len(g["sources"]) == len(guide["sources"])
-    assert client.get(f"/api/v1/workspaces/{w['id']}").json()["guide_available"]
+    assert client.get(f"/api/v1/chats/{w['id']}").json()["guide_available"]
 
 
 def test_obvious_credentials_are_rejected(client):
     r = client.post(
-        "/api/v1/workspaces",
+        "/api/v1/chats",
         json={"prompt": "Slack client_secret=exampleVerySensitiveValue123"},
     )
     assert r.status_code == 422
@@ -206,7 +206,7 @@ def test_obvious_credentials_are_rejected(client):
     # Ordinary troubleshooting about secret configuration remains allowed.
     assert (
         client.post(
-            "/api/v1/workspaces",
+            "/api/v1/chats",
             json={"prompt": "Slack: where should I store a client secret?"},
         ).status_code
         == 201
@@ -223,7 +223,7 @@ def test_audience_intent_and_capabilities(client):
         assert w["audience"] == audience
         assert w["capabilities"] == prompt
     w = client.post(
-        "/api/v1/workspaces",
+        "/api/v1/chats",
         json={
             "prompt": "Slack personal access",
             "audience": "external_customers",
@@ -264,7 +264,7 @@ def test_freshness_uses_source_verification_date_and_config(client, monkeypatch)
 
     monkeypatch.setattr(settings, "guide_freshness_days", 7)
     w = new(client)
-    base = f"/api/v1/workspaces/{w['id']}"
+    base = f"/api/v1/chats/{w['id']}"
     with database.SessionLocal() as db:
         g = db.get(GuideVersion, w["active_guide_version_id"])
         g.data = {**g.data, "last_verified_at": (now() - timedelta(days=8)).isoformat()}
@@ -298,7 +298,7 @@ def test_researched_provider_identity_never_publishes_original_prompt(client):
         assert private_prompt not in str(provider.aliases)
         assert provider.official_domain == "slack.com"
         assert provider.slug.startswith("resolved-slack-")
-    guide = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+    guide = client.get(f"/api/v1/chats/{w['id']}/guide").json()
     client.cookies.clear()
     public = client.get("/api/v1/guides/" + guide["share_slug"])
     assert private_prompt not in public.text and "acquisition Orion" not in public.text

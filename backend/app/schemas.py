@@ -200,7 +200,7 @@ class SecretSafeInput(BaseModel):
         return value
 
 
-class CreateWorkspace(SecretSafeInput):
+class CreateChat(SecretSafeInput):
     prompt: str = Field(min_length=1, max_length=3000)
     audience: str | None = Field(default=None, max_length=100)
     capabilities: str | None = Field(

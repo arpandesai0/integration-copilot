@@ -14,7 +14,7 @@ def events(response):
 
 
 def pending(client):
-    w = client.post("/api/v1/workspaces", json={"prompt": "Slack"}).json()
+    w = client.post("/api/v1/chats", json={"prompt": "Slack"}).json()
     with database.SessionLocal() as db:
         record = db.get(Workspace, w["id"])
         guide = seed_guide("slack").model_copy(update={
@@ -28,7 +28,7 @@ def pending(client):
 
 def test_legacy_empty_unknown_projects_question_and_anchor(client):
     w = pending(client)
-    guide = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+    guide = client.get(f"/api/v1/chats/{w['id']}/guide").json()
     assert guide["clarification_needed"]
     assert guide["clarification_questions"] == ["Which data do you want to access?"]
     assert guide["conversation_anchor_message_id"]
@@ -41,7 +41,7 @@ def test_confirmed_unsupported_is_not_unclear(client):
         record = db.get(Workspace, w["id"])
         guide = seed_guide("slack").model_copy(update={"oauth_support_status": "unsupported", "steps": []})
         persist_guide(db, record, guide)
-    result = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+    result = client.get(f"/api/v1/chats/{w['id']}/guide").json()
     assert not result["clarification_needed"]
     assert result["clarification_questions"] == []
 
@@ -56,7 +56,7 @@ def test_acknowledgement_keeps_question_without_research(client, monkeypatch):
         for chunk in ("You're ", "welcome!") if content == "thanks" else ("I'll check the docs ", "for reading tickets."):
             yield chunk
     monkeypatch.setattr(api, "clarification_reply_stream", reply)
-    response = client.post(f"/api/v1/workspaces/{w['id']}/clarify", json={"content": "thanks"})
+    response = client.post(f"/api/v1/chats/{w['id']}/clarify", json={"content": "thanks"})
     assert response.status_code == 200
     assert [name for name, _ in events(response)][-1] == "message_completed"
     with database.SessionLocal() as db:
@@ -79,7 +79,7 @@ def test_actual_answer_starts_research_with_exact_requirement(client, monkeypatc
         captured.append(record.capabilities)
         return {"id": "test-run", "run_id": "test-run", "status": "running"}
     monkeypatch.setattr(api, "launch_research", launch)
-    response = client.post(f"/api/v1/workspaces/{w['id']}/clarify", json={"content": "Read tickets from our account"})
+    response = client.post(f"/api/v1/chats/{w['id']}/clarify", json={"content": "Read tickets from our account"})
     assert response.status_code == 200
     assert events(response)[-1] == ("research_started", {"id": "test-run", "run_id": "test-run", "status": "running"})
     assert captured[0].endswith("Read tickets from our account")
@@ -100,12 +100,12 @@ def test_clarification_endpoint_is_owner_scoped(client):
     from app.main import app
     w = pending(client)
     with TestClient(app) as stranger:
-        response = stranger.post(f"/api/v1/workspaces/{w['id']}/clarify", json={"content": "Read tickets"})
+        response = stranger.post(f"/api/v1/chats/{w['id']}/clarify", json={"content": "Read tickets"})
         assert response.status_code == 404
 
 
 def test_failed_research_can_be_refined_without_existing_guide(client, monkeypatch):
-    w = client.post("/api/v1/workspaces", json={"prompt": "Help me integrate Example Service"}).json()
+    w = client.post("/api/v1/chats", json={"prompt": "Help me integrate Example Service"}).json()
     with database.SessionLocal() as db:
         record = db.get(Workspace, w["id"])
         record.active_guide_version_id = None
@@ -124,7 +124,7 @@ def test_failed_research_can_be_refined_without_existing_guide(client, monkeypat
         captured.append(record.capabilities)
         return {"id": "test-run", "status": "running"}
     monkeypatch.setattr(api, "launch_research", launch)
-    response = client.post(f"/api/v1/workspaces/{w['id']}/clarify", json={"content": "I need to read tickets"})
+    response = client.post(f"/api/v1/chats/{w['id']}/clarify", json={"content": "I need to read tickets"})
     assert response.status_code == 200
     assert events(response)[-1][0] == "research_started"
     assert captured[0].endswith("I need to read tickets")
@@ -147,7 +147,7 @@ def test_clarification_streams_before_completion_and_retains_prior_auth_answers(
     with database.SessionLocal() as db:
         db.add(Message(thread_id=w["main_thread_id"], role="user", content="I want OAuth"))
         db.commit()
-    response = client.post(f"/api/v1/workspaces/{w['id']}/clarify", json={"content": "I want my users to log in"})
+    response = client.post(f"/api/v1/chats/{w['id']}/clarify", json={"content": "I want my users to log in"})
     output = events(response)
     assert [name for name, _ in output] == ["message_started", "message_delta", "message_delta", "message_completed", "research_started"]
     assert [data["delta"] for name, data in output if name == "message_delta"] == ["I'll check ", "public sign-in support."]
@@ -163,7 +163,7 @@ def test_clarification_failure_preserves_input_and_releases_lock(client, monkeyp
     async def fail(context, content):
         raise RuntimeError("private model failure")
     monkeypatch.setattr(api, "clarify_intent", fail)
-    response = client.post(f"/api/v1/workspaces/{w['id']}/clarify", json={"content": "OAuth"})
+    response = client.post(f"/api/v1/chats/{w['id']}/clarify", json={"content": "OAuth"})
     assert [name for name, _ in events(response)] == ["message_started", "message_error"]
     assert w["id"] not in api._clarifying
     with database.SessionLocal() as db:
@@ -229,7 +229,7 @@ def test_explicit_missing_requirement_is_not_hidden_by_assumed_steps(client):
             "clarification_questions": ["Are you adding sign-in or accessing messages?"],
         })
         persist_guide(db, record, guide)
-    result = client.get(f"/api/v1/workspaces/{w['id']}/guide").json()
+    result = client.get(f"/api/v1/chats/{w['id']}/guide").json()
     assert result["steps"]
     assert result["clarification_needed"] is True
 

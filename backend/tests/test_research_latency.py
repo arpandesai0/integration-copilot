@@ -15,7 +15,7 @@ from app.seeds.guides import seed_guide
 
 @pytest.mark.parametrize("hang", ["search", "synthesis", "highlights"])
 def test_research_has_bounded_stages_and_one_terminal_event(client, monkeypatch, hang):
-    workspace = client.post("/api/v1/workspaces", json={"prompt": "Xbox"}).json()
+    workspace = client.post("/api/v1/chats", json={"prompt": "Xbox"}).json()
     with database.SessionLocal() as db:
         run = ResearchRun(workspace_id=workspace["id"])
         db.add(run)
@@ -116,7 +116,7 @@ def test_provider_timeout_is_not_reported_as_configuration_failure(
     class DeadlineError(Exception):
         code = 504
 
-    workspace = client.post("/api/v1/workspaces", json={"prompt": "Xbox"}).json()
+    workspace = client.post("/api/v1/chats", json={"prompt": "Xbox"}).json()
     with database.SessionLocal() as db:
         run = ResearchRun(workspace_id=workspace["id"])
         db.add(run)

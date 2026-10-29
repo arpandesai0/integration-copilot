@@ -33,7 +33,7 @@ export function Sidebar({ workspace }: { workspace?: Workspace }) {
   const [deleteTarget, setDeleteTarget] = useState<Workspace | null>(null);
   const deleteChat = useMutation({
     mutationFn: (target: Workspace) =>
-      api(`/workspaces/${target.id}`, { method: "DELETE" }),
+      api(`/chats/${target.id}`, { method: "DELETE" }),
     onSuccess: async (_, target) => {
       const savedThreads =
         query.getQueryData<Thread[]>(["threads", target.id]) || [];
@@ -47,7 +47,7 @@ export function Sidebar({ workspace }: { workspace?: Workspace }) {
       await Promise.all(
         keys.map((queryKey) => query.cancelQueries({ queryKey })),
       );
-      if (pathname === `/workspaces/${target.id}`) router.replace("/");
+      if (pathname === `/chats/${target.id}`) router.replace("/");
       keys.forEach((queryKey) => query.removeQueries({ queryKey }));
       query.setQueryData<Workspace[]>(["workspaces"], (saved = []) =>
         saved.filter((item) => item.id !== target.id),
@@ -60,7 +60,7 @@ export function Sidebar({ workspace }: { workspace?: Workspace }) {
   const [search, setSearch] = useState("");
   const { data: workspaces = [] } = useQuery({
     queryKey: ["workspaces"],
-    queryFn: () => api<Workspace[]>("/workspaces"),
+    queryFn: () => api<Workspace[]>("/chats"),
   });
   const filtered = workspaces.filter((w) =>
     (w.title + " " + w.provider.name)
@@ -133,7 +133,7 @@ export function Sidebar({ workspace }: { workspace?: Workspace }) {
                 className={`integration-nav-item${workspace?.id === w.id ? " is-active" : ""}`}
               >
                 <Link
-                  href={`/workspaces/${w.id}`}
+                  href={`/chats/${w.id}`}
                   className="integration-nav-link"
                 >
                   <ProviderIcon provider={w.provider} size={27} />

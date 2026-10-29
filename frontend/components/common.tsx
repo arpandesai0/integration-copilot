@@ -48,7 +48,7 @@ function providerIconUrl(provider?: Provider): string | undefined {
       )
     )
       return undefined;
-    return `https://${url.hostname}/favicon.ico`;
+    return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url.hostname)}&sz=64`;
   } catch {
     return undefined;
   }
@@ -162,7 +162,7 @@ export const titleCase = (text?: string) =>
   text
     ? text.replaceAll("_", " ").replace(/^./, (c) => c.toUpperCase())
     : "Unknown";
-export function Loading({ label = "Loading workspace…" }: { label?: string }) {
+export function Loading({ label = "Loading chat…" }: { label?: string }) {
   return (
     <div
       style={{
@@ -175,6 +175,23 @@ export function Loading({ label = "Loading workspace…" }: { label?: string }) 
     >
       <Loader2 size={16} className="spinner" />
       {label}
+    </div>
+  );
+}
+
+export function ChatSkeleton() {
+  return (
+    <div className="chat-loading-skeleton" aria-label="Loading chat" aria-busy="true">
+      <div className="chat-skeleton-line is-short" />
+      <div className="chat-skeleton-card">
+        <div className="chat-skeleton-line" />
+        <div className="chat-skeleton-line" />
+        <div className="chat-skeleton-line is-medium" />
+      </div>
+      <div className="chat-skeleton-card is-compact">
+        <div className="chat-skeleton-line" />
+        <div className="chat-skeleton-line is-short" />
+      </div>
     </div>
   );
 }

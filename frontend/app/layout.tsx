@@ -6,6 +6,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Integration Copilot",
   description: "Source-backed OAuth setup and contextual developer guidance.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 export default function RootLayout({
   children,
