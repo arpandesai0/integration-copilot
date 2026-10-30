@@ -181,19 +181,18 @@ async def research(run_id):
         )
         phase = "preparing the setup guide"
         synthesis_model = settings.gemini_synthesis_model or settings.gemini_model
+        synthesis_payload = {
+            "request": request,
+            "research": response.text,
+            "sources": [
+                {"id": source["id"], "title": source["title"]}
+                for source in sources
+            ],
+        }
         synth = await asyncio.wait_for(
             c.aio.models.generate_content(
                 model=synthesis_model,
-                contents=json.dumps(
-                    {
-                        "request": request,
-                        "research": response.text,
-                        "sources": [
-                            {"id": source["id"], "title": source["title"]}
-                            for source in sources
-                        ],
-                    }
-                ),
+                contents=json.dumps(synthesis_payload),
                 config=research_config(
                     budget(settings.research_synthesis_timeout_seconds),
                     model=synthesis_model,
@@ -206,8 +205,45 @@ async def research(run_id):
             ),
             timeout=budget(settings.research_synthesis_timeout_seconds),
         )
-        draft = GuideDraft.model_validate_json(synth.text)
-        draft = constrain_oauth_claims(draft, response.text or "")
+        proposed_draft = GuideDraft.model_validate_json(synth.text)
+        draft = constrain_oauth_claims(proposed_draft, response.text or "")
+        if (
+            proposed_draft.authentication_method not in {"oauth2", "oidc"}
+            and proposed_draft.steps
+            and not draft.steps
+        ):
+            event(
+                run_id,
+                "guide_repairing",
+                {"message": "Aligning the guide with the documented authentication evidence."},
+            )
+            repair = await asyncio.wait_for(
+                c.aio.models.generate_content(
+                    model=synthesis_model,
+                    contents=json.dumps(
+                        {
+                            **synthesis_payload,
+                            "rejected_draft": proposed_draft.model_dump(mode="json"),
+                        }
+                    ),
+                    config=research_config(
+                        budget(settings.research_synthesis_timeout_seconds),
+                        model=synthesis_model,
+                        system_instruction=SAFETY
+                        + " Repair the rejected structured guide using only the supplied research and retained source IDs. Preserve the user's goal and protocol. For OAuth/OIDC, keep setup steps only when the research contains both exact authorization and token endpoint URLs and populate oauth_evidence. For every non-OAuth workflow, populate workflow_evidence with a retained source_id and a short verbatim passage copied exactly from the research that documents the setup. Every step must cite at least one retained source. Do not invent or paraphrase evidence. If the required evidence is absent, return no steps and state the precise evidence gap in uncertainties instead of a generic failure or a repeated capability question.",
+                        response_mime_type="application/json",
+                        response_schema=GuideDraft,
+                        max_output_tokens=5000,
+                    ),
+                ),
+                timeout=budget(settings.research_synthesis_timeout_seconds),
+            )
+            proposed_draft = GuideDraft.model_validate_json(repair.text)
+            draft = constrain_oauth_claims(proposed_draft, response.text or "")
+            if proposed_draft.steps and not draft.steps:
+                raise AIUnavailable(
+                    "The documentation was found, but the generated setup could not be matched to exact authentication evidence. Please retry."
+                )
         returned = {s["id"]: s for s in sources}
         hydrated = []
         for source in draft.sources:

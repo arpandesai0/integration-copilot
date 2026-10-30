@@ -400,3 +400,52 @@ def test_research_pipeline_validates_grounded_sources_before_persistence(
         assert guide["sources"][0]["url"] == official_url
         assert guide["oauth_support_status"] == result_kind
         assert bool(guide["steps"]) == (result_kind == "supported")
+
+
+def test_research_repairs_protocol_evidence_before_discarding_valid_steps(client, monkeypatch):
+    w = workspace(client, "Example signed API")
+    with database.SessionLocal() as db:
+        run = ResearchRun(workspace_id=w["id"])
+        db.add(run)
+        db.commit()
+        run_id = run.id
+    calls = []
+    passage = "Sign each API request with the account key and a SHA-256 HMAC."
+
+    async def generate_content(**kwargs):
+        calls.append(kwargs)
+        if len(calls) == 1:
+            web = SimpleNamespace(uri="https://docs.example.com/signing", title="Signing documentation")
+            metadata = SimpleNamespace(grounding_chunks=[SimpleNamespace(web=web)])
+            return SimpleNamespace(text=passage, candidates=[SimpleNamespace(grounding_metadata=metadata)])
+        payload = json.loads(kwargs["contents"])
+        data = seed_guide("slack").model_dump(mode="json")
+        data.update({
+            "provider_name": "Example signed API",
+            "provider_website": "https://example.com",
+            "authentication_method": "hmac",
+            "oauth_support_status": "unknown",
+            "oauth_evidence": None,
+            "citations": [],
+        })
+        data["sources"] = payload["sources"]
+        data["sources"][0]["claims"] = ["Requests use HMAC signing."]
+        for step in data["steps"]:
+            step["source_ids"] = ["source-1"]
+            step["citations"] = []
+        if len(calls) == 2:
+            data["workflow_evidence"] = None
+        else:
+            assert "rejected_draft" in payload
+            data["workflow_evidence"] = {"source_id": "source-1", "excerpt": passage}
+        return SimpleNamespace(text=json.dumps(data))
+
+    fake_client = SimpleNamespace(aio=SimpleNamespace(models=SimpleNamespace(generate_content=generate_content)))
+    monkeypatch.setattr(workflows, "client", lambda: fake_client)
+    asyncio.run(workflows.research(run_id))
+    assert len(calls) == 3
+    events = client.get(f"/api/v1/research-runs/{run_id}/events").text
+    assert "guide_repairing" in events
+    guide = client.get(f"/api/v1/chats/{w['id']}/guide").json()
+    assert guide["authentication_method"] == "hmac"
+    assert guide["steps"]
