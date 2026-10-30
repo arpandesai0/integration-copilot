@@ -80,6 +80,17 @@ def test_saml_workflow_keeps_documented_steps_without_oauth_endpoints():
     assert result.oauth_support_status == "unknown"
 
 
+def test_iam_role_workflow_keeps_documented_steps_without_oauth_endpoints():
+    passage = "Assume the cross-account role with AWS STS and use the returned temporary security credentials."
+    guide = draft(authentication_method="iam_role", oauth_support_status="unknown",
+                  oauth_evidence=None,
+                  workflow_evidence={"source_id": "slack-oauth", "excerpt": passage})
+    result = constrain_oauth_claims(guide, passage)
+    assert result.steps
+    assert result.authentication_method == "iam_role"
+    assert result.oauth_support_status == "unknown"
+
+
 def test_non_oauth_label_cannot_bypass_evidence_gate():
     guide = draft(authentication_method="saml", oauth_support_status="unknown",
                   oauth_evidence=None, workflow_evidence=None)

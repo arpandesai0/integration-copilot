@@ -103,7 +103,7 @@ class Guide(BaseModel):
     provider_name: str
     provider_website: HttpUrl
     oauth_support_status: Literal["supported", "unsupported", "unknown"] = "unknown"
-    authentication_method: Literal["oauth2", "oidc", "oidc_sdk", "saml", "api_key", "hmac", "other", "unknown"] = "oauth2"
+    authentication_method: Literal["oauth2", "oidc", "oidc_sdk", "saml", "api_key", "hmac", "iam_role", "other", "unknown"] = "oauth2"
     summary: str
     clarification_questions: list[str] = Field(default_factory=list, max_length=3)
     recommended_auth_path: str
