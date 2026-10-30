@@ -8,6 +8,8 @@ Build requirements: [docs/agents/AGENT.md](docs/agents/AGENT.md). Execution chec
 
 Requirements: Node.js 20.9+ (a current supported LTS is recommended), npm, Python 3.11+, [uv](https://docs.astral.sh/uv/), and MongoDB Atlas (or local MongoDB) for durable application storage. Google Cloud access is required for live research and assistant answers. SQLite is retained as a process-local query cache and is restored from MongoDB at startup.
 
+Run the setup commands from the repository root:
+
 ```sh
 make setup
 cp backend/.env.example backend/.env
