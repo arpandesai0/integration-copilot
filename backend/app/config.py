@@ -6,8 +6,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     gemini_model: ClassVar[str] = "gemini-3.8-flash"
     gemini_chat_model: ClassVar[str] = "gemini-3.5-flash-lite"
-    gemini_synthesis_model: ClassVar[str] = "gemini-3.5-flash-lite"
+    gemini_synthesis_model: ClassVar[str] = "gemini-3.1-pro-preview"
     gemini_research_model: ClassVar[str] = "gemini-3.5-flash-lite"
+    gemini_routing_model: ClassVar[str] = "gemini-3.5-flash-lite"
     google_cloud_project: str = ""
     google_cloud_location: str = "global"
     research_timeout_seconds: float = 240

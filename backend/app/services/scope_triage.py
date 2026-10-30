@@ -1,6 +1,7 @@
 """Understand the user's goal before spending time looking up documentation."""
 
 import json
+import re
 from pydantic import BaseModel, Field, model_validator
 from google.genai import types
 from app.agents.client import client
@@ -21,10 +22,39 @@ class ScopeDecision(BaseModel):
         return self
 
 
+ACTIONABLE_GOAL = re.compile(
+    r"\b(?:access|analy[sz]e|create|download|fetch|import|list|manage|monitor|read|"
+    r"retrieve|send|sync|track|upload|view|write)\b",
+    re.IGNORECASE,
+)
+PURPOSEFUL_CONNECTION = re.compile(
+    r"\bconnect\b.+\b(?:account|app|application|customer|data|metric|report|resource|user)s?\b"
+    r"|\b(?:account|app|application|customer|data|metric|report|resource|user)s?\b.+\bconnect\b",
+    re.IGNORECASE,
+)
+
+
+def explicit_goal(request) -> str:
+    """Return a user-supplied data/action goal that is already specific enough to research."""
+    text = "\n".join(
+        str(request.get(field) or "").strip()
+        for field in ("request", "capabilities")
+    ).strip()
+    if ACTIONABLE_GOAL.search(text) or PURPOSEFUL_CONNECTION.search(text):
+        return text
+    return ""
+
+
 async def assess_scope(request, timeout_seconds=12):
+    focused_request = explicit_goal(request)
+    if focused_request:
+        return ScopeDecision(
+            needs_clarification=False,
+            focused_request=focused_request,
+        )
     c = client()
     response = await c.aio.models.generate_content(
-        model=settings.gemini_synthesis_model or settings.gemini_model,
+        model=settings.gemini_routing_model or settings.gemini_model,
         contents=json.dumps(request),
         config=types.GenerateContentConfig(
             system_instruction=(

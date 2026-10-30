@@ -79,7 +79,19 @@ def test_triage_is_fast_tool_free_and_cannot_claim_support(monkeypatch):
     config = calls[0]["config"]
     assert not config.tools
     assert config.http_options.timeout == 2000
-    assert calls[0]["model"] == (scope_triage.settings.gemini_synthesis_model or scope_triage.settings.gemini_model)
+    assert calls[0]["model"] == (scope_triage.settings.gemini_routing_model or scope_triage.settings.gemini_model)
+
+
+def test_explicit_aws_billing_goal_bypasses_generic_clarification(monkeypatch):
+    monkeypatch.setattr(
+        scope_triage,
+        "client",
+        lambda: (_ for _ in ()).throw(AssertionError("Clear data goal must bypass model triage")),
+    )
+    request = "Can you help me connect aws account to the app so userr can view their billign metrics"
+    result = asyncio.run(scope_triage.assess_scope({"request": request}, 2))
+    assert result.needs_clarification is False
+    assert request in result.focused_request
 
 
 def test_awaiting_initial_scope_can_use_clarify_endpoint(client, monkeypatch):

@@ -354,7 +354,7 @@ CLARIFICATION_ROUTING = (
 async def clarify_intent(context, content):
     c = client()
     response = await c.aio.models.generate_content(
-        model=settings.gemini_synthesis_model or settings.gemini_model,
+        model=settings.gemini_routing_model or settings.gemini_model,
         contents=json.dumps({"context": context, "latest_user_message": content}, default=str),
         config=types.GenerateContentConfig(
             system_instruction=SAFETY + CLARIFICATION_ROUTING,
@@ -392,7 +392,7 @@ async def clarification_reply_stream(context, content, decision):
         " the relevant distinction instead of repeating the original question."
     )
     stream = await c.aio.models.generate_content_stream(
-        model=settings.gemini_synthesis_model or settings.gemini_model,
+        model=settings.gemini_routing_model or settings.gemini_model,
         contents=json.dumps({"context": context, "latest_user_message": content, "inferred_intent": decision.intent}, default=str),
         config=types.GenerateContentConfig(
             system_instruction=instruction,
