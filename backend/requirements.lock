@@ -33,6 +33,8 @@ google-auth==2.62.0
     # via google-genai
 google-genai==2.33.0
     # via -r backend/requirements.txt
+googleapis-common-protos==1.76.0
+    # via opentelemetry-exporter-otlp-proto-http
 h11==0.16.0
     # via
     #   httpcore
@@ -45,6 +47,7 @@ httpx==0.28.1
     # via
     #   -r backend/requirements.txt
     #   google-genai
+    #   runtime-labs-sdk
 idna==3.20
     # via
     #   anyio
@@ -53,11 +56,40 @@ idna==3.20
 iniconfig==2.3.1
     # via pytest
 opentelemetry-api==1.45.1
-    # via fastapi
+    # via
+    #   fastapi
+    #   opentelemetry-exporter-http-transport
+    #   opentelemetry-exporter-otlp-proto-http
+    #   opentelemetry-sdk
+    #   opentelemetry-semantic-conventions
+    #   runtime-labs-sdk
+opentelemetry-exporter-http-transport==0.66b1
+    # via opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-common==0.66b1
+    # via opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-proto-common==1.45.1
+    # via opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-proto-http==1.45.1
+    # via runtime-labs-sdk
+opentelemetry-proto==1.45.1
+    # via
+    #   opentelemetry-exporter-otlp-proto-common
+    #   opentelemetry-exporter-otlp-proto-http
+opentelemetry-sdk==1.45.1
+    # via
+    #   opentelemetry-exporter-otlp-common
+    #   opentelemetry-exporter-otlp-proto-http
+    #   runtime-labs-sdk
+opentelemetry-semantic-conventions==0.66b1
+    # via opentelemetry-sdk
 packaging==26.3
     # via pytest
 pluggy==1.7.0
     # via pytest
+protobuf==7.36.2
+    # via
+    #   googleapis-common-protos
+    #   opentelemetry-proto
 pyasn1==0.6.5
     # via pyasn1-modules
 pyasn1-modules==0.4.2
@@ -69,6 +101,7 @@ pydantic==2.14.1
     #   fastapi
     #   google-genai
     #   pydantic-settings
+    #   runtime-labs-contracts
 pydantic-core==2.50.1
     # via pydantic
 pydantic-settings==2.16.1
@@ -82,6 +115,7 @@ pytest==9.2.0
 python-dotenv==1.2.4
     # via
     #   pydantic-settings
+    #   runtime-labs-sdk
     #   uvicorn
 pyyaml==6.0.3
     # via uvicorn
@@ -89,6 +123,12 @@ requests==2.34.2
     # via
     #   google-auth
     #   google-genai
+    #   opentelemetry-exporter-http-transport
+    #   opentelemetry-exporter-otlp-proto-http
+runtime-labs-contracts==0.10.0
+    # via runtime-labs-sdk
+runtime-labs-sdk==0.10.0
+    # via -r backend/requirements.txt
 sniffio==1.3.1
     # via google-genai
 sqlalchemy==2.1.6
@@ -103,6 +143,9 @@ typing-extensions==4.16.0
     #   fastapi
     #   google-genai
     #   opentelemetry-api
+    #   opentelemetry-exporter-otlp-proto-http
+    #   opentelemetry-sdk
+    #   opentelemetry-semantic-conventions
     #   pydantic
     #   pydantic-core
     #   pydantic-settings

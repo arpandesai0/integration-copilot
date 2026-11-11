@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy import select
+import runtime_labs
 from app.config import settings
 from app.database import (
     Base,
@@ -21,6 +22,8 @@ from app.metadata_store import (
     flush_metadata_snapshot,
     get_metadata_store,
 )
+
+runtime_labs.init()
 
 
 @asynccontextmanager

@@ -6,3 +6,4 @@ pymongo>=4.10,<5
 google-genai>=1.0,<3
 httpx>=0.28,<1
 pytest>=8,<10
+runtime-labs-sdk>=0.10.0
